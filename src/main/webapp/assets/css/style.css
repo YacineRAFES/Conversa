@@ -1,0 +1,9 @@
+.bg-img {
+    background-image: url('../images/nightcity.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(2px);
+    height: 100vh;
+}
+
