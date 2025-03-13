@@ -8,7 +8,7 @@
 }
 
 .bg-gradient-custom {
-    background-image: linear-gradient(135deg, #007bff  10%, #6c757d 100%);
+    background-image: linear-gradient(135deg, #007bff 10%, #6c757d 100%);
 }
 
 .navbar-bg-glass {
@@ -21,15 +21,71 @@
 
 .btn-sidebar {
     border-radius: 50%;
-    transition: border-radius 90ms, background-color 90ms;
+    transition: border-radius 90ms, background-color 150ms, color 90ms;
+    color: white;
 }
 
 .btn-sidebar:hover {
     border-radius: 25%;
     background-color: black;
+    color: white;
 }
 
-.click-to-red:active{
-    color: red !important;
+.nav-link:focus {
+    color: white;
 }
 
+.btn-sidebar:active {
+    color: black;
+    background-color: white;
+}
+
+.bloc-principal {
+    margin: auto;
+    height: calc(100vh - 1rem);
+    background: rgba(17, 154, 196, 0.45);
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.btn-sidebar-for-power {
+    border-radius: 50%;
+    transition: border-radius 90ms, background-color 150ms;
+    color: white;
+}
+
+.btn-sidebar-for-power:hover {
+    border-radius: 25%;
+    background-color: black;
+    color: white;
+}
+
+.btn-sidebar-for-power:active {
+    background-color: red;
+}
+
+.placeholderCustom:placeholder-shown {
+    font-style: italic;
+}
+
+.groupEffet{
+    max-height: 21rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    filter: brightness(1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(7.2px);
+    color: white;
+    transition: transform 90ms, filter 90ms;
+    z-index: 0;
+    contain: layout paint;
+}
+
+.groupEffet:hover {
+    background: rgba(255, 255, 255, 0.014);
+    filter: brightness(1.2);
+    transform: translateY(-3px);
+    z-index: 5;
+}
