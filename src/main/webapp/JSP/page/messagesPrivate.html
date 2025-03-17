@@ -26,13 +26,13 @@
                         </li>
                         <!-- BOUTON DE ACCUEIL -->
                         <li class="nav-item mb-1">
-                            <a class="nav-link btn-sidebar" href="#">
+                            <a class="nav-link btn-sidebar" href="home.html">
                                 <i class="bi bi-house fs-2" aria-label="Accueil"></i>
                             </a>
                         </li>
                         <!-- BOUTON DE MESSAGES PRIVEES -->
                         <li class="nav-item mb-1">
-                            <a class="nav-link btn-sidebar" href="#">
+                            <a class="nav-link btn-sidebar" href="messagesPrivate.html">
                                 <i class="bi bi-chat-right fs-2" aria-label="Messages privées"></i>
                             </a>
                         </li>
@@ -54,25 +54,63 @@
                     <a class="nav-link btn-sidebar text-decoration-none text-white" href="#">
                         <i class="bi bi-shield-shaded align-self-end"></i></i>
                     </a> -->
-                    <!-- BOUTON DE PARAMETRES -->
+                        <!-- BOUTON DE PARAMETRES -->
                         <a class="nav-link btn-sidebar" href="#">
                             <i class="bi bi-gear fs-2" aria-label="Paramètres"></i>
-                            
+
                         </a>
                     </li>
                 </ul>
 
             </div>
             <!-- COLONNE PRINCIPAL -->
-            <div class="col p-0 bloc-principal me-2">
+            <div class="col p-0">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col mt-3">
+                        <div class="col-2 p-2 mt-2 bloc-principal">
                             <!-- TODO: message privée à faire -->
-                            
+                            <!-- FOR -->
+                            <form action="" class="m-1 mb-2" method="post">
+                                <input type="text" class="form-control placeholderCustom" name="" id=""
+                                    placeholder="Rechercher une conversation...">
+                            </form>
 
+                            <div class="user d-flex align-items-center p-2 m-1">
+                                <img src="../../assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                                <div class="m-2">
+                                    <div class="username">Username</div>
+                                    <div class="messageUserRecent">Hello World!</div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="col p-0 ms-2">
+
+                            <div class="message d-flex justify-content-between mt-2 p-2">
+                                <div class=" d-flex align-items-center ">
+                                    <img src="../../assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                                    <div class="ms-3">
+                                        <div class="username">Username</div>
+                                        <div class="messageUser">Hello World!</div>
+                                    </div>
+                                </div>
+                                <div class=" dropdownCustom my-auto mx-3 rounded-circle">
+                                    <button class="mainmenubtn boutonOptionMessage" href="">
+                                        <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                                    </button>
+                                    <ul class="dropdown-childCustom">
+                                        <li class="dropdown-list"><a href="">Répondre</a></li>
+                                        <li class="dropdown-list"><a href="">Signaler le message</a></li>
+                                    </ul>
+                                </div>
                                 
-                            
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            fdsfs
                         </div>
                     </div>
                 </div>
@@ -83,7 +121,9 @@
 
 
     <!-- LIEN DE SCRIPT -->
+    <script src="../../assets/js/script.js"></script>
     <script src="../../assets/js/bootstrap.js"></script>
+    <script src="../../assets/js/bootstrap.bundle.js"></script>
 </body>
 
 </html>

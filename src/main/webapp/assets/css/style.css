@@ -98,3 +98,116 @@
     white-space: nowrap;
     border: 0;
   }
+
+.avatarConversa {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+
+}
+
+.user{
+    
+    border-radius: 16px;
+    transition: background 90ms, box-shadow 90ms;
+}
+
+
+.user:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.user:active{
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.messageUserRecent{
+    font-size: 13px;
+}
+
+.message {
+    
+    background-color: rgba(17, 154, 196, 0.45);
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.username {
+    font-weight: bolder;
+}
+
+.boutonOptionMessage{
+    width: 40px;
+    height: 40px;
+}
+
+.boutonOptionMessage:hover{
+    background-color: rgba(255, 255, 255, 0.514);
+    border-radius: 50%;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dropdownCustom{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-childCustom{
+    z-index: 3;
+    position: absolute;
+    margin: 2px;
+    padding: 1px;
+    display: none;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dropdown-childCustom a{
+    text-decoration: none;
+    display: block;
+    color: black;
+}
+
+.mainmenubtn{
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+.dropdown-childCustom .dropdown-list{
+    list-style-type: none;
+    
+}
+
+.dropdown-list{
+    width: 160px;
+    margin: 2px;
+    padding: 6px;
+    font-weight: 600;
+}
+
+.dropdown-list:hover{
+    background-color:rgba(255, 255, 255, 0.28);
+    color: black;
+    border-radius: 16px;
+}
+
+.show {
+    display: block;
+}
+
+
