@@ -135,8 +135,6 @@
     background-color: rgba(17, 154, 196, 0.45);
     border-radius: 15px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 }
 
 .username {
@@ -213,10 +211,32 @@
 
 
 .z-indexlow {
-    z-index: 900;
+    z-index: 0;
 }
 
 .z-indexhigh {
     z-index: 1000;
 }
+.listOfMessage {
+    overflow-y: auto;
+}
 
+.insertMessage{
+    background-color: rgb(255, 0, 0);
+    border-radius: 15px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    bottom: 0;
+    max-height: 30vh; 
+    overflow: hidden;
+}
+
+.insertMessage textarea{
+    resize: none;
+    background-color: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 100%;
+}
