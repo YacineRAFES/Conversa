@@ -130,7 +130,8 @@
 }
 
 .message {
-    
+    z-index: 1;
+    position: relative;
     background-color: rgba(17, 154, 196, 0.45);
     border-radius: 15px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -156,52 +157,52 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.dropdownCustom{
+.dropdownCustom {
     position: relative;
     display: inline-block;
 }
 
-.dropdown-childCustom{
-    z-index: 3;
+.dropdown-childCustom {
     position: absolute;
     margin: 2px;
     padding: 1px;
     display: none;
-    /* From https://css.glass */
     background: rgba(255, 255, 255, 0.2);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 1000; /* Ajoutez un z-index plus élevé */
 }
 
-.dropdown-childCustom a{
+.dropdown-childCustom a {
     text-decoration: none;
     display: block;
     color: black;
 }
 
-.mainmenubtn{
+.mainmenubtn {
     border: none;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
 }
 
-.dropdown-childCustom .dropdown-list{
+.dropdown-childCustom .dropdown-list {
     list-style-type: none;
-    
 }
 
-.dropdown-list{
+.dropdown-list {
     width: 160px;
     margin: 2px;
     padding: 6px;
+    border-radius: 16px;
     font-weight: 600;
+    transition: background 90ms;
 }
 
-.dropdown-list:hover{
-    background-color:rgba(255, 255, 255, 0.28);
+.dropdown-list:hover {
+    background-color: rgba(255, 255, 255, 0.28);
     color: black;
     border-radius: 16px;
 }
@@ -210,4 +211,12 @@
     display: block;
 }
 
+
+.z-indexlow {
+    z-index: 900;
+}
+
+.z-indexhigh {
+    z-index: 1000;
+}
 
