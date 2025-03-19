@@ -240,15 +240,17 @@
                                             <li class="dropdown-list"><a href="">Signaler le message</a></li>
                                         </ul>
                                     </div>
-
                                 </div>
 
                             </div>
 
                             <!-- PARTIE POUR ECRIRE UN MESSAGE -->
                             <div class="insertMessage mt-2">
-                                <form action="" method="post">
+                                <form action="#" class="d-flex ">
                                     <textarea class="textareaCustom" name="" id="autoResize"></textarea>
+                                    <label for="fichiers" class="custom-file-upload d-flex align-items-center rounded-circle m-auto"><i class="bi bi-file-image"></i></label>
+                                    <input type="file" name="fichier" id="fichiers">
+                                    <input type="submit" value="Entrer">
                                 </form>
                             </div>
 
