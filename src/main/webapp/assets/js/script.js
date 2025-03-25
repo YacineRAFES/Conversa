@@ -72,3 +72,28 @@ document.addEventListener("DOMContentLoaded", function () {
     // Initialiser la mise en page
     adjustLayout();
 });
+
+async function afficherListeUser() {
+    //
+    var users = "http://localhost:8080/ConversaAPI_war/api/users";
+    const reponse = await fetch(users);
+    const data = await reponse.json();
+    console.log(data);
+    let output = '';
+    for (let user of data) {
+        output += `
+            <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
+                                <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h4 class="card-title">${user.name}"</h4>
+                                    <h6 class="fw-bold">${user.email}</h6>
+                                    <p class="card-text ">
+                                        role : ${user.role}
+                                        date de création : ${user.date}
+                                    </p>
+                                </div>
+                            </a>`
+    }
+    document.getElementById("listUser").innerHTML = output;
+}
+afficherListeUser();

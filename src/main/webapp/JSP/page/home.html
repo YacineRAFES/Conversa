@@ -264,6 +264,15 @@
 
     <!-- LIEN DE SCRIPT -->
     <script src="../../assets/js/bootstrap.js"></script>
+    <script>
+
+        async function afficherFilms() {
+            var users = "http://localhost:8080/ConversaAPI_war/api/users";
+            const reponse = await fetch(users);
+            console.log(users);
+        }
+        afficherFilms();
+    </script>
 </body>
 
 </html>
