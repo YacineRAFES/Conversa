@@ -252,8 +252,3 @@ input[type="file"] {
     cursor: pointer;
     font-size: 25px;
 }
-
-input[type="submit"] {
-    display: none;
-}
-

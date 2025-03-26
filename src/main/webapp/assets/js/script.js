@@ -1,3 +1,6 @@
+import { sendFormData } from "./sendRegisterForm.js"
+import { getCsrfToken } from "./CSRFToken.js";
+
 document.addEventListener('DOMContentLoaded', function () {
     const dropdownButtons = document.querySelectorAll('.mainmenubtn');
 
@@ -73,27 +76,40 @@ document.addEventListener("DOMContentLoaded", function () {
     adjustLayout();
 });
 
-async function afficherListeUser() {
-    //
-    var users = "http://localhost:8080/ConversaAPI_war/api/users";
-    const reponse = await fetch(users);
-    const data = await reponse.json();
-    console.log(data);
-    let output = '';
-    for (let user of data) {
-        output += `
-            <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h4 class="card-title">${user.name}"</h4>
-                                    <h6 class="fw-bold">${user.email}</h6>
-                                    <p class="card-text ">
-                                        role : ${user.role}
-                                        date de création : ${user.date}
-                                    </p>
-                                </div>
-                            </a>`
+
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+
+        const formData = new FormData(this); // Création du FormData avec l'objet formulaire
+
+        // Création d'un objet pour stocker les données sous forme de JSON
+        const formObject = {};
+        formData.forEach((value, key) => {
+            formObject[key] = value;
+        });
+
+        // Envoi du formulaire avec le token
+        sendFormData(formData);
+    });
+});
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const csrfToken = await getCsrfToken();
+    if (csrfToken) {
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "csrf";
+        csrfInput.id = "csrfToken";
+        csrfInput.value = csrfToken;
+
+        const form = document.getElementById("registerForm");
+        if (form) {
+            form.appendChild(csrfInput);
+        }
     }
-    document.getElementById("listUser").innerHTML = output;
-}
-afficherListeUser();
+});

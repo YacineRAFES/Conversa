@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Créer un compte - Conversa</title>
-    <link rel="stylesheet" href="../../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-</head>
-
+<%@include file="/WEB-INF/JSP/header.jsp" %>
 <body class="d-flex flex-column min-vh-100 bg-img">
     <!-- HEADER -->
     <header style="z-index: 2;">
@@ -22,25 +14,25 @@
     <div class="container" style="z-index: 2;">
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
-                <form class="form-control rounded-0 p-5" action="" method="post">
+                <form class="form-control rounded-0 p-5" action="" method="post" id="registerForm">
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Créer un compte</h5>
                     </div>
                     <!-- CHAMPS DE NOM D'UTILISATEUR -->
                     <div class="mb-3">
-                        <label for="user" class="form-label">
+                        <label for="userName" class="form-label">
                             Nom d'utilisateur <span aria-hidden="true">*</span>
                         </label>
-                        <input type="text" class="form-control rounded-0" id="user" aria-label="Nom d'utilisateur" required aria-required="true">
+                        <input type="text" class="form-control rounded-0" id="userName" aria-label="Nom d'utilisateur" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE ADRESSE D'EMAIL -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">
+                        <label for="userEmail" class="form-label">
                             Adresse email <span aria-hidden="true">*</span>
                         </label>
-                        <input type="email" class="form-control rounded-0" id="email" aria-label="Adresse email" required aria-required="true">
+                        <input type="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE MOT DE PASSE -->
@@ -48,7 +40,7 @@
                         <label for="password1" class="form-label">
                             Mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" class="form-control rounded-0" id="password1" aria-label="Mot de passe" required aria-required="true">
+                        <input type="password" class="form-control rounded-0" onkeyup="mdpverif()" id="password1" aria-label="Mot de passe" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE CONFIRMATION DE MOT DE PASSE -->
@@ -56,14 +48,17 @@
                         <label for="password2" class="form-label">
                             Confirmation mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" class="form-control rounded-0" id="password2" aria-label="Confirmation de mot de passe" required aria-required="true">
+                        <input type="password" class="form-control rounded-0" onkeyup="mdpverif()" id="password2" aria-label="Confirmation de mot de passe" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
+                    </div>
+                    <div class="text-center">
+                        <div id="mdpverif"></div>
                     </div>
                     <!-- TODO: CAPTCHA -->
                     <div>CAPTCHA A METTRE</div>
                     <!-- BOUTON DE SUBMIT DU FORMULAIRE -->
-                    <div class="text-center mt-4">
-                        <input type="submit" class="btn btn-outline-success rounded-0 px-3" value="Créer un compte">
+                    <div class="text-center mt-4" id="boutonSiLeMDPestValide">
+
                     </div>
                     <!-- LIEN HYPERTEXTE REDIRECTION VERS LA PAGE DE CONNEXION -->
                     <div class="text-center mt-1">
@@ -75,6 +70,5 @@
     </div>
     <!-- LIEN DE SCRIPT -->
     <script src="../../assets/js/bootstrap.js"></script>
-</body>
+    <%@include file="/WEB-INF/JSP/footer.jsp" %>
 
-</html>
