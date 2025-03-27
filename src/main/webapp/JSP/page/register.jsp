@@ -24,7 +24,7 @@
                         <label for="userName" class="form-label">
                             Nom d'utilisateur <span aria-hidden="true">*</span>
                         </label>
-                        <input type="text" class="form-control rounded-0" id="userName" aria-label="Nom d'utilisateur" required aria-required="true">
+                        <input type="text" name="user" class="form-control rounded-0" id="userName" aria-label="Nom d'utilisateur" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE ADRESSE D'EMAIL -->
@@ -32,7 +32,7 @@
                         <label for="userEmail" class="form-label">
                             Adresse email <span aria-hidden="true">*</span>
                         </label>
-                        <input type="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" required aria-required="true">
+                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE MOT DE PASSE -->
@@ -40,7 +40,7 @@
                         <label for="password1" class="form-label">
                             Mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" class="form-control rounded-0" onkeyup="mdpverif()" id="password1" aria-label="Mot de passe" required aria-required="true">
+                        <input type="password" name="password1" class="form-control rounded-0" onkeyup="mdpverif()" id="password1" aria-label="Mot de passe" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE CONFIRMATION DE MOT DE PASSE -->
@@ -48,7 +48,7 @@
                         <label for="password2" class="form-label">
                             Confirmation mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" class="form-control rounded-0" onkeyup="mdpverif()" id="password2" aria-label="Confirmation de mot de passe" required aria-required="true">
+                        <input type="password" name="password2" class="form-control rounded-0" onkeyup="mdpverif()" id="password2" aria-label="Confirmation de mot de passe" required aria-required="true">
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <div class="text-center">

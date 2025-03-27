@@ -9,7 +9,12 @@ export async function sendFormData(formData) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(formData)
-        });
+        })
+            .then(response => response.json())
+            .then(json => {
+
+            })
+            .catch(error => console.error("Erreur:", error));
 
         console.log("Utilisateur créé avec succès !");
     } catch (error) {

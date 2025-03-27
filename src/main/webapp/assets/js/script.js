@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
 
         // Envoi du formulaire avec le token
-        sendFormData(formData);
+        sendFormData(formObject);
     });
 });
 
