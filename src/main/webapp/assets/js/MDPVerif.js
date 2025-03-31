@@ -7,7 +7,7 @@ export function mdpverif() {
     let ok =
         '<div class="alert alert-success" role="alert">Votre mot de passe correspond bien.</div>';
     let button =
-        '<input type="submit" class="btn btn-outline-success rounded-0 px-3" value="Créer un compte">';
+        '<button type="submit" value="Submit" class="btn btn-outline-success rounded-0 px-3">Créer un compte</button>';
 
     if (mdp1 == mdp2) {
         document.getElementById("mdpverif").innerHTML = ok;

@@ -12,6 +12,7 @@
     </header>
     <!-- PARTIE DE CORPS DU SITE -->
     <div class="container" style="z-index: 2;">
+        <div id="message"></div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
                 <form class="form-control rounded-0 p-5" action="" method="post" id="registerForm">
@@ -55,20 +56,20 @@
                         <div id="mdpverif"></div>
                     </div>
                     <!-- TODO: CAPTCHA -->
-                    <div>CAPTCHA A METTRE</div>
+<%--                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>--%>
                     <!-- BOUTON DE SUBMIT DU FORMULAIRE -->
                     <div class="text-center mt-4" id="boutonSiLeMDPestValide">
 
                     </div>
                     <!-- LIEN HYPERTEXTE REDIRECTION VERS LA PAGE DE CONNEXION -->
                     <div class="text-center mt-1">
-                        <a href="login.html">J'ai déjà un compte</a>
+                        <a href="/login">J'ai déjà un compte</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <!-- LIEN DE SCRIPT -->
-    <script src="../../assets/js/bootstrap.js"></script>
+<%--    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>--%>
     <%@include file="/WEB-INF/JSP/footer.jsp" %>
 

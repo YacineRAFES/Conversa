@@ -9,14 +9,9 @@ export async function sendFormData(formData) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(formData)
-        })
-            .then(response => response.json())
-            .then(json => {
-
-            })
-            .catch(error => console.error("Erreur:", error));
-
-        console.log("Utilisateur créé avec succès !");
+        });
+        const json = await response.json();
+        return json; // Retourne la réponse JSON
     } catch (error) {
         console.error("Erreur:", error);
     }

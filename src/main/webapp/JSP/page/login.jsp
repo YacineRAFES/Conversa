@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion - Conversa</title>
-    <link rel="stylesheet" href="../../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/bootstrapicons.css">
-</head>
+<%@include file="/WEB-INF/JSP/header.jsp" %>
 
 <body class="d-flex flex-column min-vh-100 bg-img">
     <!-- HEADER -->
@@ -23,6 +15,10 @@
     <div class="container">
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
+
+                <c:if test="${param.info == 'compteCree'}">
+                    <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
+                </c:if>
                 <!-- FORMULAIRE DE CONNEXION -->
                 <form class="form-control rounded-0 p-5" action="" method="post">
                     <!-- TITRE DU FORMULAIRE -->
