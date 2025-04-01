@@ -104,24 +104,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.location = "http://localhost:8090/Conversa_war/login?info=compteCree";
             // userNotCreated - ESSAI: OK
         } else if (response.message == "userAlreadyExists") {
-            document.getElementById("message").innerHTML = `<div class="alert alert-danger" role="alert">Le nom ou l'email existe déjà.</div>`;
-            // TODO: TEST  A FAIRE
-            // passwordInvalid - ESSAI: PAS FAIT
+            document.getElementById("message").innerHTML = `<div class="alert alert-danger text-center" role="alert">Le nom ou l'email existe déjà.</div>`;
+            // passwordInvalid - ESSAI: OK
         } else if (response.message == "passwordInvalid") {
-            document.getElementById("message").innerHTML = '<div class="alert alert-danger" role="alert">Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.</div>';
+            document.getElementById("message").innerHTML = '<div class="alert alert-danger text-center" role="alert">Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre.</div>';
             // emailInvalid - ESSAI: OK
         } else if (response.message == "emailInvalid") {
-            document.getElementById("message").innerHTML = '<div class="alert alert-danger" role="alert">L\'adresse e-mail est invalide.</div>';
+            document.getElementById("message").innerHTML = '<div class="alert alert-danger text-center" role="alert">L\'adresse e-mail est invalide.</div>';
             // TODO: TEST  A FAIRE
-            // emptyField - ESSAI: PAS FAIT
+            // emptyField - ESSAI: OK
         } else if (response.message == "emptyField") {
-            document.getElementById("message").innerHTML = '<div class="alert alert-danger" role="alert">Tous les champs doivent être remplis.</div>';
+            document.getElementById("message").innerHTML = '<div class="alert alert-danger text-center" role="alert">Tous les champs doivent être remplis.</div>';
             // emailLengthInvalid - ESSAI: OK
         } else if (response.message == "lengthInvalid") {
-            document.getElementById("message").innerHTML = '<div class="alert alert-danger" role="alert">Le nom d\'utilisateur ou L\'adresse e-mail ne doit pas contenir plus de 50 caractères.</div>';
+            document.getElementById("message").innerHTML = '<div class="alert alert-danger text-center" role="alert">Le nom d\'utilisateur ou L\'adresse e-mail ne doit pas contenir plus de 50 caractères.</div>';
             // Server problem OK
         } else {
-            document.getElementById("message").innerHTML = '<div class="alert alert-danger" role="alert">Erreur lors de la création du compte.</div>';
+            document.getElementById("message").innerHTML = '<div class="alert alert-danger text-center" role="alert">Erreur lors de la création du compte.</div>';
         }
     });
 });

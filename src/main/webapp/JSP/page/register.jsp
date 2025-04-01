@@ -25,7 +25,7 @@
                         <label for="userName" class="form-label">
                             Nom d'utilisateur <span aria-hidden="true">*</span>
                         </label>
-                        <input type="text" name="user" class="form-control rounded-0" id="userName" aria-label="Nom d'utilisateur" required aria-required="true">
+                        <input type="text" name="user" class="form-control rounded-0" id="userName" aria-label="Nom d'utilisateur" aria-required="true" required>
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE ADRESSE D'EMAIL -->
@@ -33,7 +33,7 @@
                         <label for="userEmail" class="form-label">
                             Adresse email <span aria-hidden="true">*</span>
                         </label>
-                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" required aria-required="true">
+                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" aria-required="true" required>
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE MOT DE PASSE -->
@@ -41,7 +41,14 @@
                         <label for="password1" class="form-label">
                             Mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" name="password1" class="form-control rounded-0" onkeyup="mdpverif()" id="password1" aria-label="Mot de passe" required aria-required="true">
+                        <input type="password"
+                               name="password1"
+                               class="form-control rounded-0"
+                               onkeyup="mdpverif()"
+                               id="password1"
+                               aria-label="Mot de passe"
+                               aria-required="true"
+                               required>
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE CONFIRMATION DE MOT DE PASSE -->
@@ -49,14 +56,14 @@
                         <label for="password2" class="form-label">
                             Confirmation mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password" name="password2" class="form-control rounded-0" onkeyup="mdpverif()" id="password2" aria-label="Confirmation de mot de passe" required aria-required="true">
+                        <input type="password" name="password2" class="form-control rounded-0" onkeyup="mdpverif()" id="password2" aria-label="Confirmation de mot de passe" aria-required="true" required>
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <div class="text-center">
                         <div id="mdpverif"></div>
                     </div>
                     <!-- TODO: CAPTCHA -->
-<%--                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>--%>
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>
                     <!-- BOUTON DE SUBMIT DU FORMULAIRE -->
                     <div class="text-center mt-4" id="boutonSiLeMDPestValide">
 
@@ -70,6 +77,6 @@
         </div>
     </div>
     <!-- LIEN DE SCRIPT -->
-<%--    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>--%>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <%@include file="/WEB-INF/JSP/footer.jsp" %>
 
