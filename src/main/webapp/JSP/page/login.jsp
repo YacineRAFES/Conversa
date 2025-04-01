@@ -13,6 +13,7 @@
     </header>
     <!-- PARTIE DE CORPS DU SITE -->
     <div class="container">
+        <div id="message"></div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
 
@@ -20,7 +21,7 @@
                     <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
                 </c:if>
                 <!-- FORMULAIRE DE CONNEXION -->
-                <form class="form-control rounded-0 p-5" action="" method="post">
+                <form id="loginForm" class="form-control rounded-0 p-5" action="" method="post">
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Connexion</h5>
@@ -39,14 +40,15 @@
                             Mot de passe oublié
                         </a>
                     </div>
-                    <div>CAPTCHA A METTRE</div>
+                    <!-- CAPTCHA -->
+                    <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>
                     <!-- BOUTON DE CONNEXION -->
                     <div class="text-center mt-4">
                         <input type="submit" class="btn btn-outline-success rounded-0" value="Se connecter">
                     </div>
                     <!-- PARTIE POUR REDIRIGER DANS UNE PAGE POUR CREER UN COMPTE -->
                     <div class="text-center mt-1">
-                        <a href="register.jsp">
+                        <a href="${pageContext.request.contextPath}/register">
                             Je n'ai pas de compte
                         </a>
                     </div>
@@ -56,7 +58,7 @@
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <!-- FORMULAIRE DE REINITIALISER LE MOT DE PASSE -->
-                            <form action="" class="form-control border-0 p-0" method="post">
+                            <form id="resetForm" action="" class="form-control border-0 p-0" method="post">
                                 <div class="modal-header">
                                     <h1 class="modal-title fs-5" id="ModalReset">Réinitialisation de mot de passe</h1>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"

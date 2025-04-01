@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "LoginServlet", value = "/login")
+@WebServlet(name = "LoginServlet", value = {"/login", "/"})
 public class LoginServlet extends HttpServlet {
 
     @Override
@@ -16,7 +16,10 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Définir le titre de la page
         request.setAttribute("title", "Connexion");
+        // Définir le nom du fichier JavaScript à inclure
+        request.setAttribute("js", "login.js");
         this.getServletContext().getRequestDispatcher("/JSP/page/login.jsp").forward(request, response);
     }
 

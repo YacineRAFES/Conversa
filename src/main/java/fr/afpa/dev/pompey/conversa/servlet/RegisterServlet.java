@@ -18,10 +18,13 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Définir le titre de la page
         request.setAttribute("title", "Inscription");
+
+        // Définir le nom du fichier JavaScript à inclure
+        request.setAttribute("js", "register.js");
+
         this.getServletContext().getRequestDispatcher("/JSP/page/register.jsp").forward(request, response);
-
-
     }
 
     @Override

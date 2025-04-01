@@ -62,7 +62,7 @@
                     <div class="text-center">
                         <div id="mdpverif"></div>
                     </div>
-                    <!-- TODO: CAPTCHA -->
+                    <!-- CAPTCHA -->
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>
                     <!-- BOUTON DE SUBMIT DU FORMULAIRE -->
                     <div class="text-center mt-4" id="boutonSiLeMDPestValide">
@@ -70,7 +70,7 @@
                     </div>
                     <!-- LIEN HYPERTEXTE REDIRECTION VERS LA PAGE DE CONNEXION -->
                     <div class="text-center mt-1">
-                        <a href="/login">J'ai déjà un compte</a>
+                        <a href="${pageContext.request.contextPath}/login">J'ai déjà un compte</a>
                     </div>
                 </form>
             </div>
