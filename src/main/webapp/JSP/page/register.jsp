@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@include file="/WEB-INF/JSP/header.jsp" %>
-<body class="d-flex flex-column min-vh-100 bg-img">
+<main>
     <!-- HEADER -->
     <header style="z-index: 2;">
         <nav class="navbar navbar-expand-lg bg-info">
