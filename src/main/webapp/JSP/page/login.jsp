@@ -1,8 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%@include file="/WEB-INF/JSP/header.jsp" %>
-
-<body class="d-flex flex-column min-vh-100 bg-img">
+<main>
     <!-- HEADER -->
     <header>
         <nav class="navbar navbar-expand-lg bg-info">
@@ -16,10 +15,11 @@
         <div id="message"></div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
-
-                <c:if test="${param.info == 'compteCree'}">
-                    <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
-                </c:if>
+                <div class="message">
+                    <c:if test="${param.info == 'compteCree'}">
+                        <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
+                    </c:if>
+                </div>
                 <!-- FORMULAIRE DE CONNEXION -->
                 <form id="loginForm" class="form-control rounded-0 p-5" action="" method="post">
                     <!-- TITRE DU FORMULAIRE -->
@@ -36,7 +36,7 @@
                         <label for="password" class="form-label">Mot de passe</label>
                         <input type="password" class="form-control rounded-0 text-decoration-none" id="password">
                         <!-- LIEN HYPERTEXTE POUR OUVRIR LE MODAL -->
-                        <a href="" data-bs-toggle="modal" data-bs-target="#motdepasseoublie" class="">
+                        <a data-bs-toggle="modal" data-bs-target="#motdepasseoublie" class="">
                             Mot de passe oublié
                         </a>
                     </div>
@@ -79,8 +79,5 @@
             </div>
         </div>
     </div>
-    <!-- LIEN DE SCRIPT -->
-    <script src="../../assets/js/bootstrap.js"></script>
-</body>
-
-</html>
+</main>
+<%@include file="/WEB-INF/JSP/footer.jsp" %>
