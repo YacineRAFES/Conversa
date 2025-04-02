@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
 <%@include file="/WEB-INF/JSP/header.jsp" %>
 <main>
     <!-- HEADER -->
@@ -76,7 +75,6 @@
             </div>
         </div>
     </div>
-    <!-- LIEN DE SCRIPT -->
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-    <%@include file="/WEB-INF/JSP/footer.jsp" %>
 
+</main>
+<%@include file="/WEB-INF/JSP/footer.jsp" %>
