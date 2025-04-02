@@ -1,13 +1,13 @@
 // Fonction pour récupérer le token CSRF
-export async function getCsrfToken() {
+export async function getCsrfToken(type) {
     try {
-        const response = await fetch("http://localhost:8080/ConversaAPI_war/user", {
+        const response = await fetch("http://localhost:8080/ConversaAPI_war/"+type, {
             method: "GET",
             credentials: "include"
         });
 
         if (!response.ok) {
-            new Error("Erreur lors de la récupération du CSRF token");
+            throw new Error("Erreur lors de la récupération du CSRF token");
         }
 
         const data = await response.json();
