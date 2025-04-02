@@ -1,5 +1,5 @@
 //Verifie les mots de passe dans 2 inputs
-export function mdpverif() {
+function mdpverif() {
     let mdp1 = document.getElementById("password1").value;
     let mdp2 = document.getElementById("password2").value;
     let pasok =
