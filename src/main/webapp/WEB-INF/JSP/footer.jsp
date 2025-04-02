@@ -11,7 +11,14 @@
     </c:if>
 
     <!-- Script de la page -->
-    <script type="module" src="/Conversa_war/assets/js/${js}"></script>
+    <script type="module" src="${pageContext.request.contextPath}/assets/js/${js}"></script>
+
+    <c:if test="${requestScope.title eq 'Inscription' or requestScope.title eq 'Connexion'}">
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    </c:if>
+    <c:if test="${requestScope.title eq 'Inscription'}">
+        <script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
+    </c:if>
 
 <%--    <script type="module" src="${script}"></script>--%>
     <script src="${bootstrapbundlejs}"></script>
