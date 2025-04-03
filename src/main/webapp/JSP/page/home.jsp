@@ -1,17 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connexion - Conversa</title>
-    <link rel="stylesheet" href="../../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../../assets/css/style.css">
-    <link rel="stylesheet" href="../../assets/css/bootstrapicons.css">
-</head>
-
-<body class="min-vh-100 bg-gradient-custom">
-    <!-- PARTIE DE CORPS DU SITE -->
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@include file="/WEB-INF/JSP/header.jsp" %>
+<main>
     <div class="container-fluid">
         <div class="row" style="height: 100vh; ">
             <!-- SIDEBAR MENU DE L'APPLICATION -->
@@ -260,19 +249,5 @@
         </div>
 
     </div>
-
-
-    <!-- LIEN DE SCRIPT -->
-    <script src="../../assets/js/bootstrap.js"></script>
-    <script>
-
-        async function afficherFilms() {
-            var users = "http://localhost:8080/ConversaAPI_war/api/users";
-            const reponse = await fetch(users);
-            console.log(users);
-        }
-        afficherFilms();
-    </script>
-</body>
-
-</html>
+</main>
+<%@include file="/WEB-INF/JSP/footer.jsp" %>
