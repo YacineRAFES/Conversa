@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         if (response.message == "userCreated") {
-            window.location = "http://localhost:8090/Conversa_war/login?info=compteCree";
+            window.location = "./login?info=compteCree";
         } else if (response.message == "userAlreadyExists") {
             message.appendChild(createAlert(AlertMessages.UserAlreadyExists,"warning"));
             resetCaptcha();
