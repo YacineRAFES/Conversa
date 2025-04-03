@@ -15,26 +15,38 @@
         <div id="message"></div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
-                <div class="message">
+                <div class="message disparition">
                     <c:if test="${param.info == 'compteCree'}">
                         <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
                     </c:if>
                 </div>
                 <!-- FORMULAIRE DE CONNEXION -->
-                <form id="loginForm" class="form-control rounded-0 p-5" action="" method="post">
+                <form id="loginForm" class="form-control rounded-0 p-5 mx-auto my-auto" method="post">
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Connexion</h5>
                     </div>
                     <!-- CHAMPS D'EMAIL -->
                     <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control rounded-0" id="email">
+                        <label for="userEmail" class="form-label">
+                            Adresse email <span aria-hidden="true">*</span>
+                        </label>
+                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" aria-required="true" required>
+                        <span class="visually-hidden">Ce champ est obligatoire</span>
                     </div>
                     <!-- CHAMPS DE MOT DE PASSE -->
                     <div class="mb-3">
-                        <label for="password" class="form-label">Mot de passe</label>
-                        <input type="password" class="form-control rounded-0 text-decoration-none" id="password">
+                        <label for="password" class="form-label">
+                            Mot de passe <span aria-hidden="true">*</span>
+                        </label>
+                        <input type="password"
+                               name="password"
+                               class="form-control rounded-0 text-decoration-none"
+                               id="password"
+                               aria-label="Mot de passe"
+                               aria-required="true"
+                               required>
+                        <span class="visually-hidden">Ce champ est obligatoire</span>
                         <!-- LIEN HYPERTEXTE POUR OUVRIR LE MODAL -->
                         <a data-bs-toggle="modal" data-bs-target="#motdepasseoublie" class="">
                             Mot de passe oublié
@@ -44,7 +56,7 @@
                     <div class="cf-turnstile" data-sitekey="0x4AAAAAABCkJ2clzFt4U0Yt"></div>
                     <!-- BOUTON DE CONNEXION -->
                     <div class="text-center mt-4">
-                        <input type="submit" class="btn btn-outline-success rounded-0" value="Se connecter">
+                        <button type="submit" value="Submit" class="btn btn-outline-success rounded-0 px-3">Se connecter</button>
                     </div>
                     <!-- PARTIE POUR REDIRIGER DANS UNE PAGE POUR CREER UN COMPTE -->
                     <div class="text-center mt-1">
