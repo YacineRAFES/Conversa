@@ -252,3 +252,19 @@ input[type="file"] {
     cursor: pointer;
     font-size: 25px;
 }
+
+.disparition {
+    animation: hide 5s forwards;
+}
+
+@keyframes hide {
+    0%   {
+        opacity: 1;
+    }
+    90%  {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
