@@ -15,6 +15,4 @@
     <link rel="stylesheet" href="${style}">
     <link rel="stylesheet" href="${bootstrapicons}">
 </head>
-<body class="d-flex flex-column min-vh-100 <c:if test="${title eq 'Inscription' or title eq 'Connexion'}">
-    bg-img
-</c:if>">
+<body class="min-vh-100 bg-gradient-custom">
