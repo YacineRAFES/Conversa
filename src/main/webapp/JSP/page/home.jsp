@@ -15,13 +15,13 @@
                         </li>
                         <!-- BOUTON DE ACCUEIL -->
                         <li class="nav-item mb-1">
-                            <a class="nav-link btn-sidebar" href="home.html">
+                            <a class="nav-link btn-sidebar" href="/home">
                                 <i class="bi bi-house fs-2" aria-label="Accueil"></i>
                             </a>
                         </li>
                         <!-- BOUTON DE MESSAGES PRIVEES -->
                         <li class="nav-item mb-1">
-                            <a class="nav-link btn-sidebar" href="messagesPrivate.html">
+                            <a class="nav-link btn-sidebar" href="/messageprive">
                                 <i class="bi bi-chat-right fs-2" aria-label="Messages privées"></i>
                             </a>
                         </li>
