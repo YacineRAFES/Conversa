@@ -49,7 +49,7 @@
                             <!-- LISTE DES COMMUNAUTES -->
                             <div class="d-flex d-inline-flex pt-3 flex-wrap overflow-y-scroll overflow-y-hidden" style="scrollbar-width: none;  height: calc(80vh - 1rem);">
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -60,7 +60,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -71,7 +71,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -82,7 +82,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -93,7 +93,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -104,7 +104,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -115,7 +115,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -126,7 +126,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -137,7 +137,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem; max-height: 21rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -148,7 +148,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -159,7 +159,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -170,7 +170,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="bannière de la communauté">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="bannière de la communauté">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -181,7 +181,7 @@
                                     </div>
                                 </a>
                                 <a class="m-1 card text-decoration-none groupEffet align-self-stretch" href="#" style="width: 18rem;">
-                                    <img src="../../assets/images/nightcity.jpg" class="card-img-top" alt="...">
+                                    <img src="${pageContext.request.contextPath}/assets/images/nightcity.jpg" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h4 class="card-title">Communauté</h4>
                                         <h6 class="fw-bold">Catégorie</h6>
@@ -191,15 +191,12 @@
                                         </p>
                                     </div>
                                 </a>
-
-                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </main>
 <%@include file="/WEB-INF/JSP/footer.jsp" %>
