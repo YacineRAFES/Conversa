@@ -6,14 +6,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
-@WebServlet(name = "UsersServlet", value = "/users")
-public class UsersServlet extends HttpServlet {
+@WebServlet(name = "MessagePriveServlet", value = "/messageprive")
+public class MessagePriveServlet extends HttpServlet {
 
     @Override
     public void init() {
@@ -22,9 +18,11 @@ public class UsersServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        this.getServletContext().getRequestDispatcher("/JSP/page/users.jsp").forward(request, response);
-
+// Définir le titre de la page
+        request.setAttribute("title", "Messages Privés");
+        // Définir le nom du fichier JavaScript à inclure
+        request.setAttribute("js", "messagesprive.js");
+        this.getServletContext().getRequestDispatcher("/JSP/page/clients/messagesPrivate.jsp").forward(request, response);
     }
 
     @Override
