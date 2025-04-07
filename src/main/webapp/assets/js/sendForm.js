@@ -10,8 +10,7 @@ export async function sendFormData(formData, type) {
             },
             body: JSON.stringify(formData)
         });
-        const json = await response.json();
-        return json; // Retourne la réponse JSON
+        return await response.json(); // Retourne la réponse JSON
     } catch (error) {
         console.error("Erreur:", error);
     }
