@@ -21,7 +21,7 @@ public class HomeServlet extends HttpServlet {
         // Définir le nom du fichier JavaScript à inclure
         request.setAttribute("js", "home.js");
 
-        this.getServletContext().getRequestDispatcher("/JSP/page/home.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher("/JSP/page/clients/home.jsp").forward(request, response);
     }
 
     @Override
