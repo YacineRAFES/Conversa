@@ -1,5 +1,4 @@
-import { getCsrfToken } from "./CSRFToken.js";
-import { createAlert, csrfInput } from "./constructElement.js";
+import { createAlert } from "./constructElement.js";
 import { sendFormData } from "./sendForm.js";
 import { AlertMessages } from "./alertMessages.js";
 

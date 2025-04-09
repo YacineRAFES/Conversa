@@ -1,4 +1,3 @@
-import { getCsrfToken } from "./CSRFToken.js";
 import { createAlert, csrfInput } from "./constructElement.js";
 import { AlertMessages } from "./alertMessages.js";
 import {loginUser} from "./loginUser.js";
@@ -35,16 +34,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             resetCaptcha();
         }
     });
-});
-
-document.addEventListener("DOMContentLoaded", async function () {
-    const csrfToken = await getCsrfToken(type);
-    if (csrfToken) {
-        const form = document.getElementById("loginForm");
-        if (form) {
-            form.appendChild(csrfInput(csrfToken));
-        }
-    }
 });
 
 function resetCaptcha(){

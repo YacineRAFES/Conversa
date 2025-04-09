@@ -1,5 +1,4 @@
 import { sendFormData } from "./sendForm.js";
-import { getCsrfToken } from "./CSRFToken.js";
 import { csrfInput, createAlert } from "./constructElement.js";
 import { AlertMessages } from "./alertMessages.js";
 
@@ -48,16 +47,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             resetCaptcha();
         }
     });
-});
-
-document.addEventListener("DOMContentLoaded", async function () {
-    const csrfToken = await getCsrfToken(type);
-    if (csrfToken) {
-        const form = document.getElementById("registerForm");
-        if (form) {
-            form.appendChild(csrfInput(csrfToken));
-        }
-    }
 });
 
 // Fonction pour réinitialiser le captcha
