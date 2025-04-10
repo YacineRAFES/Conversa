@@ -18,8 +18,7 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Définir le titre de la page
         request.setAttribute("title", "Connexion");
-        // Définir le nom du fichier JavaScript à inclure
-        request.setAttribute("js", "login.js");
+
         this.getServletContext().getRequestDispatcher("/JSP/page/login.jsp").forward(request, response);
     }
 

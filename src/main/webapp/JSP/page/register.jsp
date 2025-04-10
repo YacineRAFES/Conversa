@@ -12,17 +12,15 @@
     <!-- PARTIE DE CORPS DU SITE -->
     <div class="container" style="z-index: 2;">
         <div id="message">
-            <c:if test="${param.info == 'erreurCaptcha'}">
-                <div class="alert alert-danger" role="alert">
-                    ${error}
-                </div>
+            <c:if test="${not empty setDivError}">
+                ${setDivError}
             </c:if>
         </div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
                 <form class="form-control rounded-0 p-5" action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
                     <!-- CSRF TOKEN -->
-                    <input type="hidden" name="csrftoken" value="${csrfToken}"/>
+                    <input type="hidden" name="csrfToken" value="${csrfToken}"/>
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Créer un compte</h5>
@@ -85,4 +83,5 @@
     </div>
 
 </main>
+<script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
 <%@include file="/WEB-INF/JSP/footer.jsp" %>
