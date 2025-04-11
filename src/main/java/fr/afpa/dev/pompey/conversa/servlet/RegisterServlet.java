@@ -2,6 +2,7 @@ package fr.afpa.dev.pompey.conversa.servlet;
 
 import fr.afpa.dev.pompey.conversa.securite.Captcha;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
+import fr.afpa.dev.pompey.conversa.utilitaires.Page;
 import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,14 +23,13 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.envoyerFormulaire
 public class RegisterServlet extends HttpServlet {
     private static final String MESSAGE = "message";
     private static final String SET_DIV_ERROR = "setDivError";
-    private static final String CHEMIN_DE_LA_PAGE = "/JSP/page/register.jsp";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Définir le titre de la page
         request.setAttribute("title", "Inscription");
 
-        this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+        this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
     }
 
     @Override
@@ -54,34 +54,43 @@ public class RegisterServlet extends HttpServlet {
         JsonObject jsonObject = envoyerFormulaireVersApi(formData, REGISTER);
         if (jsonObject.getString("status").equals("success")) {
             log.info("Inscription réussie et redirection vers la page de connexion");
-            this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+            this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response);
         } else if (jsonObject.getString("status").equals("error")) {
+            request.setAttribute("title", "Inscription");
 
-            if (jsonObject.getString(MESSAGE).equals("lengthInvalid")) {
+            if (jsonObject.getString(MESSAGE).equals("lengthInvalid")) { // Au cas d'erreur de longueur
                 log.info("lengthInvalid");
-                request.setAttribute(SET_DIV_ERROR, Alert.LENGTHINVALID);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                request.setAttribute(SET_DIV_ERROR, Alert.LENGTHINVALID); // Afficher le message d'erreur
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response); // Rediriger vers la page d'inscription
             } else if (jsonObject.getString(MESSAGE).equals("userAlreadyExists")) {
                 log.info("userAlreadyExists");
                 request.setAttribute(SET_DIV_ERROR, Alert.USERALREADYEXISTS);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
 
             } else if (jsonObject.getString(MESSAGE).equals("emailInvalid")) {
+
                 log.info("emailInvalid");
                 request.setAttribute(SET_DIV_ERROR, Alert.EMAILINVALID);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+
             } else if (jsonObject.getString(MESSAGE).equals("passwordInvalid")) {
+
                 log.info("passwordInvalid");
                 request.setAttribute(SET_DIV_ERROR, Alert.PASSWORDINVALID);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+
             } else if (jsonObject.getString(MESSAGE).equals("emptyField")) {
+
                 log.info("emptyField");
                 request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+
             } else {
+
                 log.info("errorUnknown");
                 request.setAttribute(SET_DIV_ERROR, Alert.UNKNOWNERROR);
-                this.getServletContext().getRequestDispatcher(CHEMIN_DE_LA_PAGE).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+
             }
         }
     }

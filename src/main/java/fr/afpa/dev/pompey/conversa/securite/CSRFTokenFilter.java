@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-@WebFilter("*")
+@WebFilter("/*")
 @Slf4j
 public class CSRFTokenFilter implements Filter {
     private static final String CSRFTOKEN = "csrfToken";
@@ -29,11 +29,12 @@ public class CSRFTokenFilter implements Filter {
         } else {
             List<String> routesAProteger = List.of(
                     contextPath + "/register",
-                    contextPath + "/login"
+                    contextPath + "/login",
+                    contextPath + "/"
             );
 
             log.info("filtre csrf appele");
-            HttpSession session = httpRequest.getSession(false);
+            HttpSession session = httpRequest.getSession(true);
 
             // Vérifier uniquement pour les requêtes sensibles (POST, PUT, DELETE)
             String method = httpRequest.getMethod();

@@ -83,5 +83,5 @@
     </div>
 
 </main>
-<script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
+<%--<script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>--%>
 <%@include file="/WEB-INF/JSP/footer.jsp" %>

@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -15,43 +16,62 @@ import java.util.Map;
 @Slf4j
 public class SendJSON {
 
-    //Liste APIURL
     public static final String REGISTER = "user";
     public static final String LOGIN = "login";
+
     private SendJSON() {}
 
-
     public static JsonObject envoyerFormulaireVersApi(Map<String, String> formData, String apiUrl) {
+        HttpURLConnection conn = null;
+
         try {
-            HttpURLConnection conn;
-            // Construction du JSON à partir de la Map
             JSONObject json = new JSONObject(formData);
-            // Connexion à l'API
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/"+apiUrl);
+            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
+
+            // Configuration de la connexion
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
 
-            log.info(json.toString());
-            conn.getOutputStream().write(json.toString().getBytes(StandardCharsets.UTF_8));
+            // Envoi du JSON
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+            }
 
-            // Vérifier si la réponse HTTP est un succès
-            int responseCode = conn.getResponseCode();
-            InputStream inputStream = (responseCode < 400)
-                    ? conn.getInputStream()
-                    : conn.getErrorStream();
+            // Lecture de la réponse JSON (succès ou erreur)
+            JsonObject jsonObject = lireReponseJSON(conn);
 
-            JsonObject jsonObject = Json.createReader(inputStream).readObject();
-
-            log.info("Réponse JSON erreur : {}", jsonObject);
-
+            log.info("Réponse JSON : {}", jsonObject);
             return jsonObject;
 
         } catch (IOException e) {
+            log.error("Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
             e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
         }
         return null;
+    }
+
+    private static JsonObject lireReponseJSON(HttpURLConnection conn) throws IOException {
+        InputStream inputStream;
+
+        try {
+            inputStream = conn.getInputStream(); // Réponse 2xx
+        } catch (IOException e) {
+            inputStream = conn.getErrorStream(); // Réponse 4xx ou 5xx
+        }
+
+        if (inputStream != null) {
+            return Json.createReader(inputStream).readObject();
+        } else {
+            return Json.createObjectBuilder()
+                    .add("message", "Aucune réponse reçue de l'API")
+                    .build();
+        }
     }
 }
