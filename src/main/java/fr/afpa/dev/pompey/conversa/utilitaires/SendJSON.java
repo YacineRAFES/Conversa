@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -21,7 +22,7 @@ public class SendJSON {
 
     private SendJSON() {}
 
-    public static JsonObject envoyerFormulaireVersApi(Map<String, String> formData, String apiUrl) {
+    public static Map<String, Object> envoyerFormulaireVersApi(Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
@@ -43,8 +44,15 @@ public class SendJSON {
             // Lecture de la réponse JSON (succès ou erreur)
             JsonObject jsonObject = lireReponseJSON(conn);
 
+            String autorizationHeader = conn.getHeaderField("Authorization");
+
             log.info("Réponse JSON : {}", jsonObject);
-            return jsonObject;
+            log.info("AutorizationHeader : {}", autorizationHeader);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("json", jsonObject);
+            result.put("Authorization", autorizationHeader);
+            return result;
 
         } catch (IOException e) {
             log.error("Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());

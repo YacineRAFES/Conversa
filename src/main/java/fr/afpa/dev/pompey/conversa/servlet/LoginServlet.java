@@ -5,6 +5,7 @@ import fr.afpa.dev.pompey.conversa.utilitaires.Page;
 import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
 
@@ -29,6 +31,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
+        // response qui permet d'envoyer une réponse HTTP au client
         // Définir le titre de la page
         request.setAttribute("title", "Connexion");
 
@@ -47,23 +51,51 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/login?info=erreurCaptcha");
             return;
         }
+
         Map<String, String> formData = new HashMap<>();
         formData.put("email", request.getParameter("email"));
         formData.put("password", request.getParameter("password"));
 
-        JsonObject jsonObject = envoyerFormulaireVersApi(formData, LOGIN);
-        if (jsonObject.getString("status").equals("success")) {
-            request.setAttribute("title", "Accueil");
-            log.info("Inscription réussie et redirection vers la page de connexion");
-            this.getServletContext().getRequestDispatcher(Page.HOME).forward(request, response);
-        } else if (jsonObject.getString("status").equals("error")) {
-            request.setAttribute("title", "Connexion");
-            log.info("INVALIDCREDENTIALS");
-            request.setAttribute(SET_DIV_ERROR, Alert.INVALIDCREDENTIALS); // Afficher le message d'erreur
-            this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
-        }else{
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(formData, LOGIN);
+
+        if(apiResponse != null){
+            JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+            String autorisation = (String) apiResponse.get("Authorization");
+
+            if (jsonObject.getString("status").equals("success")) {
+
+                log.info("Connexion réussie");
+                String token = autorisation.replace("Bearer ", "");
+                request.setAttribute("title", "Accueil");
+                log.info("Inscription réussie et redirection vers la page de connexion");
+                Cookie cookie = new Cookie("jwt", token);
+                cookie.setHttpOnly(true);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+
+                this.getServletContext().getRequestDispatcher(Page.HOME).forward(request, response);
+
+            } else if (jsonObject.getString("status").equals("error")) {
+
+                request.setAttribute("title", "Connexion");
+
+                if(jsonObject.getString(MESSAGE).equals("InvalidCredentials")) {
+
+                    log.info("INVALIDCREDENTIALS");
+                    request.setAttribute(SET_DIV_ERROR, Alert.INVALIDCREDENTIALS); // Afficher le message d'erreur
+                    this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
+
+                }
+            } else {
+
+                request.setAttribute(SET_DIV_ERROR, Alert.ERRORSERVER); // Afficher le message d'erreur
+                this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
+
+            }
 
         }
+
+
     }
     
     @Override

@@ -4,7 +4,7 @@
         <div>
             <!-- BOUTON DE DECONNEXION -->
             <li class="nav-item mb-1">
-                <a class="nav-link btn-sidebar-for-power btn-sidebar-power click-to-red" href="#">
+                <a class="nav-link btn-sidebar-for-power btn-sidebar-power click-to-red" href="${pageContext.request.contextPath}/deconnexion">
                     <i class="bi bi-power fs-2" aria-label="Déconnexion"></i>
                 </a>
             </li>

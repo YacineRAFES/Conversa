@@ -21,9 +21,9 @@
                     </c:if>
                 </div>
                 <!-- FORMULAIRE DE CONNEXION -->
-                <form id="loginForm" class="form-control rounded-0 p-5 mx-auto my-auto" method="post">
+                <form id="loginForm" action="${pageContext.request.contextPath}/login" class="form-control rounded-0 p-5 mx-auto my-auto" method="post">
                     <!-- CSRF TOKEN -->
-                    <input type="hidden" name="csrftoken" value="${csrfToken}"/>
+                    <input type="hidden" name="csrfToken" value="${csrfToken}"/>
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Connexion</h5>
