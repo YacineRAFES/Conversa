@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
                 log.info("Connexion réussie");
                 String token = autorisation.replace("Bearer ", "");
                 request.setAttribute("title", "Accueil");
-                log.info("Inscription réussie et redirection vers la page de connexion");
+                log.info("Connexion réussie et redirection vers la page d'accueil");
                 Cookie cookie = new Cookie("jwt", token);
                 cookie.setHttpOnly(true);
                 cookie.setPath("/");

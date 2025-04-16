@@ -22,7 +22,7 @@
             </li>
             <!-- BOUTON DE CONTACTS -->
             <li class="nav-item mb-1">
-                <a class="nav-link btn-sidebar" href="${pageContext.request.contextPath}/contacts">
+                <a class="nav-link btn-sidebar" href="${pageContext.request.contextPath}/amis">
                     <i class="bi bi-person-lines-fill fs-2" aria-label="Contacts"></i>
                 </a>
             </li>

@@ -1,6 +1,7 @@
 package fr.afpa.dev.pompey.conversa.utilitaires;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -19,8 +20,38 @@ public class SendJSON {
 
     public static final String REGISTER = "user";
     public static final String LOGIN = "login";
+    public static final String AMIS = "amis";
 
     private SendJSON() {}
+
+    public static JsonArray recupererInfoArray(String jwt, String apiUrl) {
+        HttpURLConnection conn = null;
+
+        try {
+            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            conn = (HttpURLConnection) url.openConnection();
+
+            // Configuration de la connexion
+            conn.setRequestMethod("GET");
+            conn.setRequestProperty("Authorization", "Bearer " + jwt);
+            conn.setRequestProperty("Accept", "application/json");
+
+            // Lecture de la réponse JSON sous forme de tableau
+            try (InputStream inputStream = conn.getInputStream()) {
+                return Json.createReader(inputStream).readArray();
+            }
+
+        } catch (IOException e) {
+            log.error("Erreur lors de la connexion à l'API : {}", e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        return null;
+    }
+
 
     public static Map<String, Object> envoyerFormulaireVersApi(Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;

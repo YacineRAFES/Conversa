@@ -27,7 +27,7 @@ public class DeconnexionServlet extends HttpServlet {
             }
             session.invalidate();
         }
-        this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
     @Override
