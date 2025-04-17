@@ -43,22 +43,6 @@
                                         </a>
                                     </div>
                                 </c:forEach>
-                                <div>
-                                    <a class="user d-flex align-items-center p-2 m-1 px-3 text-decoration-none text-reset" href="#">
-                                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                                        <div class="m-2">
-                                            <div class="username">Username</div>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div>
-                                    <a class="user d-flex align-items-center p-2 m-1 px-3 text-decoration-none text-reset" href="#">
-                                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                                        <div class="m-2">
-                                            <div class="username">Username</div>
-                                        </div>
-                                    </a>
-                                </div>
                             </div>
                         </div>
                     </div>
