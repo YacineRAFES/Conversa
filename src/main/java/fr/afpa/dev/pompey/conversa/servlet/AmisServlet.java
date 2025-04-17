@@ -24,6 +24,7 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
 @Slf4j
 @WebServlet(name = "AmisServlet", value = "/amis")
 public class AmisServlet extends HttpServlet {
+    private static final String SET_DIV = "setDiv";
 
     @Override
     public void init() {
@@ -47,16 +48,19 @@ public class AmisServlet extends HttpServlet {
         Map<String, String> formData = new HashMap<>();
         formData.put("jwt", jwt);
         log.info("formData : " + formData);
-        JsonArray amisJson = recupererArray(formData, AMIS, GET);
+        Map<String, JsonArray>  amisJson = envoyerFormulaireVersApiAvecObjects(formData, AMIS);
+        JsonArray amis = amisJson.get("amis");
+        JsonArray demandes = amisJson.get("demandes");
 
         // Une fois récupérer sous forme de tableau, il faut les afficher dans la page amis.jsp
         List<Map<String, Object>> amisList = new ArrayList<>();
+        List<Map<String, Object>> amisRequest = new ArrayList<>();
 
-        if (amisJson == null) {
+        if (amis == null) {
             log.error("amisJson est null, la récupération a échoué");
             request.setAttribute("amisList", null);
         } else {
-            for (JsonValue value : amisJson) {
+            for (JsonValue value : amis) {
                 JsonObject amiJson = value.asJsonObject();
 
                 Map<String, Object> ami = new HashMap<>();
@@ -71,10 +75,32 @@ public class AmisServlet extends HttpServlet {
                 amisList.add(ami);
             }
         }
+
+        if (demandes == null) {
+            log.error("amisJson est null, la récupération a échoué");
+            request.setAttribute("amisRequest", null);
+        } else {
+            for (JsonValue value : demandes) {
+                JsonObject demandesJson = value.asJsonObject();
+
+                Map<String, Object> demande = new HashMap<>();
+                demande.put("idGroupeMessagesPrives", demandesJson.getInt("idGroupeMessagesPrives"));
+                demande.put("statut", demandesJson.getString("statut"));
+                demande.put("dateDemande", demandesJson.getString("dateDemande"));
+                demande.put("userIdAmiDe", demandesJson.getInt("userIdAmiDe"));
+                demande.put("userIdDemandeur", demandesJson.getInt("userIdDemandeur"));
+                demande.put("userId", demandesJson.getInt("userId"));
+                demande.put("username", demandesJson.getString("username"));
+
+                amisRequest.add(demande);
+            }
+        }
         // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
         // response qui permet d'envoyer une réponse HTTP au client
         // Définir le titre de la page
         request.setAttribute("title", "Amis");
+        request.setAttribute("amisList", amisList);
+        request.setAttribute("amisRequest", amisRequest);
 
         this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
     }
@@ -83,7 +109,6 @@ public class AmisServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("title", "Amis");
         String jwt = null;
-        request.setAttribute("title", "Amis");
         String action = request.getParameter("action");
         Cookie[] cookies = request.getCookies();
 
@@ -96,14 +121,15 @@ public class AmisServlet extends HttpServlet {
             }
         }
 
+        Map<String, String> formData = new HashMap<>();
+        formData.put("search", request.getParameter("searchInput"));
+        formData.put("action", action);
+        formData.put("jwt", jwt);
+
         //Verification JWT
 
         if("search".equals(action)) {
-            Map<String, String> formData = new HashMap<>();
-            formData.put("search", request.getParameter("searchInput"));
-            formData.put("action", action);
-            formData.put("jwt", jwt);
-            JsonArray amisJson = recupererArray(formData, AMIS, POST);
+            JsonArray amisJson = recupererArray(formData, AMIS);
 
             // Une fois récupérer sous forme de tableau, il faut les afficher dans la page amis.jsp
             List<Map<String, Object>> amisList = new ArrayList<>();
@@ -121,23 +147,48 @@ public class AmisServlet extends HttpServlet {
             }
 
         }else if("add".equals(action)) {
-            Map<String, String> formData = new HashMap<>();
-            formData.put("search", request.getParameter("searchInput"));
-            formData.put("action", action);
-            formData.put("jwt", jwt);
             Map<String, Object> apiResponse = envoyerFormulaireVersApi(formData, AMIS);
+
             if(apiResponse != null) {
                 JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+
+                if (jsonObject.getString("status").equals("success")) {
+
+                    if(jsonObject.getString("message").equals("friendRequestSent")) {
+                        log.info("Demande d'ami envoyée");
+                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
+                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+
+                    } else if(jsonObject.getString("message").equals("friendRequestAlreadySent")) {
+                        log.error("Demande d'ami déjà envoyée");
+                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYSENT);
+                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+
+                    } else if(jsonObject.getString("message").equals("friendRequestAlreadyAccepted")) {
+                        log.error("Demande d'ami déjà acceptée");
+                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYACCEPTED);
+                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+
+                    } else {
+                        log.error("Erreur lors de l'ajout d'ami");
+                        request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+                    }
+
+                } else if (jsonObject.getString("status").equals("error")) {
+                    log.error("Erreur lors de l'ajout d'ami");
+                    request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                    this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+                }
+            }else{
+                log.error("apiResponse est null, la récupération a échoué");
+                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
             }
 
         } else {
             // Gérer d'autres actions si nécessaire
             this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
         }
-    }
-    
-    @Override
-    public void destroy() {
-    
     }
 }

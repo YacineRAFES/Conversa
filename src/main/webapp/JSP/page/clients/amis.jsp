@@ -9,12 +9,18 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col mt-3">
+                            <div id="message">
+                                <c:if test="${not empty setDiv}">
+                                    ${setDiv}
+                                </c:if>
+                            </div>
                             <!-- TITRE DE BIENVENUE -->
                             <div class="text-center fw-bold fs-4 text-white mb-3">
                                 Liste des amis
                             </div>
                             <!-- FORMULAIRE DE RECHERCHE D'UN AMI OU AJOUT UN AMI -->
                             <form action="${pageContext.request.contextPath}/amis" method="post">
+                                <%-- TODO: FAIRE <input type="hidden" name="formType" value="friendSearchForm"> --%>
                                 <div class="mb-3 d-flex justify-content-center">
                                     <input type="text" class="placeholderCustom form-control rounded-3"
                                            name="searchInput"
@@ -44,9 +50,41 @@
                                     </div>
                                 </c:forEach>
                             </div>
+
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-2 bloc-principal pt-3">
+                <div class="text-center fw-bold fs-4 text-white mb-3">
+                    Demande d'amis
+                </div>
+                <!-- LISTE DES DEMANDES D'AMIS -->
+                <c:forEach var="amisRequest" items="${amisRequest}">
+                    <div class="user-friendrequest d-flex align-items-center p-2 m-1 text-decoration-none text-reset">
+                        <img src="../../assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                        <div class="m-2">
+                            <div class="username">${amisRequest.username}</div>
+                        </div>
+                        <div class="ms-auto">
+                            <form action="${pageContext.request.contextPath}/amis" class="" method="post">
+                                    <%-- TODO: FAIRE <input type="hidden" name="formType" value="friendRequestResponse"> --%>
+                                <!-- CSRF TOKEN -->
+                                <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+
+                                <input name="username" type="hidden" value="${amisRequest.username}">
+                                <!-- Bouton YES pour accepter la demande d'amis -->
+                                <button type="submit" class="btn-friendrequest-valider" name="action" value="yes">
+                                    <i class="bi bi-check-lg"></i>
+                                </button>
+                                <!-- Bouton NO pour refuser la demande d'amis -->
+                                <button type="submit" class="btn-friendrequest-annuler" name="action" value="no">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </c:forEach>
             </div>
         </div>
     </div>

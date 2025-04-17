@@ -31,6 +31,12 @@ public class Alert {
 
     private static final String UNKNOWN_ERROR = "Erreur inconnue.";
 
+    private static final String FRIEND_REQUEST_SENT = "Demande d'ami envoyée";
+
+    private static final String FRIEND_REQUEST_ALREADY_SENT = "Demande d'ami déjà envoyée";
+
+    private static final String FRIEND_REQUEST_ALREADY_ACCEPTED = "Demande d'ami déjà acceptée";
+
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
     }
@@ -39,14 +45,72 @@ public class Alert {
         return "<div class='alert alert-warning text-center' role='alert'>"+message+"</div>";
     }
 
+    private static String setDivAlertInfo(String message) {
+        return "<div class='alert alert-info text-center' role='alert'>"+message+"</div>";
+    }
+
+    /**
+     * Avertissement pour les champs vides
+     */
     public static final String EMPTYFIELD = setDivAlertWarning(EMPTY_FIELD);
+
+    /**
+     * Message d'erreur pour le serveur
+     */
     public static final String ERRORSERVER = setDivAlertDanger(ERROR_SERVER);
+
+    /**
+     * Avertissement que l'utilisateur existe déjà
+     */
     public static final String USERALREADYEXISTS = setDivAlertWarning(USER_ALREADY_EXISTS);
+
+    /**
+     * Avertissement pour le mot de passe invalide
+     */
     public static final String PASSWORDINVALID = setDivAlertWarning(PASSWORD_INVALID);
+
+    /**
+     * Avertissement pour l'email invalide
+     */
     public static final String EMAILINVALID = setDivAlertWarning(EMAIL_INVALID);
+
+    /**
+     * Avertissement pour la longueur invalide
+     */
     public static final String LENGTHINVALID = setDivAlertWarning(LENGTH_INVALID);
-    public static final String ERRORUSERCREATED =  setDivAlertWarning(ERROR_USER_CREATED);
+
+    /**
+     * Erreur pour la création de l'utilisateur
+     */
+    public static final String ERRORUSERCREATED =  setDivAlertDanger(ERROR_USER_CREATED);
+
+    /**
+     * Erreur pour les identifiants invalides
+     */
     public static final String INVALIDCREDENTIALS = setDivAlertWarning(INVALID_CREDENTIALS);
+
+    /**
+     * Erreur pour les identifiants invalides
+     */
     public static final String ERRORCREDENTIALS = setDivAlertDanger(ERROR_CREDENTIALS);
+
+    /**
+     * Erreur inconnue
+     */
     public static final String UNKNOWNERROR = setDivAlertDanger(UNKNOWN_ERROR);
+
+    /**
+     * Information pour la demande d'ami envoyée
+     */
+    public static final String FRIENDREQUESTSENT = setDivAlertInfo(FRIEND_REQUEST_SENT);
+
+    /**
+     * Information pour la demande d'ami déjà envoyée
+     */
+    public static final String FRIENDREQUESTALREADYSENT = setDivAlertInfo(FRIEND_REQUEST_ALREADY_SENT);
+
+    /**
+     * Information pour la demande d'ami déjà acceptée
+     */
+    public static final String FRIENDREQUESTALREADYACCEPTED = setDivAlertInfo(FRIEND_REQUEST_ALREADY_ACCEPTED);
 }
