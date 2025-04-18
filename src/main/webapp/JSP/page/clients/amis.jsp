@@ -18,12 +18,12 @@
                             <div class="text-center fw-bold fs-4 text-white mb-3">
                                 Liste des amis
                             </div>
-                            <!-- FORMULAIRE DE RECHERCHE D'UN AMI OU AJOUT UN AMI -->
+                            <!-- BARRE DE RECHERCHE D'UN AMI OU AJOUTER UN AMI -->
                             <form action="${pageContext.request.contextPath}/amis" method="post">
-                                <%-- TODO: FAIRE <input type="hidden" name="formType" value="friendSearchForm"> --%>
+                                <input type="hidden" name="formType" value="friendSearchForm">
                                 <div class="mb-3 d-flex justify-content-center">
                                     <input type="text" class="placeholderCustom form-control rounded-3"
-                                           name="searchInput"
+                                           name="username"
                                            style="width: 20%;"
                                            placeholder="Rechercher un ami ou saisir un utilisateur">
                                 </div>
@@ -68,7 +68,7 @@
                         </div>
                         <div class="ms-auto">
                             <form action="${pageContext.request.contextPath}/amis" class="" method="post">
-                                    <%-- TODO: FAIRE <input type="hidden" name="formType" value="friendRequestResponse"> --%>
+                                <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->
                                 <input type="hidden" name="csrfToken" value="${csrfToken}"/>
 

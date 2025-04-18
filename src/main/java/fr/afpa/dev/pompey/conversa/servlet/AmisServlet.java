@@ -1,7 +1,6 @@
 package fr.afpa.dev.pompey.conversa.servlet;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
-import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
@@ -107,9 +106,12 @@ public class AmisServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Map<String, Object> apiResponse = null;
         request.setAttribute("title", "Amis");
         String jwt = null;
         String action = request.getParameter("action");
+        String type = request.getParameter("formType");
+        String username = request.getParameter("username");
         Cookie[] cookies = request.getCookies();
 
         if (cookies != null) {
@@ -121,74 +123,96 @@ public class AmisServlet extends HttpServlet {
             }
         }
 
-        Map<String, String> formData = new HashMap<>();
-        formData.put("search", request.getParameter("searchInput"));
-        formData.put("action", action);
-        formData.put("jwt", jwt);
+        if ("friendSearchForm".equals(type)) {
+            if("search".equals(action)) {
+                Map<String, String> formData = new HashMap<>();
+                formData.put("type", type);
+                formData.put("action", action);
+                formData.put("username", username);
+                formData.put("jwt", jwt);
+                JsonArray amisJson = recupererArray(formData, AMIS);
 
-        //Verification JWT
+                // Une fois récupérer sous forme de tableau, il faut les afficher dans la page amis.jsp
+                List<Map<String, Object>> amisList = new ArrayList<>();
 
-        if("search".equals(action)) {
-            JsonArray amisJson = recupererArray(formData, AMIS);
+                for (JsonValue value : amisJson) {
+                    JsonObject amiJson = value.asJsonObject();
 
-            // Une fois récupérer sous forme de tableau, il faut les afficher dans la page amis.jsp
-            List<Map<String, Object>> amisList = new ArrayList<>();
+                    Map<String, Object> ami = new HashMap<>();
+                    ami.put("idGroupeMessagesPrives", amiJson.getInt("idGroupeMessagesPrives"));
+                    ami.put("statut", amiJson.getString("statut"));
+                    ami.put("userId", amiJson.getInt("userId"));
+                    ami.put("username", amiJson.getString("username"));
 
-            for (JsonValue value : amisJson) {
-                JsonObject amiJson = value.asJsonObject();
+                    amisList.add(ami);
+                }
 
-                Map<String, Object> ami = new HashMap<>();
-                ami.put("idGroupeMessagesPrives", amiJson.getInt("idGroupeMessagesPrives"));
-                ami.put("statut", amiJson.getString("statut"));
-                ami.put("userId", amiJson.getInt("userId"));
-                ami.put("username", amiJson.getString("username"));
+            }else if("add".equals(action)) {
+                apiResponse = EnvoyerLesDonnees(type, action, username, jwt);
 
-                amisList.add(ami);
+            } else {
+                // Gérer d'autres actions si nécessaire
+                this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
             }
+        } else if ("friendRequestResponse".equals(type)) {
+            if("yes".equals(action)) {
+                apiResponse = EnvoyerLesDonnees(type, action, username, jwt);
 
-        }else if("add".equals(action)) {
-            Map<String, Object> apiResponse = envoyerFormulaireVersApi(formData, AMIS);
+            }else if("no".equals(action)) {
+                apiResponse = EnvoyerLesDonnees(type, action, username, jwt);
+            }else {
 
-            if(apiResponse != null) {
-                JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+            }
+        }else {
 
-                if (jsonObject.getString("status").equals("success")) {
+        }
 
-                    if(jsonObject.getString("message").equals("friendRequestSent")) {
-                        log.info("Demande d'ami envoyée");
-                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
-                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+        if(apiResponse != null) {
+            JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 
-                    } else if(jsonObject.getString("message").equals("friendRequestAlreadySent")) {
-                        log.error("Demande d'ami déjà envoyée");
-                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYSENT);
-                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+            if (jsonObject.getString("status").equals("success")) {
 
-                    } else if(jsonObject.getString("message").equals("friendRequestAlreadyAccepted")) {
-                        log.error("Demande d'ami déjà acceptée");
-                        request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYACCEPTED);
-                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+                if(jsonObject.getString("message").equals("friendRequestSent")) {
+                    log.info("Demande d'ami envoyée");
+                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
+                    this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
 
-                    } else {
-                        log.error("Erreur lors de l'ajout d'ami");
-                        request.setAttribute(SET_DIV, Alert.ERRORSERVER);
-                        this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
-                    }
+                } else if(jsonObject.getString("message").equals("friendRequestAlreadySent")) {
+                    log.error("Demande d'ami déjà envoyée");
+                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYSENT);
+                    this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
 
-                } else if (jsonObject.getString("status").equals("error")) {
+                } else if(jsonObject.getString("message").equals("friendRequestAlreadyAccepted")) {
+                    log.error("Demande d'ami déjà acceptée");
+                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYACCEPTED);
+                    this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
+
+                } else {
                     log.error("Erreur lors de l'ajout d'ami");
                     request.setAttribute(SET_DIV, Alert.ERRORSERVER);
                     this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
                 }
-            }else{
-                log.error("apiResponse est null, la récupération a échoué");
+
+            } else if (jsonObject.getString("status").equals("error")) {
+                log.error("Erreur lors de l'ajout d'ami");
                 request.setAttribute(SET_DIV, Alert.ERRORSERVER);
                 this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
             }
-
-        } else {
-            // Gérer d'autres actions si nécessaire
+        }else{
+            log.error("apiResponse est null, la récupération a échoué");
+            request.setAttribute(SET_DIV, Alert.ERRORSERVER);
             this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
         }
+
+    }
+
+    private Map<String, Object> EnvoyerLesDonnees(String type, String action, String username, String jwt) {
+        Map<String, String> formData = new HashMap<>();
+        formData.put("type", type);
+        formData.put("action", action);
+        formData.put("username", username);
+        formData.put("jwt", jwt);
+        return envoyerFormulaireVersApi(formData, AMIS);
     }
 }
+
