@@ -112,6 +112,7 @@ public class AmisServlet extends HttpServlet {
         String action = request.getParameter("action");
         String type = request.getParameter("formType");
         String username = request.getParameter("username");
+
         Cookie[] cookies = request.getCookies();
 
         if (cookies != null) {
@@ -155,18 +156,9 @@ public class AmisServlet extends HttpServlet {
                 this.getServletContext().getRequestDispatcher(Page.AMIS).forward(request, response);
             }
         } else if ("friendRequestResponse".equals(type)) {
-            if("yes".equals(action)) {
-                apiResponse = EnvoyerLesDonnees(type, action, username, jwt);
-
-            }else if("no".equals(action)) {
-                apiResponse = EnvoyerLesDonnees(type, action, username, jwt);
-            }else {
-
-            }
-        }else {
-
+            String id = request.getParameter("id");
+            apiResponse = ReponseLaDemandeAmis(type, action, id, jwt);
         }
-
         if(apiResponse != null) {
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 
@@ -211,6 +203,15 @@ public class AmisServlet extends HttpServlet {
         formData.put("type", type);
         formData.put("action", action);
         formData.put("username", username);
+        formData.put("jwt", jwt);
+        return envoyerFormulaireVersApi(formData, AMIS);
+    }
+
+    private Map<String, Object> ReponseLaDemandeAmis(String type, String action, String id, String jwt) {
+        Map<String, String> formData = new HashMap<>();
+        formData.put("type", type);
+        formData.put("action", action);
+        formData.put("idFriendRequest", id);
         formData.put("jwt", jwt);
         return envoyerFormulaireVersApi(formData, AMIS);
     }

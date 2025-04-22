@@ -30,7 +30,8 @@ public class CSRFTokenFilter implements Filter {
             List<String> routesAProteger = List.of(
                     contextPath + "/register",
                     contextPath + "/login",
-                    contextPath + "/"
+                    contextPath + "/",
+                    contextPath + "/amis"
             );
 
             log.info("filtre csrf appele");

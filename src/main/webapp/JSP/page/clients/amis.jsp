@@ -20,6 +20,7 @@
                             </div>
                             <!-- BARRE DE RECHERCHE D'UN AMI OU AJOUTER UN AMI -->
                             <form action="${pageContext.request.contextPath}/amis" method="post">
+                                <input type="hidden" name="csrfToken" value="${csrfToken}"/>
                                 <input type="hidden" name="formType" value="friendSearchForm">
                                 <div class="mb-3 d-flex justify-content-center">
                                     <input type="text" class="placeholderCustom form-control rounded-3"
@@ -62,12 +63,14 @@
                 <!-- LISTE DES DEMANDES D'AMIS -->
                 <c:forEach var="amisRequest" items="${amisRequest}">
                     <div class="user-friendrequest d-flex align-items-center p-2 m-1 text-decoration-none text-reset">
-                        <img src="../../assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                         <div class="m-2">
                             <div class="username">${amisRequest.username}</div>
                         </div>
                         <div class="ms-auto">
                             <form action="${pageContext.request.contextPath}/amis" class="" method="post">
+                                <input name="id" type="hidden" value="${amisRequest.id}">
+
                                 <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->
                                 <input type="hidden" name="csrfToken" value="${csrfToken}"/>
