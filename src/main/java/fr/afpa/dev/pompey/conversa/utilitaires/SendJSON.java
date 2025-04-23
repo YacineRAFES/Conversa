@@ -1,9 +1,6 @@
 package fr.afpa.dev.pompey.conversa.utilitaires;
 
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
+import jakarta.json.*;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 
@@ -25,11 +22,11 @@ public class SendJSON {
 
     private SendJSON() {}
 
-    public static JsonArray recupererArray(Map<String, String> formData, String apiUrl) {
+    public static Map<String, JsonArray> rechercherUnAmis(String method, Map<String, String> formData, String apiUrl) {
+        log.info("Fonction rechercherUnAmis appelée avec les paramètres : method = {}, formData = {}, apiUrl = {}", method, formData, apiUrl);
         HttpURLConnection conn = null;
 
         try {
-            JSONObject json = new JSONObject(formData);
             URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
@@ -39,23 +36,27 @@ public class SendJSON {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
 
-            // Envoi du JSON
+            JSONObject json = new JSONObject();
+            json.put("method", method);
+            json.put("objects", new JSONObject(formData));
+
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));
             }
+            log.info("rechercherUnAmis: JSON envoyé : {}", json);
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                try (InputStream is = conn.getInputStream();
-                     JsonReader reader = Json.createReader(is)) {
-                    return reader.readArray(); // <- on lit le JsonArray ici
-                }
-            } else {
-                log.error("Réponse non OK : " + responseCode);
-            }
+            JsonObject fullResponse = lireReponseJSON(conn);
+
+            log.info("rechercherUnAmis: Réponse JSON : {}", fullResponse);
+
+            JsonObject objects = fullResponse.getJsonObject("objects");
+
+            Map<String, JsonArray> result = new HashMap<>();
+            result.put("amisRechercher", objects.getJsonArray("amisRechercher"));
+            return result;
 
         } catch (IOException e) {
-            log.error("Erreur lors de la connexion à l'API : {}", e.getMessage());
+            log.error("rechercherUnAmis: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
             e.printStackTrace();
         } finally {
             if (conn != null) {
@@ -65,11 +66,10 @@ public class SendJSON {
         return null;
     }
 
-    public static Map<String, JsonArray> envoyerFormulaireVersApiAvecObjects(Map<String, String> formData, String apiUrl) {
+    public static Map<String, JsonArray> recuperationInfoAmis(String method, Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
-            JSONObject json = new JSONObject(formData);
             URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
@@ -78,13 +78,18 @@ public class SendJSON {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
 
+            JSONObject json = new JSONObject();
+            json.put("method", method);
+            json.put("objects", new JSONObject(formData));
+
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));
             }
+            log.info("recuperationInfoAmis: JSON envoyé : {}", json);
 
             JsonObject fullResponse = lireReponseJSON(conn);
 
-            log.info("Réponse JSON : {}", fullResponse);
+            log.info("recuperationInfoAmis: Réponse JSON : {}", fullResponse);
 
             JsonObject objects = fullResponse.getJsonObject("objects");
 
@@ -94,7 +99,48 @@ public class SendJSON {
             return result;
 
         } catch (IOException e) {
-            log.error("Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
+            log.error("recuperationInfoAmis: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        return null;
+    }
+
+    public static Map<String, Object> envoyeLaDemandeAmis(String method, Map<String, String> formData, String apiUrl) {
+        HttpURLConnection conn = null;
+
+        try {
+            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            conn = (HttpURLConnection) url.openConnection();
+
+            // Configuration de la connexion
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            JSONObject json = new JSONObject();
+            json.put("method", method);
+            json.put("objects", new JSONObject(formData));
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+            }
+            log.info("envoyeLaDemandeAmis: JSON envoyé : {}", json);
+
+            JsonObject fullResponse = lireReponseJSON(conn);
+
+            log.info("envoyeLaDemandeAmis: Réponse JSON : {}", fullResponse);
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("json", fullResponse);
+            return result;
+
+        } catch (IOException e) {
+            log.error("envoyeLaDemandeAmis: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
             e.printStackTrace();
         } finally {
             if (conn != null) {
@@ -128,8 +174,8 @@ public class SendJSON {
 
             String autorizationHeader = conn.getHeaderField("Authorization");
 
-            log.info("Réponse JSON : {}", jsonObject);
-            log.info("AutorizationHeader : {}", autorizationHeader);
+            log.info("envoyerFormulaireVersApi: Réponse JSON : {}", jsonObject);
+            log.info("envoyerFormulaireVersApi: AutorizationHeader : {}", autorizationHeader);
 
             Map<String, Object> result = new HashMap<>();
             result.put("json", jsonObject);
@@ -137,7 +183,7 @@ public class SendJSON {
             return result;
 
         } catch (IOException e) {
-            log.error("Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
+            log.error("envoyerFormulaireVersApi: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
             e.printStackTrace();
         } finally {
             if (conn != null) {

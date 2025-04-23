@@ -37,6 +37,10 @@ public class Alert {
 
     private static final String FRIEND_REQUEST_ALREADY_ACCEPTED = "Demande d'ami déjà acceptée";
 
+    private static final String ACCEPT_FRIEND_REQUEST = "Demande d'ami acceptée";
+
+    private static final String REFUSED_FRIEND_REQUEST = "Demande d'ami refusée";
+
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
     }
@@ -46,8 +50,13 @@ public class Alert {
     }
 
     private static String setDivAlertInfo(String message) {
-        return "<div class='alert alert-info text-center' role='alert'>"+message+"</div>";
+        return "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
+                message +
+                "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
+                "</div>";
     }
+
+
 
     /**
      * Avertissement pour les champs vides
@@ -113,4 +122,14 @@ public class Alert {
      * Information pour la demande d'ami déjà acceptée
      */
     public static final String FRIENDREQUESTALREADYACCEPTED = setDivAlertInfo(FRIEND_REQUEST_ALREADY_ACCEPTED);
+
+    /**
+     * Information pour la demande d'ami acceptée
+     */
+    public static final String ACCEPTFRIENDREQUEST = setDivAlertInfo(ACCEPT_FRIEND_REQUEST);
+
+    /**
+     * Information pour la demande d'ami refusée
+     */
+    public static final String REFUSEDFRIENDREQUEST = setDivAlertInfo(REFUSED_FRIEND_REQUEST);
 }

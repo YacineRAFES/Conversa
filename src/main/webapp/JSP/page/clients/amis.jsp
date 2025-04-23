@@ -14,6 +14,7 @@
                                     ${setDiv}
                                 </c:if>
                             </div>
+
                             <!-- TITRE DE BIENVENUE -->
                             <div class="text-center fw-bold fs-4 text-white mb-3">
                                 Liste des amis
@@ -69,7 +70,7 @@
                         </div>
                         <div class="ms-auto">
                             <form action="${pageContext.request.contextPath}/amis" class="" method="post">
-                                <input name="id" type="hidden" value="${amisRequest.id}">
+                                <input name="id" type="hidden" value="${amisRequest.userId}">
 
                                 <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->
