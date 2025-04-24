@@ -188,6 +188,11 @@ public class AmisServlet extends HttpServlet {
         formData.put("jwt", jwt);
 
         Map<String, JsonArray> amisJson = recuperationInfoAmis("GetListFriends", formData, AMIS);
+        JsonArray status = amisJson.get("status");
+        if(status.equals("success")){
+            // TODO: A FAIRE
+        }
+        log.info("amisJson : " + amisJson);
         JsonArray amis = amisJson.get("amis");
         JsonArray demandes = amisJson.get("demandes");
 
@@ -235,7 +240,7 @@ public class AmisServlet extends HttpServlet {
         formData.put("type", type);
         formData.put("action", action);
         formData.put("jwt", jwt);
-        formData.put("idFriendRequest", id);
+        formData.put("idGroupeMessagesPrivee", id);
         return envoyeLaDemandeAmis(method, formData, AMIS);
     }
 }

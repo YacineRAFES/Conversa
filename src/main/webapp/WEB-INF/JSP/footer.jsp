@@ -10,6 +10,10 @@
     <c:if test="${requestScope.title eq 'Inscription'}">
         <script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
     </c:if >
+    <c:if test="${requestScope.title eq 'Messages Privees'}">
+        <script src="${pageContext.request.contextPath}/assets/js/messagesprivee.js"></script>
+    </c:if >
+
 
 <%--    <script type="module" src="${script}"></script>--%>
     <script src="${bootstrapbundlejs}"></script>

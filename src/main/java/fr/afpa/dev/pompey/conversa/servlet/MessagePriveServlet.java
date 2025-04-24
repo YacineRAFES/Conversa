@@ -21,8 +21,8 @@ public class MessagePriveServlet extends HttpServlet {
 // Définir le titre de la page
         request.setAttribute("title", "Messages Privés");
         // Définir le nom du fichier JavaScript à inclure
-        request.setAttribute("js", "messagesprive.js");
-        this.getServletContext().getRequestDispatcher("/JSP/page/clients/messagesPrivate.jsp").forward(request, response);
+        request.setAttribute("js", "messagesprivee.js");
+        this.getServletContext().getRequestDispatcher("/JSP/page/clients/messagesPrivee.jsp").forward(request, response);
     }
 
     @Override

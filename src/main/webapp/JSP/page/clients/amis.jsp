@@ -70,7 +70,7 @@
                         </div>
                         <div class="ms-auto">
                             <form action="${pageContext.request.contextPath}/amis" class="" method="post">
-                                <input name="id" type="hidden" value="${amisRequest.userId}">
+                                <input name="id" type="hidden" value="${amisRequest.idGroupeMessagesPrives}">
 
                                 <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->

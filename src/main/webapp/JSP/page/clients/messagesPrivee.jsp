@@ -26,7 +26,7 @@
                             <div class="col p-0 ms-2 justify-content-between">
                                 <!-- LISTE DES MESSAGES -->
                                 <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0"
-                                     style="scrollbar-width: none;  height: calc(100vh - 4.2rem);">
+                                     style="scrollbar-width: none;  height: calc(100vh - 4.5rem);">
                                     <div class="message d-flex justify-content-between mt-2 p-2">
                                         <div class="d-flex">
                                             <img src="../../assets/images/nightcity.jpg" alt=""
@@ -48,15 +48,15 @@
                                     </div>
                                 </div>
                                 <!-- PARTIE POUR ECRIRE UN MESSAGE -->
-                                <div class="insertMessage mt-2">
-                                    <form action="#" class="d-flex ">
-                                        <textarea class="textareaCustom" name="" id="autoResize"></textarea>
-                                        <label for="fichiers"
+                                <div class="insertMessage">
+                                    <textarea class="textareaCustom autoResize" name="" id="Msg"></textarea>
+                                    <!-- <label for="fichiers"
                                                class="custom-file-upload d-flex align-items-center rounded-circle m-auto"><i
                                                 class="bi bi-file-image"></i></label>
-                                        <input type="file" name="fichier" id="fichiers">
-                                        <input type="submit" value="Entrer">
-                                    </form>
+                                        <input type="file" name="fichier" id="fichiers"> -->
+                                    <button type="submit" class="button-mp" id="sendMsg">
+                                        <i class="bi bi-send"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-3 bloc-principal ms-2 p-0 mb-0 me-2 z-0 z-indexlow position-relative">

@@ -54,7 +54,7 @@ document.querySelectorAll("textarea").forEach(function (textarea) {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const textarea = document.getElementById("autoResize");
+    const textarea = document.getElementsByClassName("autoResize");
     const listOfMessage = document.querySelector(".listOfMessage");
     const insertMessage = document.querySelector(".insertMessage");
     

@@ -91,6 +91,26 @@ public class SendJSON {
 
             log.info("recuperationInfoAmis: Réponse JSON : {}", fullResponse);
 
+            if(fullResponse.getString("status").equals("success")){
+                JsonObject objects = fullResponse.getJsonObject("objects");
+
+                Map<String, JsonArray> result = new HashMap<>();
+                result.put("status", fullResponse.getJsonArray("status"));
+                result.put("amis", objects.getJsonArray("amis"));
+                result.put("demandes", objects.getJsonArray("demandes"));
+                return result;
+            }else if(fullResponse.getString("status").equals("error")){
+                if(fullResponse.getString("message").equals("jwtInvalide")){
+                    log.error("recuperationInfoAmis: JWT invalide");
+                    // Rediriger vers la page de connexion
+                    Map<String, JsonArray> result = new HashMap<>();
+
+                    result.put("status", fullResponse.getJsonArray("status"));
+                    result.put("message", fullResponse.getJsonArray("message"));
+                    return result;
+                }
+            }
+
             JsonObject objects = fullResponse.getJsonObject("objects");
 
             Map<String, JsonArray> result = new HashMap<>();
