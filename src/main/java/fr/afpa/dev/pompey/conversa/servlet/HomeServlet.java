@@ -1,4 +1,5 @@
 package fr.afpa.dev.pompey.conversa.servlet;
+import fr.afpa.dev.pompey.conversa.utilitaires.Page;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +22,7 @@ public class HomeServlet extends HttpServlet {
         // Définir le nom du fichier JavaScript à inclure
         request.setAttribute("js", "home.js");
 
-        this.getServletContext().getRequestDispatcher("/JSP/page/clients/home.jsp").forward(request, response);
+        this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
     }
 
     @Override

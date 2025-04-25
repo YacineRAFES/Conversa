@@ -31,7 +31,8 @@ public class CSRFTokenFilter implements Filter {
                     contextPath + "/register",
                     contextPath + "/login",
                     contextPath + "/",
-                    contextPath + "/amis"
+                    contextPath + "/amis",
+                    contextPath + "/messageprive"
             );
 
             log.info("filtre csrf appele");
@@ -43,8 +44,8 @@ public class CSRFTokenFilter implements Filter {
             if (session != null
                     && (method.equalsIgnoreCase("POST")
                     || method.equalsIgnoreCase("PUT")
-                    || method.equalsIgnoreCase("DELETE")
-                    && routesAProteger.contains(requestURI))) {
+                    || method.equalsIgnoreCase("DELETE"))
+                    && routesAProteger.contains(requestURI)) {
                 // Récupérer le token CSRF envoyé par le client
                 log.info("REQUETE: {} ", requestURI);
                 request.getParameterMap().forEach((key, value) -> log.info("REQUETE PARAMETER key: {} value: {}", key, value));

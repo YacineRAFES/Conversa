@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         // Définir le titre de la page
         request.setAttribute("title", "Connexion");
 
-        this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response);
+        this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class LoginServlet extends HttpServlet {
                 cookie.setPath("/");
                 response.addCookie(cookie);
 
-                this.getServletContext().getRequestDispatcher(Page.HOME).forward(request, response);
+                this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
 
             } else if (jsonObject.getString("status").equals("error")) {
 
@@ -83,13 +83,13 @@ public class LoginServlet extends HttpServlet {
 
                     log.info("INVALIDCREDENTIALS");
                     request.setAttribute(SET_DIV_ERROR, Alert.INVALIDCREDENTIALS); // Afficher le message d'erreur
-                    this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
+                    this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
 
                 }
             } else {
 
                 request.setAttribute(SET_DIV_ERROR, Alert.ERRORSERVER); // Afficher le message d'erreur
-                this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
+                this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
 
             }
 

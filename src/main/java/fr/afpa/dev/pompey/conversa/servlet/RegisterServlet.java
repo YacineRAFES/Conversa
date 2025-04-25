@@ -29,7 +29,7 @@ public class RegisterServlet extends HttpServlet {
         // Définir le titre de la page
         request.setAttribute("title", "Inscription");
 
-        this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+        this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class RegisterServlet extends HttpServlet {
             if (jsonObject.getString("status").equals("success")) {
                 request.setAttribute("title", "Connexion");
                 log.info("Inscription réussie et redirection vers la page de connexion");
-                this.getServletContext().getRequestDispatcher(Page.LOGIN).forward(request, response);
+                response.sendRedirect(request.getContextPath() + Page.URL.LOGIN);
 
             } else if (jsonObject.getString("status").equals("error")) {
                 request.setAttribute("title", "Inscription");
@@ -69,32 +69,32 @@ public class RegisterServlet extends HttpServlet {
                 if (jsonObject.getString(MESSAGE).equals("lengthInvalid")) { // Au cas d'erreur de longueur
                     log.info("lengthInvalid");
                     request.setAttribute(SET_DIV_ERROR, Alert.LENGTHINVALID); // Afficher le message d'erreur
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response); // Rediriger vers la page d'inscription
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response); // Rediriger vers la page d'inscription
 
                 } else if (jsonObject.getString(MESSAGE).equals("userAlreadyExists")) {
                     log.info("userAlreadyExists");
                     request.setAttribute(SET_DIV_ERROR, Alert.USERALREADYEXISTS);
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
 
                 } else if (jsonObject.getString(MESSAGE).equals("emailInvalid")) {
                     log.info("emailInvalid");
                     request.setAttribute(SET_DIV_ERROR, Alert.EMAILINVALID);
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
 
                 } else if (jsonObject.getString(MESSAGE).equals("passwordInvalid")) {
                     log.info("passwordInvalid");
                     request.setAttribute(SET_DIV_ERROR, Alert.PASSWORDINVALID);
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
 
                 } else if (jsonObject.getString(MESSAGE).equals("emptyField")) {
                     log.info("emptyField");
                     request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD);
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
 
                 } else {
                     log.info("errorUnknown");
                     request.setAttribute(SET_DIV_ERROR, Alert.UNKNOWNERROR);
-                    this.getServletContext().getRequestDispatcher(Page.REGISTER).forward(request, response);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
 
                 }
             }

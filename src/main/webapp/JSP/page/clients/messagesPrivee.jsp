@@ -26,7 +26,7 @@
                             <div class="col p-0 ms-2 justify-content-between">
                                 <!-- LISTE DES MESSAGES -->
                                 <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0"
-                                     style="scrollbar-width: none;  height: calc(100vh - 4.5rem);">
+                                     style="scrollbar-width: none;  height: calc(100vh - 4.5rem);" id="listeOfMessage">
                                     <div class="message d-flex justify-content-between mt-2 p-2">
                                         <div class="d-flex">
                                             <img src="../../assets/images/nightcity.jpg" alt=""
@@ -50,6 +50,7 @@
                                 <!-- PARTIE POUR ECRIRE UN MESSAGE -->
                                 <div class="insertMessage">
                                     <textarea class="textareaCustom autoResize" name="" id="Msg"></textarea>
+                                    <input type="hidden" name="csrfToken" id="csrfToken" value="${csrfToken}"/>
                                     <!-- <label for="fichiers"
                                                class="custom-file-upload d-flex align-items-center rounded-circle m-auto"><i
                                                 class="bi bi-file-image"></i></label>

@@ -10,17 +10,19 @@ document.getElementById('Msg').addEventListener("keydown", function (e) {
 async function sendMessage() {
     //Récuperer le message dans le textarea
     const Msg = document.getElementById('Msg').value;
+    const csrfToken = document.getElementById('csrfToken').value;
 
     //Ajoute le message à la liste des messages
     const messageList = document.getElementById('listeOfMessage');
 
     //Envoyer le message au serveur
-    fetch('/sendMessage', {
+    fetch('messageprive', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: 'message=' + encodeURIComponent(Msg)
+        body: 'message=' + encodeURIComponent(Msg) + '&csrfToken=' + encodeURIComponent(csrfToken)
+
     })
         .then(response => response.json())  // Traitement de la réponse (JSON ici)
         .then(data => console.log(data))
