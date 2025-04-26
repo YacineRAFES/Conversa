@@ -1,3 +1,7 @@
+document.addEventListener("DOMContentLoaded", () => {
+    getAllMessages();
+})
+
 document.getElementById('sendMsg').addEventListener("click", () => sendMessage());
 
 document.getElementById('Msg').addEventListener("keydown", function (e) {
@@ -7,7 +11,23 @@ document.getElementById('Msg').addEventListener("keydown", function (e) {
     }
 });
 
+// Récupère tous les messages de ses amis
+function getAllMessages(){
+    const type = "getAllMessages"
+    fetch('messageprive', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'type=' + encodeURIComponent(type)
+
+    })
+        .then(response => response.json())  // Traitement de la réponse (JSON ici)
+        .then(data => console.log(data))
+}
+
 async function sendMessage() {
+    const type = "sendMessages"
     //Récuperer le message dans le textarea
     const Msg = document.getElementById('Msg').value;
     const csrfToken = document.getElementById('csrfToken').value;
@@ -21,7 +41,7 @@ async function sendMessage() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: 'message=' + encodeURIComponent(Msg) + '&csrfToken=' + encodeURIComponent(csrfToken)
+        body: 'type=' + type + '&message=' + encodeURIComponent(Msg) + '&csrfToken=' + encodeURIComponent(csrfToken)
 
     })
         .then(response => response.json())  // Traitement de la réponse (JSON ici)

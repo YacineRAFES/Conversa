@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
@@ -38,28 +39,51 @@ public class MessagePriveServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            //Recupere le JWT
-            String jwt = null;
-            jwt = CookiesUtils.getJWT(request.getCookies());
             log.info("msg recu : " + request.getParameter("message"));
-            log.info("JWT: {}", jwt);
 
-            //Crée une map
-            Map<String, String> messageAenvoyer = new HashMap<>();
-            messageAenvoyer.put("message", request.getParameter("message"));
-            messageAenvoyer.put("jwt", CookiesUtils.getJWT(request.getCookies()));
+            String type = request.getParameter("type");
+            if(type != null) {
+                if(type.equals("getAllMessages")){
+                    //Crée une map
+                    Map<String, String> recupToutLesMessages = new HashMap<>();
+                    recupToutLesMessages.put("type", type);
+                    recupToutLesMessages.put("jwt", CookiesUtils.getJWT(request.getCookies()));
+                    Map<String, Object> apiResponse = getAllMessages(recupToutLesMessages, MESSAGEPRIVE);
+                    if(apiResponse != null) {
+                        if(apiResponse.get("status").equals("success")) {
+                            log.info("apiResponse : OK " + apiResponse );
+                            List<Map<String, Object>> getAllMessages = (List<Map<String, Object>>) apiResponse.get("getAllMessages");
 
-            //Envoyer un message vers API
-            Map<String, Object> apiResponse = envoyerFormulaireVersApi(messageAenvoyer, MESSAGEPRIVE);
-            if(apiResponse != null) {
-                if(apiResponse.get("status").equals("success")) {
-                    log.info("apiResponse : OK " + apiResponse );
-                }else if(apiResponse.get("status").equals("error")) {
-                    log.info("apiResponse : ERROR " + apiResponse );
+                            //Envoyer les infos vers le web en json
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.setStatus(HttpServletResponse.SC_OK); // Code 200 pour succès
+                            response.getWriter().write(getAllMessages.toString());
+
+                        }else if(apiResponse.get("status").equals("error")) {
+                            log.info("apiResponse : ERROR " + apiResponse );
+                        }
+                    }
+                }else if(type.equals("sendMessage")){
+                    //Crée une map
+                    Map<String, String> messageAenvoyer = new HashMap<>();
+                    messageAenvoyer.put("message", request.getParameter("message"));
+                    messageAenvoyer.put("jwt", CookiesUtils.getJWT(request.getCookies()));
+
+                    //Envoyer un message vers API
+                    Map<String, Object> apiResponse = envoyerFormulaireVersApi(messageAenvoyer, MESSAGEPRIVE);
+                    if(apiResponse != null) {
+                        if(apiResponse.get("status").equals("success")) {
+                            log.info("apiResponse : OK " + apiResponse );
+                        }else if(apiResponse.get("status").equals("error")) {
+                            log.info("apiResponse : ERROR " + apiResponse );
+                        }
+                    }
+                }else{
+                    //Une erreur s'est survenu
+                    log.error("Erreur de type MessagesPrives");
                 }
             }
-
-
 
         } catch (Exception e) {
             log.error("apiResponse est null, la récupération a échoué");
@@ -69,8 +93,9 @@ public class MessagePriveServlet extends HttpServlet {
 
     }
 
-    @Override
-    public void destroy() {
+//    private void EnvoyeLesInfosVersWeb(HttpServletResponse response, <String, Object> getAllMessages) throws ServletException, IOException {
+//
+//
+//    }
 
-    }
 }

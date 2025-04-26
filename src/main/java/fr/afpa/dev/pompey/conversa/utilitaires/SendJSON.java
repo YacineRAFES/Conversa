@@ -23,6 +23,49 @@ public class SendJSON {
 
     private SendJSON() {}
 
+    public static Map<String, Object> getAllMessages(Map<String, String> formData, String apiUrl){
+        log.info("Fonction getAllMessages appelée avec les paramètres : formData = {}, apiUrl = {}", formData, apiUrl);
+
+        HttpURLConnection conn = null;
+        try {
+            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            conn = (HttpURLConnection) url.openConnection();
+
+            // Configuration de la connexion
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json; utf-8");
+            conn.setRequestProperty("Accept", "application/json");
+            conn.setDoOutput(true);
+
+            JSONObject json = new JSONObject();
+            json.put("objects", new JSONObject(formData));
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(json.toString().getBytes(StandardCharsets.UTF_8));
+            }
+            log.info("getAllMessages: JSON envoyé : {}", json);
+
+            JsonObject fullResponse = lireReponseJSON(conn);
+
+            log.info("getAllMessages: Réponse JSON : {}", fullResponse);
+
+            JsonObject objects = fullResponse.getJsonObject("objects");
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("AllMessages", objects.getJsonArray("AllMessages"));
+            return result;
+
+        } catch (IOException e) {
+            log.error("getAllMessages: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
+        return null;
+    }
+
     public static Map<String, JsonArray> rechercherUnAmis(String method, Map<String, String> formData, String apiUrl) {
         log.info("Fonction rechercherUnAmis appelée avec les paramètres : method = {}, formData = {}, apiUrl = {}", method, formData, apiUrl);
         HttpURLConnection conn = null;
