@@ -19,6 +19,7 @@ public class SendJSON {
     public static final String REGISTER = "user";
     public static final String LOGIN = "login";
     public static final String AMIS = "amis";
+    public static final String MESSAGEPRIVE = "MessagesPrivee";
 
     private SendJSON() {}
 
