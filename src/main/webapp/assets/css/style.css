@@ -341,3 +341,6 @@ input[type="file"] {
     -webkit-backdrop-filter: blur(5px);
 }
 
+.heuresMessage{
+    font-size: 13px;
+}

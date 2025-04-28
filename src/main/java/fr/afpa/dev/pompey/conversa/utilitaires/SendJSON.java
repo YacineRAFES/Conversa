@@ -37,8 +37,7 @@ public class SendJSON {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
 
-            JSONObject json = new JSONObject();
-            json.put("objects", new JSONObject(formData));
+            JSONObject json = new JSONObject(formData);
 
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));
@@ -52,7 +51,8 @@ public class SendJSON {
             JsonObject objects = fullResponse.getJsonObject("objects");
 
             Map<String, Object> result = new HashMap<>();
-            result.put("AllMessages", objects.getJsonArray("AllMessages"));
+            result.put("status", fullResponse.getString("status"));
+            result.put("getAllMessages", objects.getJsonArray("getAllMessages"));
             return result;
 
         } catch (IOException e) {

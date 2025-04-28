@@ -9,13 +9,13 @@
                         <div class="row">
                             <div class="col-2 p-2 mt-2 bloc-principal">
                                 <!-- TODO: message privée à faire -->
-                                <!-- FOR -->
+                                <!-- FORM -->
                                 <form action="" class="m-1 mb-2" method="post">
                                     <input type="text" class="form-control placeholderCustom" name="" id=""
                                            placeholder="Rechercher une conversation...">
                                 </form>
                                 <div class="user d-flex align-items-center p-2 m-1">
-                                    <img src="../../assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                                    <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                     <div class="m-2">
                                         <div class="username">Username</div>
                                         <div class="messageUserRecent">Hello World!</div>
@@ -29,7 +29,7 @@
                                      style="scrollbar-width: none;  height: calc(100vh - 4.5rem);" id="listeOfMessage">
                                     <div class="message d-flex justify-content-between mt-2 p-2">
                                         <div class="d-flex">
-                                            <img src="../../assets/images/nightcity.jpg" alt=""
+                                            <img src="assets/images/nightcity.jpg" alt=""
                                                  class="avatarConversa">
                                             <div class="ms-3">
                                                 <div class="username">Username</div>

@@ -1,8 +1,11 @@
 package fr.afpa.dev.pompey.conversa.servlet;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
+import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,10 +32,12 @@ public class MessagePriveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-// Définir le titre de la page
+
+        // Définir le titre de la page
         request.setAttribute("title", "Messages Privés");
         // Définir le nom du fichier JavaScript à inclure
         request.setAttribute("js", "messagesprivee.js");
+
         this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
     }
 
@@ -42,29 +47,30 @@ public class MessagePriveServlet extends HttpServlet {
             log.info("msg recu : " + request.getParameter("message"));
 
             String type = request.getParameter("type");
-            if(type != null) {
-                if(type.equals("getAllMessages")){
+            if (type != null) {
+                if (type.equals("getAllMessages")) {
                     //Crée une map
                     Map<String, String> recupToutLesMessages = new HashMap<>();
                     recupToutLesMessages.put("type", type);
                     recupToutLesMessages.put("jwt", CookiesUtils.getJWT(request.getCookies()));
                     Map<String, Object> apiResponse = getAllMessages(recupToutLesMessages, MESSAGEPRIVE);
-                    if(apiResponse != null) {
-                        if(apiResponse.get("status").equals("success")) {
-                            log.info("apiResponse : OK " + apiResponse );
-                            List<Map<String, Object>> getAllMessages = (List<Map<String, Object>>) apiResponse.get("getAllMessages");
+                    if (apiResponse != null && apiResponse.get("status").equals("success")) {
+                        log.info("apiResponse : OK " + apiResponse);
+                        List<Map<String, Object>> objects = (List<Map<String, Object>>) apiResponse.get("getAllMessages");
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        String jsonResponse = objectMapper.writeValueAsString(objects);
+                        //Envoyer les infos vers le web en json
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
+                        response.setStatus(HttpServletResponse.SC_OK); // Code 200 pour succès
+                        response.getWriter().write(jsonResponse);
+                        log.info("getAllMessages : " + objects);
 
-                            //Envoyer les infos vers le web en json
-                            response.setContentType("application/json");
-                            response.setCharacterEncoding("UTF-8");
-                            response.setStatus(HttpServletResponse.SC_OK); // Code 200 pour succès
-                            response.getWriter().write(getAllMessages.toString());
-
-                        }else if(apiResponse.get("status").equals("error")) {
-                            log.info("apiResponse : ERROR " + apiResponse );
-                        }
+                    } else if (apiResponse.get("status").equals("error")) {
+                        log.info("apiResponse : ERROR " + apiResponse);
                     }
-                }else if(type.equals("sendMessage")){
+
+                } else if (type.equals("sendMessages")) {
                     //Crée une map
                     Map<String, String> messageAenvoyer = new HashMap<>();
                     messageAenvoyer.put("message", request.getParameter("message"));
@@ -72,14 +78,14 @@ public class MessagePriveServlet extends HttpServlet {
 
                     //Envoyer un message vers API
                     Map<String, Object> apiResponse = envoyerFormulaireVersApi(messageAenvoyer, MESSAGEPRIVE);
-                    if(apiResponse != null) {
-                        if(apiResponse.get("status").equals("success")) {
-                            log.info("apiResponse : OK " + apiResponse );
-                        }else if(apiResponse.get("status").equals("error")) {
-                            log.info("apiResponse : ERROR " + apiResponse );
+                    if (apiResponse != null) {
+                        if (apiResponse.get("status").equals("success")) {
+                            log.info("apiResponse : OK " + apiResponse);
+                        } else if (apiResponse.get("status").equals("error")) {
+                            log.info("apiResponse : ERROR " + apiResponse);
                         }
                     }
-                }else{
+                } else {
                     //Une erreur s'est survenu
                     log.error("Erreur de type MessagesPrives");
                 }

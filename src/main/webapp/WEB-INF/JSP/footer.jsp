@@ -11,7 +11,7 @@
         <script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
     </c:if >
     <c:if test="${js eq 'messagesprivee.js'}">
-        <script src="${pageContext.request.contextPath}/assets/js/messagesprivee.js"></script>
+        <script src="${pageContext.request.contextPath}/assets/js/messagesprivee.js" type="module"></script>
     </c:if >
 
 

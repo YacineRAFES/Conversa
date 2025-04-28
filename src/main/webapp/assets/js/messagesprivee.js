@@ -1,3 +1,5 @@
+import { formatDate } from "./utilitaires/utils.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     getAllMessages();
 })
@@ -14,17 +16,53 @@ document.getElementById('Msg').addEventListener("keydown", function (e) {
 // Récupère tous les messages de ses amis
 function getAllMessages(){
     const type = "getAllMessages"
-    fetch('messageprive', {
-        method: 'POST',
+    fetch('messageprivejson',{
+        method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: 'type=' + encodeURIComponent(type)
 
     })
         .then(response => response.json())  // Traitement de la réponse (JSON ici)
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data);
+            sessionStorage.setItem('allMessages', JSON.stringify(data));
+            // Récupérer les messages de la sessionStorage
+            const messages = data;
+            messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+            const messageList = document.getElementById('listeOfMessage');
+            messageList.innerHTML = '';
+            // Créer un élément pour chaque message
+            messages.forEach(message => {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message d-flex justify-content-between mt-2 p-2';
+                messageElement.innerHTML = `
+                <div class="d-flex">
+                    <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                    <div class="ms-3">
+                        <div class="d-flex flex-wrap align-items-center">
+                            <div class="username">${message.user.username}</div>
+                            <span class="ms-3 heuresMessage">${formatDate(message.date)}</span>
+                        </div>
+                        <div class="messageUser">${message.message}</div>
+                    </div>
+                </div>
+                <div class="dropdownCustom my-auto mx-3 rounded-circle">
+                    <button class="mainmenubtn boutonOptionMessage" href="">
+                        <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                    </button>
+                    <ul class="dropdown-childCustom">
+    <!--                    <li class="dropdown-list"><a href="">Répondre</a></li>-->
+                        <li class="dropdown-list"><a href="">Signaler le message</a></li>
+                    </ul>
+                </div>`;
+                messageList.appendChild(messageElement);
+            });
+        })
+
 }
+
+
 
 async function sendMessage() {
     const type = "sendMessages"
@@ -47,7 +85,7 @@ async function sendMessage() {
         .then(response => response.json())  // Traitement de la réponse (JSON ici)
         .then(data => console.log(data))
 
-    if(Msg){
+    if (Msg) {
         messageList.innerHTML += `<div class="message d-flex justify-content-between mt-2 p-2">
                                     <div class="d-flex">
                                         <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
