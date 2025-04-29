@@ -219,6 +219,8 @@
 }
 .listOfMessage {
     overflow-y: auto;
+    scrollbar-width: none;
+    height: calc(100vh - 4.5rem);
 }
 
 .insertMessage{
@@ -343,4 +345,9 @@ input[type="file"] {
 
 .heuresMessage{
     font-size: 13px;
+}
+
+.listAllMessagesOfUserClass {
+    scrollbar-width: none;
+    height: calc(100vh - 4.5rem);
 }

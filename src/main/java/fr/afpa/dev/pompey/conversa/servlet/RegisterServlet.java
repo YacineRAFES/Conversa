@@ -46,7 +46,8 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        Map<String, String> formData = new HashMap<>();
+        // 29/04/2025 j'ai mis Map<String, String> formData = new HashMap<>(); en Map<String, Object> formData = new HashMap<>();
+        Map<String, Object> formData = new HashMap<>();
         formData.put("username", request.getParameter("user"));
         formData.put("email", request.getParameter("email"));
         formData.put("password1", request.getParameter("password1"));

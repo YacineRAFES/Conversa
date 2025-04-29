@@ -11,22 +11,23 @@
                                 <!-- TODO: message privée à faire -->
                                 <!-- FORM -->
                                 <form action="" class="m-1 mb-2" method="post">
-                                    <input type="text" class="form-control placeholderCustom" name="" id=""
+                                    <input type="text" class="form-control placeholderCustom" name="" id="searchFriendMP"
                                            placeholder="Rechercher une conversation...">
                                 </form>
-                                <div class="user d-flex align-items-center p-2 m-1">
-                                    <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                                    <div class="m-2">
-                                        <div class="username">Username</div>
-                                        <div class="messageUserRecent">Hello World!</div>
+                                <div id="listAllMessagesOfUser" class="listAllMessagesOfUserClass overflow-y-scroll overflow-y-hidden mt-0">
+                                    <div  class="user d-flex align-items-center p-2 m-1">
+                                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                                        <div class="m-2">
+                                            <div  class="username">Username</div>
+                                            <div class="messageUserRecent">Hello World!</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <!-- PARTIE PRINCIPAL (LISTE DES MESSAGES ET UN BLOC POUR ECRIRE UN MESSAGE) -->
                             <div class="col p-0 ms-2 justify-content-between">
                                 <!-- LISTE DES MESSAGES -->
-                                <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0"
-                                     style="scrollbar-width: none;  height: calc(100vh - 4.5rem);" id="listeOfMessage">
+                                <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0" id="listeOfMessage">
                                     <div class="message d-flex justify-content-between mt-2 p-2">
                                         <div class="d-flex">
                                             <img src="assets/images/nightcity.jpg" alt=""
@@ -51,6 +52,8 @@
                                 <div class="insertMessage">
                                     <textarea class="textareaCustom autoResize" name="" id="Msg"></textarea>
                                     <input type="hidden" name="csrfToken" id="csrfToken" value="${csrfToken}"/>
+                                    <input type="hidden" name="idGrpMsgPrivee" id="idGrpMsgPrivee" value="${idGrpMsgPrivee}"/>
+                                    <input type="hidden" id="currentUserId" value="${user.id}">
                                     <!-- <label for="fichiers"
                                                class="custom-file-upload d-flex align-items-center rounded-circle m-auto"><i
                                                 class="bi bi-file-image"></i></label>

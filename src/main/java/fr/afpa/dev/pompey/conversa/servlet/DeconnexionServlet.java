@@ -11,6 +11,8 @@ import java.util.List;
 public class DeconnexionServlet extends HttpServlet {
 
     private static final String JWT = "jwt";
+    private static final String IDUSER = "iduser";
+    private static final String USERNAME = "username";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -23,7 +25,9 @@ public class DeconnexionServlet extends HttpServlet {
         }
 
         List<String> lesCookiesAsupprimer = List.of(
-                JWT
+                JWT,
+                IDUSER,
+                USERNAME
         );
 
         // Supprimer le cookie JWT

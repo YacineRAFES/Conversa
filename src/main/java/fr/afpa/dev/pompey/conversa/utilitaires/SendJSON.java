@@ -13,6 +13,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.getNameClass;
+
 @Slf4j
 public class SendJSON {
 
@@ -196,7 +198,8 @@ public class SendJSON {
         return null;
     }
 
-    public static Map<String, Object> envoyerFormulaireVersApi(Map<String, String> formData, String apiUrl) {
+    // 29/04/2025 j'ai mis Map<String, String> formData = new HashMap<>(); en Map<String, Object> formData = new HashMap<>();
+    public static Map<String, Object> envoyerFormulaireVersApi(Map<String, Object> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
@@ -209,6 +212,7 @@ public class SendJSON {
             conn.setRequestProperty("Content-Type", "application/json; utf-8");
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
+            log.info(getNameClass() + " : JSON envoyé : {}", json);
 
             // Envoi du JSON
             try (OutputStream os = conn.getOutputStream()) {

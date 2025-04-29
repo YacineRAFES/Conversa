@@ -52,27 +52,37 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        Map<String, String> formData = new HashMap<>();
+        // 29/04/2025 j'ai mis Map<String, String> formData = new HashMap<>(); en Map<String, Object> formData = new HashMap<>();
+        Map<String, Object> formData = new HashMap<>();
         formData.put("email", request.getParameter("email"));
         formData.put("password", request.getParameter("password"));
 
         Map<String, Object> apiResponse = envoyerFormulaireVersApi(formData, LOGIN);
 
         if(apiResponse != null){
+
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
             String autorisation = (String) apiResponse.get("Authorization");
+            JsonObject user = (JsonObject) jsonObject.get("user");
+            String userId = user.getString("iduser");
+            String username = user.getString("username");
 
             if (jsonObject.getString("status").equals("success")) {
 
                 log.info("Connexion réussie");
                 String token = autorisation.replace("Bearer ", "");
-                request.setAttribute("title", "Accueil");
-                log.info("Connexion réussie et redirection vers la page d'accueil");
                 Cookie cookie = new Cookie("jwt", token);
+                Cookie usernameCookie = new Cookie("username", username);
+                Cookie userIdCookie = new Cookie("userId", userId);
                 cookie.setHttpOnly(true);
                 cookie.setPath("/");
-                response.addCookie(cookie);
 
+                response.addCookie(cookie);
+                response.addCookie(usernameCookie);
+                response.addCookie(userIdCookie);
+
+                request.setAttribute("title", "Accueil");
+                log.info("Connexion réussie et redirection vers la page d'accueil");
                 this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
 
             } else if (jsonObject.getString("status").equals("error")) {
