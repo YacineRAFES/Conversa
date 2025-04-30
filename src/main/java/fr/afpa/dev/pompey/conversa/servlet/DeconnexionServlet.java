@@ -7,12 +7,10 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import java.util.List;
 
+import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
+
 @WebServlet(name = "DeconnexionServlet", value = "/deconnexion")
 public class DeconnexionServlet extends HttpServlet {
-
-    private static final String JWT = "jwt";
-    private static final String IDUSER = "iduser";
-    private static final String USERNAME = "username";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -24,27 +22,7 @@ public class DeconnexionServlet extends HttpServlet {
             session.invalidate();
         }
 
-        List<String> lesCookiesAsupprimer = List.of(
-                JWT,
-                IDUSER,
-                USERNAME
-        );
-
-        // Supprimer le cookie JWT
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (lesCookiesAsupprimer.contains(cookie.getName())) {
-                    cookie.setValue("");
-                    cookie.setMaxAge(0);  // Expire immédiatement
-                    cookie.setPath("/");  // Assurez-vous que le chemin correspond à celui défini lors de la création du cookie
-                    cookie.setHttpOnly(true);  // Si le cookie était HttpOnly
-                    cookie.setSecure(true);  // Si le cookie était sécurisé (sur HTTPS)
-                    response.addCookie(cookie);
-                    break;  // Sortir de la boucle après avoir supprimé le cookie
-                }
-            }
-        }
+        deleteCookies(request, response);
 
         // Rediriger l'utilisateur vers la page d'accueil
         response.sendRedirect(request.getContextPath() + "/");

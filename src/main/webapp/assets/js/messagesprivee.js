@@ -1,6 +1,7 @@
-import { formatDate, getCookieValue } from "./utilitaires/utils.js";
+import {formatDate, getCookieValue} from "./utilitaires/utils.js";
 
-const currentIdUser = getCookieValue("userId"); localStorage.getItem("userId");
+const currentIdUser = getCookieValue("userId");
+localStorage.getItem("userId");
 const currentUsername = getCookieValue("username");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,18 +13,24 @@ setInterval(() => {
     getAllMessages();
 }, 3000);
 
-document.getElementById('sendMsg').addEventListener("click", () => sendMessage());
+document.getElementById('sendMsg').addEventListener("click", () => Message("sendMessages"));
 
 document.getElementById('Msg').addEventListener("keydown", function (e) {
     if (e.key === "Enter" && !e.shiftKey) {
+        const type = "sendMessages";
         e.preventDefault(); // empêche la création d'une nouvelle ligne
-        sendMessage();
+        Message(type);
     }
 });
 
+function scrollVersLeBas() {
+    const messageList = document.getElementById('listeOfMessage');
+    messageList.scrollTop = messageList.scrollHeight;
+}
+
+
 // Récupère tous les messages de ses amis
 function getAllMessages() {
-    const type = "getAllMessages"
     fetch('messageprivejson', {
         method: 'GET',
         headers: {
@@ -53,8 +60,10 @@ function getAllMessages() {
             // Affichage des conversations
             Object.values(messagesByGroup).forEach(messages => {
                 messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+                // Récupére le nom de son amis
+                const user = messages.find(m => m.user.id !== currentIdUser)?.user || messages[0].user;
                 const lastMessage = messages[messages.length - 1];
-                const user = lastMessage.user;
                 document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
 
                 const userElement = document.createElement('div');
@@ -91,27 +100,26 @@ function getAllMessages() {
                     currentBlock = document.createElement('div');
                     currentBlock.className = 'message d-flex justify-content-between mt-2 p-2';
                     currentBlock.innerHTML = `
-            <div class="d-flex">
-                <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                <div class="ms-3">
-                    <div class="d-flex flex-wrap align-items-center">
-                        <div data-user-id="${message.user.id}" class="username">${message.user.username}</div>
-                        <span class="ms-3 heuresMessage">${formatDate(message.date)}</span>
-                    </div>
-                    <div class="messages-group">
-                        <div class="messageUser">${message.message}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdownCustom my-auto mx-3 rounded-circle">
-                <button class="mainmenubtn boutonOptionMessage">
-                    <i class="bi bi-three-dots fs-4 fw-bold"></i>
-                </button>
-                <ul class="dropdown-childCustom">
-                    <li class="dropdown-list"><a href="">Signaler le message</a></li>
-                </ul>
-            </div>
-        `;
+                        <div class="d-flex">
+                            <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                            <div class="ms-3">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <div data-user-id="${message.user.id}" class="username">${message.user.username}</div>
+                                    <span class="ms-3 heuresMessage">${formatDate(message.date)}</span>
+                                </div>
+                                <div class="messages-group">
+                                    <div class="messageUser">${message.message}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdownCustom my-auto mx-3 rounded-circle">
+                            <button class="mainmenubtn boutonOptionMessage">
+                                <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                            </button>
+                            <ul class="dropdown-childCustom">
+                                <li class="dropdown-list"><a href="">Signaler le message</a></li>
+                            </ul>
+                        </div>`;
                     messageList.appendChild(currentBlock);
                 } else {
                     // Ajouter le message dans le bloc courant (sans avatar ni nom)
@@ -123,12 +131,15 @@ function getAllMessages() {
                 }
 
                 lastUserId = message.user.id;
+
             });
+            scrollVersLeBas();
         });
+
 }
 
 // Envoie le message au serveur
-async function sendMessage() {
+async function Message(type) {
     //Récuperer le message dans le textarea
     const Msg = document.getElementById('Msg').value;
     const groupId = document.getElementById('idGrpMsgPrivee').value;
@@ -144,6 +155,7 @@ async function sendMessage() {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
         body:
+            'type=' + encodeURIComponent(type) +
             '&message=' + encodeURIComponent(Msg) +
             '&csrfToken=' + encodeURIComponent(csrfToken) +
             '&idGroupeMessagesPrives=' + encodeURIComponent(groupId)
@@ -152,46 +164,62 @@ async function sendMessage() {
         .then(data => console.log(data))
 
     if (Msg) {
-        const lastMessageBlock = messageList.lastElementChild;
-        const lastIdUser = lastMessageBlock?.querySelector(".username")?.getAttribute("data-user-id");
+        const allMessageBlocks = Array.from(messageList.children);
+        let lastUserBlock = null;
 
-        // À adapter avec le vrai username côté client (tu peux le stocker dans sessionStorage si besoin)
+        // On parcourt les blocs à l'envers pour trouver le dernier message du current user
+        const lastMessageBlock = allMessageBlocks[allMessageBlocks.length - 1];
+        const lastUserId = lastMessageBlock?.querySelector('.username')?.getAttribute('data-user-id');
 
-        console.log("lastIdUser:" + lastIdUser);
-        console.log("currentIdUser:" +  currentIdUser);
-        console.log("currentUsername:" +  currentUsername);
-        if (lastIdUser === currentIdUser) {
-            // Ajout dans le dernier bloc existant
-            const messageUserDiv = lastMessageBlock?.querySelector(".messageUser");
-            messageUserDiv.innerHTML += `<br>${Msg}`;
+        if (lastUserId === currentIdUser) {
+            lastUserBlock = lastMessageBlock;
+        }
+
+
+        if (lastUserBlock) {
+            const group = lastUserBlock.querySelector('.messages-group');
+            if (group) {
+                const messageUser = document.createElement('div');
+                messageUser.className = 'messageUser';
+                messageUser.textContent = Msg;
+                group.appendChild(messageUser);
+            } else {
+                console.warn("Bloc trouvé mais pas de .messages-group");
+            }
         } else {
             // Sinon, création d'un nouveau bloc
-            messageList.innerHTML += `<div class="message d-flex justify-content-between mt-2 p-2">
-            <div class="d-flex">
-                <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                <div class="ms-3">
-                    <div data-user-id="${currentIdUser}" class="username">${currentUsername}</div>
-                    <div class="messageUser">${Msg}</div>
-                </div>
-            </div>
-            <div class=" dropdownCustom my-auto mx-3 rounded-circle">
-                <button class="mainmenubtn boutonOptionMessage" href="">
-                    <i class="bi bi-three-dots fs-4 fw-bold"></i>
-                </button>
-                <ul class="dropdown-childCustom">
-                    <li class="dropdown-list"><a href="">Répondre</a></li>
-                    <li class="dropdown-list"><a href="">Signaler le message</a></li>
-                </ul>
-            </div>
-        </div>`;
+            messageList.innerHTML +=
+                `<div class="message d-flex justify-content-between mt-2 p-2">
+                    <div class="d-flex">
+                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                        <div class="ms-3">
+                            <div class="d-flex flex-wrap align-items-center">
+                                <div data-user-id="${currentIdUser}" class="username">${currentUsername}</div>
+                                <span class="ms-3 heuresMessage">${formatDate(new Date())}</span>
+                            </div>
+                            <div class="messages-group">
+                                <div class="messageUser">${Msg}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dropdownCustom my-auto mx-3 rounded-circle">
+                        <button class="mainmenubtn boutonOptionMessage">
+                            <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                        </button>
+                        <ul class="dropdown-childCustom">
+                            <li class="dropdown-list"><a href="">Répondre</a></li>
+                            <li class="dropdown-list"><a href="">Signaler le message</a></li>
+                        </ul>
+                    </div>
+                </div>`;
         }
+
+        document.getElementById('Msg').value = '';
+        scrollVersLeBas();
     }
-
-
-    //Réinitialiser le textarea
-    document.getElementById('Msg').value = '';
 }
 
+//Affichage une liste des groupes messages privée de ses amis
 function displayMessagesOfGroup(groupId) {
     const allMessages = JSON.parse(sessionStorage.getItem('allMessages') || '[]');
     const filteredMessages = allMessages.filter(msg => msg.idGroupeMessagesPrives === groupId);
@@ -203,8 +231,11 @@ function displayMessagesOfGroup(groupId) {
     document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
 
     filteredMessages.forEach(message => {
+        const isOwnMessage = message.user.id === currentIdUser;
+
         const messageElement = document.createElement('div');
         messageElement.className = 'message d-flex justify-content-between mt-2 p-2';
+
         messageElement.innerHTML = `
         <div class="d-flex">
             <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
@@ -226,5 +257,6 @@ function displayMessagesOfGroup(groupId) {
         </div>`;
         messageList.appendChild(messageElement);
     });
+
 }
 

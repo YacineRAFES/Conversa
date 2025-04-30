@@ -35,7 +35,7 @@ public class AmisServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // quand l'utilisateur entre dans la page et le servlet doit demander une reponse à l'api pour récupérer tout les amis de l'utilisateur
         String jwt = null;
-        jwt = CookiesUtils.getJWT(request.getCookies());
+        jwt = CookiesUtils.getJWT(request);
 
         Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
         request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
@@ -56,7 +56,7 @@ public class AmisServlet extends HttpServlet {
             String type = request.getParameter("formType");
             String username = request.getParameter("username");
 
-            jwt = CookiesUtils.getJWT(request.getCookies());
+            jwt = CookiesUtils.getJWT(request);
 
             if ("friendSearchForm".equals(type)) {
                 log.info("doPost: type : " + type);
@@ -125,7 +125,7 @@ public class AmisServlet extends HttpServlet {
 
     private void Reponse(Map<String, Object> apiResponse, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String jwt = null;
-        jwt = CookiesUtils.getJWT(request.getCookies());
+        jwt = CookiesUtils.getJWT(request);
         if(apiResponse != null) {
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 

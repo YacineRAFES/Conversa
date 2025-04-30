@@ -1,6 +1,7 @@
 package fr.afpa.dev.pompey.conversa.servlet;
 import fr.afpa.dev.pompey.conversa.securite.Captcha;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
+import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
 import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
 
 @Slf4j
@@ -31,6 +33,8 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        deleteCookies(request, response);
+
         // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
         // response qui permet d'envoyer une réponse HTTP au client
         // Définir le titre de la page
@@ -62,28 +66,14 @@ public class LoginServlet extends HttpServlet {
         if(apiResponse != null){
 
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
-            String autorisation = (String) apiResponse.get("Authorization");
-            JsonObject user = (JsonObject) jsonObject.get("user");
-            String userId = user.getString("iduser");
-            String username = user.getString("username");
 
             if (jsonObject.getString("status").equals("success")) {
 
-                log.info("Connexion réussie");
-                String token = autorisation.replace("Bearer ", "");
-                Cookie cookie = new Cookie("jwt", token);
-                Cookie usernameCookie = new Cookie("username", username);
-                Cookie userIdCookie = new Cookie("userId", userId);
-                cookie.setHttpOnly(true);
-                cookie.setPath("/");
+                CookiesUtils.createCookies(request, response, apiResponse);
 
-                response.addCookie(cookie);
-                response.addCookie(usernameCookie);
-                response.addCookie(userIdCookie);
-
-                request.setAttribute("title", "Accueil");
                 log.info("Connexion réussie et redirection vers la page d'accueil");
-                this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
+
+                response.sendRedirect(request.getContextPath() + "/home");
 
             } else if (jsonObject.getString("status").equals("error")) {
 

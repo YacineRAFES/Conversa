@@ -22,6 +22,7 @@ public class SendJSON {
     public static final String LOGIN = "login";
     public static final String AMIS = "amis";
     public static final String MESSAGEPRIVE = "MessagesPrivee";
+    public static final String CHECKJWT = "CheckJWT";
 
     private SendJSON() {}
 
@@ -213,6 +214,7 @@ public class SendJSON {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
             log.info(getNameClass() + " : JSON envoyé : {}", json);
+            log.info(getNameClass() + " : VERS URL API : {}", apiUrl);
 
             // Envoi du JSON
             try (OutputStream os = conn.getOutputStream()) {

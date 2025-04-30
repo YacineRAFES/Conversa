@@ -34,20 +34,45 @@ public class MessagePriveServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Récupérer le JWT
+        String jwt = CookiesUtils.getJWT(request);
+        Map<String, Object> checkJWT = new HashMap<>();
+        checkJWT.put("jwt", jwt);
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, CHECKJWT);
+        JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+        log.info("apiResponse : " + apiResponse);
+        log.info("jsonObject : " + jsonObject);
+        if (jsonObject != null && jsonObject.containsKey("status")) {
+            String status = jsonObject.getString("status", "");
 
-        // Définir le titre de la page
-        request.setAttribute("title", "Messages Privés");
-        // Définir le nom du fichier JavaScript à inclure
-        request.setAttribute("js", "messagesprivee.js");
+            if ("success".equals(status)) {
+                log.info("Status : "+status);
+                request.setAttribute("title", "Messages Privés");
+                request.setAttribute("js", "messagesprivee.js");
+                this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
 
-        this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
+            } else if ("error".equals(status)) {
+                log.info("Status : " + status);
+                String message = jsonObject.getString("message", "");
+
+                if ("jwtInvalide".equals(message)) {
+                    log.info(message);
+                    response.sendRedirect(request.getContextPath() + "/deconnexion");
+                }else if("ErrorServer".equals(message)) {
+                    log.info(message);
+                    request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                    response.sendRedirect(request.getContextPath() + "/deconnexion");
+                }
+            }
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             Cookie[] cookie = request.getCookies();
-            String jwt = CookiesUtils.getJWT(cookie);
+            String jwt = CookiesUtils.getJWT(request);
             String message = request.getParameter("message");
             String iduser = CookiesUtils.getIdUser(cookie);
             String username = CookiesUtils.getUsername(cookie);
@@ -57,8 +82,8 @@ public class MessagePriveServlet extends HttpServlet {
             log.info("jwt : " + jwt);
 
             if (jwt != null && message != null && iduser != null && username != null) {
-
-                String type = "sendMessages";
+                //Récupérer le type de la requête
+                String type = request.getParameter("type");
 
                 if (type != null && type.equals("sendMessages")) {
                     log.info(getNameClass() + " : type : " + type);

@@ -27,7 +27,7 @@
                             <!-- PARTIE PRINCIPAL (LISTE DES MESSAGES ET UN BLOC POUR ECRIRE UN MESSAGE) -->
                             <div class="col p-0 ms-2 justify-content-between">
                                 <!-- LISTE DES MESSAGES -->
-                                <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0" id="listeOfMessage">
+                                <div class="listOfMessage overflow-y-scroll overflow-y-hidden mt-0 pb-2" id="listeOfMessage">
                                     <div class="message d-flex justify-content-between mt-2 p-2">
                                         <div class="d-flex">
                                             <img src="assets/images/nightcity.jpg" alt=""
