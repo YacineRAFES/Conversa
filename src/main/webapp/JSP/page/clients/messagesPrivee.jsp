@@ -37,14 +37,13 @@
                                                 <div class="messageUser">Hello World!</div>
                                             </div>
                                         </div>
-                                        <div class=" dropdownCustom my-auto mx-3 rounded-circle">
+                                        <div class="my-auto mx-3 rounded-circle OptionsMessage">
                                             <button class="mainmenubtn boutonOptionMessage" href="">
-                                                <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                                                <i class="bi bi-x-lg fs-4 fw-bold"></i>
                                             </button>
-                                            <ul class="dropdown-childCustom">
-                                                <li class="dropdown-list"><a href="">Répondre</a></li>
-                                                <li class="dropdown-list"><a href="">Signaler le message</a></li>
-                                            </ul>
+                                            <button class="mainmenubtn boutonOptionMessage" href="">
+                                                <i class="bi bi-flag fs-4 fw-bold"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

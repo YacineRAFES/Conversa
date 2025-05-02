@@ -112,13 +112,14 @@ function getAllMessages() {
                                 </div>
                             </div>
                         </div>
-                        <div class="dropdownCustom my-auto mx-3 rounded-circle">
-                            <button class="mainmenubtn boutonOptionMessage">
-                                <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                        `if(){} `
+                        <div class="my-auto mx-3 rounded-circle OptionsMessage">
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})" href="">
+                                <i class="bi bi-x-lg fs-4 fw-bold"></i>
                             </button>
-                            <ul class="dropdown-childCustom">
-                                <li class="dropdown-list"><a href="">Signaler le message</a></li>
-                            </ul>
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})" href="">
+                                <i class="bi bi-flag fs-4 fw-bold"></i>
+                            </button>
                         </div>`;
                     messageList.appendChild(currentBlock);
                 } else {
@@ -202,14 +203,13 @@ async function Message(type) {
                             </div>
                         </div>
                     </div>
-                    <div class="dropdownCustom my-auto mx-3 rounded-circle">
-                        <button class="mainmenubtn boutonOptionMessage">
-                            <i class="bi bi-three-dots fs-4 fw-bold"></i>
+                    <div class="my-auto mx-3 rounded-circle OptionsMessage">
+                        <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})" href="">
+                            <i class="bi bi-x-lg fs-4 fw-bold"></i>
                         </button>
-                        <ul class="dropdown-childCustom">
-                            <li class="dropdown-list"><a href="">Répondre</a></li>
-                            <li class="dropdown-list"><a href="">Signaler le message</a></li>
-                        </ul>
+                        <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})" href="">
+                            <i class="bi bi-flag fs-4 fw-bold"></i>
+                        </button>
                     </div>
                 </div>`;
         }
@@ -247,13 +247,13 @@ function displayMessagesOfGroup(groupId) {
                 <div class="messageUser">${message.message}</div>
             </div>
         </div>
-        <div class="dropdownCustom my-auto mx-3 rounded-circle">
-            <button class="mainmenubtn boutonOptionMessage">
-                <i class="bi bi-three-dots fs-4 fw-bold"></i>
+        <div class="my-auto mx-3 rounded-circle OptionsMessage">
+            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})" href="">
+                <i class="bi bi-x-lg fs-4 fw-bold"></i>
             </button>
-            <ul class="dropdown-childCustom">
-                <li class="dropdown-list"><a href="">Signaler le message</a></li>
-            </ul>
+            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})" href="">
+                <i class="bi bi-flag fs-4 fw-bold"></i>
+            </button>
         </div>`;
         messageList.appendChild(messageElement);
     });

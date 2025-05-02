@@ -351,3 +351,14 @@ input[type="file"] {
     scrollbar-width: none;
     height: calc(100vh - 4.5rem);
 }
+
+.OptionsMessage {
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.message:hover .OptionsMessage {
+    opacity: 1;
+    pointer-events: auto;
+}
