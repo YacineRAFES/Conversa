@@ -99,6 +99,18 @@ function getAllMessages() {
                     // Créer un nouveau bloc message complet (avatar + nom + message)
                     currentBlock = document.createElement('div');
                     currentBlock.className = 'message d-flex justify-content-between mt-2 p-2';
+                    let optionsHTML = '';
+                    if (message.user.id == currentIdUser) {
+                        optionsHTML += `
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})">
+                                <i class="bi bi-x-lg fs-4 fw-bold"></i>
+                            </button>`;
+                    } else {
+                        optionsHTML += `
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})">
+                                <i class="bi bi-flag fs-4 fw-bold"></i>
+                            </button>`;
+                    }
                     currentBlock.innerHTML = `
                         <div class="d-flex">
                             <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
@@ -112,15 +124,10 @@ function getAllMessages() {
                                 </div>
                             </div>
                         </div>
-                        `if(){} `
                         <div class="my-auto mx-3 rounded-circle OptionsMessage">
-                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})" href="">
-                                <i class="bi bi-x-lg fs-4 fw-bold"></i>
-                            </button>
-                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})" href="">
-                                <i class="bi bi-flag fs-4 fw-bold"></i>
-                            </button>
+                            ${optionsHTML}
                         </div>`;
+
                     messageList.appendChild(currentBlock);
                 } else {
                     // Ajouter le message dans le bloc courant (sans avatar ni nom)
