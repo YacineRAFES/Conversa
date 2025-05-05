@@ -113,7 +113,7 @@ public class SendJSON {
         return null;
     }
 
-    public static Map<String, Object> recuperationInfoAmis(String method, Map<String, String> formData, String apiUrl) {
+    public static Map<String, Object> recuperationInfoAmis(Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
@@ -125,9 +125,7 @@ public class SendJSON {
             conn.setRequestProperty("Accept", "application/json");
             conn.setDoOutput(true);
 
-            JSONObject json = new JSONObject();
-            json.put("method", method);
-            json.put("objects", new JSONObject(formData));
+            JSONObject json = new JSONObject(formData);
 
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));

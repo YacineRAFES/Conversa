@@ -6,13 +6,11 @@ const currentUsername = getCookieValue("username");
 
 document.addEventListener("DOMContentLoaded", () => {
     getAllMessages();
-    scrollVersLeBas();
 })
 
 //Appel tout les 3 secondes
 setInterval(() => {
     getAllMessages();
-    scrollVersLeBas();
 }, 3000);
 
 document.getElementById('sendMsg').addEventListener("click", () => Message("sendMessages"));
@@ -30,9 +28,10 @@ function scrollVersLeBas() {
     messageList.scrollTop = messageList.scrollHeight;
 }
 
+
 // Récupère tous les messages de ses amis
-function getAllMessages(){
-    fetch('messageprivejson',{
+function getAllMessages() {
+    fetch('messageprivejson', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -84,54 +83,66 @@ function getAllMessages(){
                 });
             });
 
-            // Récupérer les messages de la sessionStorage
-            const messages = data;
-            messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+            // Affichage chronologique de tous les messages
             const messageList = document.getElementById('listeOfMessage');
             messageList.innerHTML = '';
-            // Créer un élément pour chaque message
-            messages.forEach(message => {
-                let checkMessage = '';
-                const messageChecked = transformToYouTubeIframe(message.message)
-                if(messageChecked != null){
-                    checkMessage = messageChecked;
-                }else{
-                    checkMessage = message.message;
-                }
 
-                let optionsHTML = '';
-                if (message.user.id == currentIdUser) {
-                    optionsHTML += `
-                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})">
+            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            let lastUserId = null;
+            let currentBlock = null;
+
+            data.forEach(message => {
+                const isSameUser = lastUserId === message.user.id;
+
+                if (!isSameUser) {
+                    // Créer un nouveau bloc message complet (avatar + nom + message)
+                    currentBlock = document.createElement('div');
+                    currentBlock.className = 'message d-flex justify-content-between mt-2 p-2';
+                    let optionsHTML = '';
+                    if (message.user.id == currentIdUser) {
+                        optionsHTML += `
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${data.id})">
                                 <i class="bi bi-x-lg fs-4 fw-bold"></i>
                             </button>`;
-                } else {
-                    optionsHTML += `
-                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})">
+                    } else {
+                        optionsHTML += `
+                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${data.id})">
                                 <i class="bi bi-flag fs-4 fw-bold"></i>
                             </button>`;
-                }
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message d-flex justify-content-between mt-2 p-2';
-                messageElement.innerHTML = `
-                <div class="d-flex">
-                    <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-                    <div class="ms-3">
-                        <div class="d-flex flex-wrap align-items-center">
-                            <div class="username">${message.user.username}</div>
-                            <span class="ms-3 heuresMessage">${formatDate(message.date)}</span>
+                    }
+                    currentBlock.innerHTML = `
+                        <div class="d-flex">
+                            <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                            <div class="ms-3">
+                                <div class="d-flex flex-wrap align-items-center">
+                                    <div data-user-id="${message.user.id}" class="username">${message.user.username}</div>
+                                    <span class="ms-3 heuresMessage">${formatDate(message.date)}</span>
+                                </div>
+                                <div class="messages-group">
+                                    <div class="messageUser">${message.message}</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="messageUser">${checkMessage}</div>
-                    </div>
-                </div>
-                <div class="my-auto mx-3 rounded-circle OptionsMessage">
-                    ${optionsHTML}
-                </div>`;
-                messageList.appendChild(messageElement);
-            });
-        })
-    scrollVersLeBas();
+                        <div class="my-auto mx-3 rounded-circle OptionsMessage">
+                            ${optionsHTML}
+                        </div>`;
 
+                    messageList.appendChild(currentBlock);
+                } else {
+                    // Ajouter le message dans le bloc courant (sans avatar ni nom)
+                    const group = currentBlock.querySelector('.messages-group');
+                    const messageUser = document.createElement('div');
+                    messageUser.className = 'messageUser';
+                    messageUser.textContent = message.message;
+                    group.appendChild(messageUser);
+                }
+
+                lastUserId = message.user.id;
+
+            });
+            scrollVersLeBas();
+        });
 
 }
 
@@ -160,44 +171,59 @@ async function Message(type) {
         .then(response => response.json())  // Traitement de la réponse (JSON ici)
         .then(data => console.log(data))
 
+    if (Msg) {
+        const allMessageBlocks = Array.from(messageList.children);
+        let lastUserBlock = null;
+
+        // On parcourt les blocs à l'envers pour trouver le dernier message du current user
+        const lastMessageBlock = allMessageBlocks[allMessageBlocks.length - 1];
+        const lastUserId = lastMessageBlock?.querySelector('.username')?.getAttribute('data-user-id');
+
+        if (lastUserId === currentIdUser) {
+            lastUserBlock = lastMessageBlock;
+        }
+
+
+        if (lastUserBlock) {
+            const group = lastUserBlock.querySelector('.messages-group');
+            if (group) {
+                const messageUser = document.createElement('div');
+                messageUser.className = 'messageUser';
+                messageUser.textContent = Msg;
+                group.appendChild(messageUser);
+            } else {
+                console.warn("Bloc trouvé mais pas de .messages-group");
+            }
+        } else {
+            // Sinon, création d'un nouveau bloc
+            messageList.innerHTML +=
+                `<div class="message d-flex justify-content-between mt-2 p-2">
+                    <div class="d-flex">
+                        <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                        <div class="ms-3">
+                            <div class="d-flex flex-wrap align-items-center">
+                                <div data-user-id="${currentIdUser}" class="username">${currentUsername}</div>
+                                <span class="ms-3 heuresMessage">${formatDate(new Date())}</span>
+                            </div>
+                            <div class="messages-group">
+                                <div class="messageUser">${Msg}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="my-auto mx-3 rounded-circle OptionsMessage">
+                        <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${data.message.id})" href="">
+                            <i class="bi bi-x-lg fs-4 fw-bold"></i>
+                        </button>
+                        <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${data.id})" href="">
+                            <i class="bi bi-flag fs-4 fw-bold"></i>
+                        </button>
+                    </div>
+                </div>`;
+        }
+
         document.getElementById('Msg').value = '';
         scrollVersLeBas();
-}
-
-//Signaler un message
-function Signaler(idMessage) {
-    const csrfToken = document.getElementById('csrfToken').value;
-    fetch('messageprive', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body:
-            'type=' + encodeURIComponent('signaler') +
-            '&idMessage=' + encodeURIComponent(idMessage) +
-            '&csrfToken=' + encodeURIComponent(csrfToken) +
-            '&idGroupeMessagesPrives=' + encodeURIComponent(document.getElementById('idGrpMsgPrivee').value)
-    })
-        .then(response => response.json())
-        .then(data => console.log(data))
-}
-
-//Supprimer un message
-function Supprimer(idMessage) {
-    const csrfToken = document.getElementById('csrfToken').value;
-    fetch('messageprive', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body:
-            'type=' + encodeURIComponent('supprimer') +
-            '&idMessage=' + encodeURIComponent(idMessage) +
-            '&csrfToken=' + encodeURIComponent(csrfToken) +
-            '&idGroupeMessagesPrives=' + encodeURIComponent(document.getElementById('idGrpMsgPrivee').value)
-    })
-        .then(response => response.json())
-        .then(data => console.log(data))
+    }
 }
 
 //Affichage une liste des groupes messages privée de ses amis
@@ -241,18 +267,3 @@ function displayMessagesOfGroup(groupId) {
 
 }
 
-window.Supprimer = Supprimer;
-window.Signaler = Signaler;
-
-// Fonction pour transformer une URL YouTube en iframe
-function transformToYouTubeIframe(url) {
-    const regex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
-    const match = url.match(regex);
-
-    if (match && match[1]) {
-        const videoId = match[1];
-        return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-    }
-
-    return null; // ce n'est pas une vidéo YouTube
-}

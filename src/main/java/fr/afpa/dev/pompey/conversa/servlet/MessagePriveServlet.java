@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.getNameClass;
 
 @Slf4j
@@ -57,11 +58,11 @@ public class MessagePriveServlet extends HttpServlet {
 
                 if ("jwtInvalide".equals(message)) {
                     log.info(message);
-                    response.sendRedirect(request.getContextPath() + "/deconnexion");
+                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
                     log.info(message);
-                    request.setAttribute(SET_DIV, Alert.ERRORSERVER);
-                    response.sendRedirect(request.getContextPath() + "/deconnexion");
+                    backToPageLogin(request, response);
                 }
             }
         }
@@ -73,19 +74,24 @@ public class MessagePriveServlet extends HttpServlet {
         try {
             Cookie[] cookie = request.getCookies();
             String jwt = CookiesUtils.getJWT(request);
-            String message = request.getParameter("message");
             String iduser = CookiesUtils.getIdUser(cookie);
             String username = CookiesUtils.getUsername(cookie);
-            log.info("iduser : " + iduser);
-            log.info("username : " + username);
-            log.info("message : " + message);
-            log.info("jwt : " + jwt);
+            log.info(getNameClass() + "iduser : " + iduser);
+            log.info(getNameClass() + "username : " + username);
+            log.info(getNameClass() + "jwt : " + jwt);
 
-            if (jwt != null && message != null && iduser != null && username != null) {
+            if (jwt != null && iduser != null && username != null) {
+                log.info(getNameClass() + " jwt != null && iduser != null && username != null ");
                 //Récupérer le type de la requête
                 String type = request.getParameter("type");
 
                 if (type != null && type.equals("sendMessages")) {
+                    log.info(getNameClass() + " if (type != null && type.equals(\"sendMessages\")) {");
+                    String message = request.getParameter("message");
+                    if(message == null) {
+                        log.error("message est null");
+                        return;
+                    }
                     log.info(getNameClass() + " : type : " + type);
                     //Crée une map
                     Map<String, Object> messageAenvoyer = new HashMap<>();
@@ -100,12 +106,39 @@ public class MessagePriveServlet extends HttpServlet {
                     //Envoyer un message vers API
                     Map<String, Object> apiResponse = envoyerFormulaireVersApi(messageAenvoyer, MESSAGEPRIVE);
 
-                    if (apiResponse != null && apiResponse.get("status").equals("success")) {
-                        log.info("apiResponse : OK " + apiResponse);
-                        //Récupérer la liste des messages
+                    ApiResponse(apiResponse, request, response);
+                } else if(type.equals("signaler")){
+                    log.info(getNameClass() + " : type : " + type);
+                    //Crée une map
+                    Map<String, Object> messageASignaler = new HashMap<>();
+                    //Ajoute les paramètres à la map
+                    messageASignaler.put("type", type);
+                    messageASignaler.put("idMessage", Integer.valueOf(request.getParameter("idMessage")));
+                    messageASignaler.put("jwt", jwt);
+                    messageASignaler.put("iduser", iduser);
+                    messageASignaler.put("username", username);
+                    messageASignaler.put("idGroupeMessagesPrivee", Integer.valueOf(request.getParameter("idGroupeMessagesPrives")));
 
-                    } else if (apiResponse.get("status").equals("error")) {
-                        log.info("apiResponse : ERROR " + apiResponse);
+                    boolean success = ApiResponse(messageASignaler, request, response);
+                    if (success) {
+                        return;
+                    }
+
+                } else if(type.equals("supprimer")){
+                    log.info(getNameClass() + " : type : " + type);
+                    //Crée une map
+                    Map<String, Object> messageASignaler = new HashMap<>();
+                    //Ajoute les paramètres à la map
+                    messageASignaler.put("type", type);
+                    messageASignaler.put("idMessage", Integer.valueOf(request.getParameter("idMessage")));
+                    messageASignaler.put("jwt", jwt);
+                    messageASignaler.put("iduser", iduser);
+                    messageASignaler.put("username", username);
+                    messageASignaler.put("idGroupeMessagesPrivee", Integer.valueOf(request.getParameter("idGroupeMessagesPrives")));
+
+                    boolean success = ApiResponse(messageASignaler, request, response);
+                    if (success) {
+                        return;
                     }
 
                 } else {
@@ -118,9 +151,9 @@ public class MessagePriveServlet extends HttpServlet {
             }
 
         } catch (Exception e) {
-            log.error("apiResponse est null, la récupération a échoué");
+            log.error("Une erreur s'est produite : " + e.getMessage());
             request.setAttribute(SET_DIV, Alert.ERRORSERVER);
-            this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+            this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
         }
 
     }
@@ -129,5 +162,31 @@ public class MessagePriveServlet extends HttpServlet {
 //
 //
 //    }
+
+    private boolean ApiResponse(Map<String, Object> messageASignaler, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(messageASignaler, MESSAGEPRIVE);
+        if(apiResponse == null) {
+            log.error("apiResponse est null");
+            return false;
+        }
+        String status = apiResponse.get("status").toString();
+        String message = apiResponse.get("message").toString();
+        if (status != null && message != null && status.equals("success")) {
+            log.info("apiResponse : OK " + apiResponse);
+            return true;
+        } else if (status.equals("error")) {
+            log.info("apiResponse : ERROR " + apiResponse);
+            if (message.equals("jwtInvalide")) {
+                log.info(message);
+                request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                backToPageLogin(request, response);
+            } else if (message.equals("ErrorServer")) {
+                log.info(message);
+                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                backToPageLogin(request, response);
+            }
+        }
+        return false;
+    }
 
 }

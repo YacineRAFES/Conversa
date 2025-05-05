@@ -38,6 +38,9 @@ public class AmisServlet extends HttpServlet {
         jwt = CookiesUtils.getJWT(request);
 
         Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
+
+        // TODO: FAIRE LA VERIFICATION DU JWT DANS L'API ET FAIRE UN RETOUR DE CONFIRMATION
+        // backToPageLogin(request, response);
         request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
         request.setAttribute("amisList", allAmisData.get("amisList"));
         request.setAttribute("title", "Amis");
@@ -185,26 +188,29 @@ public class AmisServlet extends HttpServlet {
 
     private Map<String, List<Map<String, Object>>> recupererAmisEtDemandes(String jwt) {
         Map<String, String> formData = new HashMap<>();
+        formData.put("method", "GetListFriends");
         formData.put("jwt", jwt);
 
-        Map<String, Object> amisJson = recuperationInfoAmis("GetListFriends", formData, AMIS);
+        Map<String, Object> amisJson = recuperationInfoAmis(formData, AMIS);
 
         String status = (String) amisJson.get("status");
-        if (!"success".equals(status)) {
+
+        Map<String, List<Map<String, Object>>> result = new HashMap<>();
+        if (status.equals("success")) {
+            // On récupère les listes d’amis et de demandes (déjà sous forme de List<Map<String, Object>>)
+            List<Map<String, Object>> amisList = (List<Map<String, Object>>) amisJson.get("amis");
+            List<Map<String, Object>> amisRequest = (List<Map<String, Object>>) amisJson.get("demandes");
+
+            if (amisList == null) amisList = new ArrayList<>();
+            if (amisRequest == null) amisRequest = new ArrayList<>();
+
+            result.put("amisList", amisList);
+            result.put("amisRequest", amisRequest);
+
+        }else if(status.equals("error")) {
             log.warn("Échec de la récupération des amis : statut = {}", status);
             return null;
         }
-
-        // On récupère les listes d’amis et de demandes (déjà sous forme de List<Map<String, Object>>)
-        List<Map<String, Object>> amisList = (List<Map<String, Object>>) amisJson.get("amis");
-        List<Map<String, Object>> amisRequest = (List<Map<String, Object>>) amisJson.get("demandes");
-
-        if (amisList == null) amisList = new ArrayList<>();
-        if (amisRequest == null) amisRequest = new ArrayList<>();
-
-        Map<String, List<Map<String, Object>>> result = new HashMap<>();
-        result.put("amisList", amisList);
-        result.put("amisRequest", amisRequest);
 
         return result;
     }

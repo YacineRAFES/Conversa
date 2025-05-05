@@ -34,14 +34,13 @@
             </li>
         </div>
         <li class="nav-item">
-            <!-- TODO Logo à changer pour super admin
-        <a class="nav-link btn-sidebar text-decoration-none text-white" href="#">
-        <i class="bi bi-shield-shaded align-self-end"></i></i>
-        </a> -->
+<%--            TODO Logo à changer pour super admin--%>
+            <a class="nav-link btn-sidebar mb-1" href="${pageContext.request.contextPath}/admin">
+                <i class="bi bi-shield-shaded fs-2" aria-label="Admin"></i>
+            </a>
             <!-- BOUTON DE PARAMETRES -->
             <a class="nav-link btn-sidebar" href="#">
                 <i class="bi bi-gear fs-2" aria-label="Paramètres"></i>
-
             </a>
         </li>
     </ul>

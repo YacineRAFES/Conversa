@@ -1,4 +1,5 @@
 package fr.afpa.dev.pompey.conversa.servlet;
+
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
@@ -19,8 +20,8 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.envoyerFormulaire
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
 
 @Slf4j
-@WebServlet(name = "HomeServlet", value = "/home")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "AdminServlet", value = "/admin")
+public class AdminServlet extends HttpServlet {
     private static final String SET_DIV = "setDiv";
 
     @Override
@@ -30,7 +31,8 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Récupérer le JWT
+// Récupérer le JWT
+        // TODO: A FAIRE !!!!!!!!!!!!!!!!!!!!!
         String jwt = CookiesUtils.getJWT(request);
         Map<String, Object> checkJWT = new HashMap<>();
         checkJWT.put("jwt", jwt);
@@ -41,15 +43,15 @@ public class HomeServlet extends HttpServlet {
         if (jsonObject != null && jsonObject.containsKey("status")) {
             String status = jsonObject.getString("status", "");
 
-            if ("success".equals(status)) {
+            if (status.equals("success")) {
                 log.info("Status : "+status);
                 // Définir le titre de la page
-                request.setAttribute("title", "Home");
+                request.setAttribute("title", "Admin");
                 // Définir le nom du fichier JavaScript à inclure
-                request.setAttribute("js", "home.js");
-                this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
+                request.setAttribute("js", "admin.js");
+                this.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
 
-            } else if ("error".equals(status)) {
+            } else if (status.equals("error")) {
                 log.info("Status : " + status);
                 String message = jsonObject.getString("message", "");
 
@@ -63,24 +65,11 @@ public class HomeServlet extends HttpServlet {
                 }
             }
         }
-
-
-
-        // Définir le titre de la page
-        request.setAttribute("title", "Home");
-        // Définir le nom du fichier JavaScript à inclure
-        request.setAttribute("js", "home.js");
-
-        this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-    
-    @Override
-    public void destroy() {
-    
-    }
+
 }

@@ -35,6 +35,12 @@ public class Page {
          * "/JSP/page/clients/messagesPrivee.jsp";
          */
         public static final String MESSAGES_PRIVEE = "/JSP/page/clients/messagesPrivee.jsp";
+
+        /**
+         * Page d'admin
+         * /JSP/page/admin/admin.jsp
+         */
+        public static final String ADMIN = "/JSP/page/admin/admin.jsp";
     }
 
     public static final class URL {
@@ -69,6 +75,12 @@ public class Page {
          * /messagesPrivee
          */
         public static final String MESSAGES_PRIVEE = "/messagesPrivee";
+
+        /**
+         * URL de la page d'administration
+         * /admin
+         */
+        public static final String ADMIN = "/admin";
 
     }
 

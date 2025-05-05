@@ -52,6 +52,7 @@ public class CookiesUtils {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (JWT.equals(cookie.getName())) {
+                    log.info("Cookie JWT trouvé : " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
@@ -64,6 +65,7 @@ public class CookiesUtils {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (USERID.equals(cookie.getName())) {
+                    log.info("Cookie JWT trouvé : " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
@@ -76,6 +78,7 @@ public class CookiesUtils {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (USERNAME.equals(cookie.getName())) {
+                    log.info("Cookie JWT trouvé : " + cookie.getValue());
                     return cookie.getValue();
                 }
             }
@@ -90,6 +93,7 @@ public class CookiesUtils {
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (lesCookiesAsupprimer.contains(cookie.getName())) {
+                    log.info("Cookie à supprimer : " + cookie.getName());
                     cookie.setValue("");
                     cookie.setMaxAge(0);  // Expire immédiatement
                     cookie.setPath("/");

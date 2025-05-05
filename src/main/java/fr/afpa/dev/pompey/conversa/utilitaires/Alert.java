@@ -41,6 +41,8 @@ public class Alert {
 
     private static final String REFUSED_FRIEND_REQUEST = "Demande d'ami refusée";
 
+    private static final String AUTHENTICATION_EXPIRED = "Votre session a expiré. Veuillez vous reconnecter.";
+
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
     }
@@ -132,4 +134,9 @@ public class Alert {
      * Information pour la demande d'ami refusée
      */
     public static final String REFUSEDFRIENDREQUEST = setDivAlertInfo(REFUSED_FRIEND_REQUEST);
+
+    /**
+     * Information pour l'authentification expirée
+     */
+    public static final String AUTHENTICATIONEXPIRED = setDivAlertDanger(AUTHENTICATION_EXPIRED);
 }

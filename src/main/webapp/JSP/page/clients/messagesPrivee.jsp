@@ -38,10 +38,10 @@
                                             </div>
                                         </div>
                                         <div class="my-auto mx-3 rounded-circle OptionsMessage">
-                                            <button class="mainmenubtn boutonOptionMessage" href="">
+                                            <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer()">
                                                 <i class="bi bi-x-lg fs-4 fw-bold"></i>
                                             </button>
-                                            <button class="mainmenubtn boutonOptionMessage" href="">
+                                            <button class="mainmenubtn boutonOptionMessage" onclick="Signaler()">
                                                 <i class="bi bi-flag fs-4 fw-bold"></i>
                                             </button>
                                         </div>
