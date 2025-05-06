@@ -31,8 +31,8 @@ function scrollVersLeBas() {
 }
 
 // Récupère tous les messages de ses amis
-function getAllMessages(){
-    fetch('messageprivejson',{
+function getAllMessages() {
+    fetch('messageprivejson', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -43,77 +43,91 @@ function getAllMessages(){
         .then(data => {
             console.log(data);
             sessionStorage.setItem('allMessages', JSON.stringify(data));
+            let mettreAjour = true;
+            // Version test
+            // let mettreAjour = false;
+            // if (sessionStorage.getItem('allMessages') === null) {
+            //     sessionStorage.setItem('allMessages', JSON.stringify(data));
+            //     mettreAjour = true;
+            // } else if (sessionStorage.getItem('allMessages') !== JSON.stringify(data)) {
+            //     sessionStorage.setItem('allMessages', JSON.stringify(data));
+            //     mettreAjour = true;
+            // } else {
+            //     console.log("Les messages sont à jour");
+            //     return;
+            // }
 
-            // Grouper les messages par idGroupeMessagesPrives
-            const messagesByGroup = {};
-            data.forEach(message => {
-                const groupId = message.idGroupeMessagesPrives;
-                if (!messagesByGroup[groupId]) {
-                    messagesByGroup[groupId] = [];
-                }
-                messagesByGroup[groupId].push(message);
-            });
+            if (mettreAjour) {
+                // Grouper les messages par idGroupeMessagesPrives
+                const messagesByGroup = {};
+                data.forEach(message => {
+                    const groupId = message.idGroupeMessagesPrives;
+                    if (!messagesByGroup[groupId]) {
+                        messagesByGroup[groupId] = [];
+                    }
+                    messagesByGroup[groupId].push(message);
+                });
 
 
-            const listUserMessages = document.getElementById('listAllMessagesOfUser');
-            listUserMessages.innerHTML = '';
+                const listUserMessages = document.getElementById('listAllMessagesOfUser');
+                listUserMessages.innerHTML = '';
 
-            // Affichage des conversations
-            Object.values(messagesByGroup).forEach(messages => {
-                messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+                // Affichage des conversations
+                Object.values(messagesByGroup).forEach(messages => {
+                    messages.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-                // Récupére le nom de son amis
-                const user = messages.find(m => m.user.id !== currentIdUser)?.user || messages[0].user;
-                const lastMessage = messages[messages.length - 1];
-                document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
+                    // Récupére le nom de son amis
+                    const user = messages.find(m => m.user.id !== currentIdUser)?.user || messages[0].user;
+                    const lastMessage = messages[messages.length - 1];
+                    document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
 
-                const userElement = document.createElement('div');
-                userElement.className = 'user d-flex align-items-center p-2 m-1';
-                userElement.setAttribute('data-groupid', lastMessage.idGroupeMessagesPrives);
-                userElement.innerHTML = `
+                    const userElement = document.createElement('div');
+                    userElement.className = 'user d-flex align-items-center p-2 m-1';
+                    userElement.setAttribute('data-groupid', lastMessage.idGroupeMessagesPrives);
+                    userElement.innerHTML = `
             <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
             <div class="m-2">
                 <div class="username">${user.username}</div>
                 <div class="messageUser">${lastMessage.message}</div>
             </div>`;
-                listUserMessages.appendChild(userElement);
+                    listUserMessages.appendChild(userElement);
 
-                // Ajouter le click pour afficher les messages de ce groupe
-                userElement.addEventListener('click', () => {
-                    displayMessagesOfGroup(lastMessage.idGroupeMessagesPrives);
+                    // Ajouter le click pour afficher les messages de ce groupe
+                    userElement.addEventListener('click', () => {
+                        displayMessagesOfGroup(lastMessage.idGroupeMessagesPrives);
+                    });
                 });
-            });
 
-            // Récupérer les messages de la sessionStorage
-            const messages = data;
-            messages.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const messageList = document.getElementById('listeOfMessage');
-            messageList.innerHTML = '';
-            // Créer un élément pour chaque message
-            messages.forEach(message => {
-                let checkMessage = '';
-                const messageChecked = transformToYouTubeIframe(message.message)
-                if(messageChecked != null){
-                    checkMessage = messageChecked;
-                }else{
-                    checkMessage = message.message;
-                }
+                // Récupérer les messages de la sessionStorage
+                const messages = data;
+                messages.sort((a, b) => new Date(a.date) - new Date(b.date));
+                const messageList = document.getElementById('listeOfMessage');
+                messageList.innerHTML = '';
+                // Créer un élément pour chaque message
+                messages.forEach(message => {
+                    let checkMessage = '';
+                    const messageChecked = transformToYouTubeIframe(message.message)
+                    if (messageChecked != null) {
+                        checkMessage = messageChecked;
+                    } else {
+                        checkMessage = message.message;
+                    }
 
-                let optionsHTML = '';
-                if (message.user.id == currentIdUser) {
-                    optionsHTML += `
+                    let optionsHTML = '';
+                    if (message.user.id == currentIdUser) {
+                        optionsHTML += `
                             <button class="mainmenubtn boutonOptionMessage" onclick="Supprimer(${message.id})">
                                 <i class="bi bi-x-lg fs-4 fw-bold"></i>
                             </button>`;
-                } else {
-                    optionsHTML += `
+                    } else {
+                        optionsHTML += `
                             <button class="mainmenubtn boutonOptionMessage" onclick="Signaler(${message.id})">
                                 <i class="bi bi-flag fs-4 fw-bold"></i>
                             </button>`;
-                }
-                const messageElement = document.createElement('div');
-                messageElement.className = 'message d-flex justify-content-between mt-2 p-2';
-                messageElement.innerHTML = `
+                    }
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message d-flex justify-content-between mt-2 p-2';
+                    messageElement.innerHTML = `
                 <div class="d-flex">
                     <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                     <div class="ms-3">
@@ -127,12 +141,11 @@ function getAllMessages(){
                 <div class="my-auto mx-3 rounded-circle OptionsMessage">
                     ${optionsHTML}
                 </div>`;
-                messageList.appendChild(messageElement);
-            });
+                    messageList.appendChild(messageElement);
+                });
+            }
         })
     scrollVersLeBas();
-
-
 }
 
 // Envoie le message au serveur
@@ -160,8 +173,8 @@ async function Message(type) {
         .then(response => response.json())  // Traitement de la réponse (JSON ici)
         .then(data => console.log(data))
 
-        document.getElementById('Msg').value = '';
-        scrollVersLeBas();
+    document.getElementById('Msg').value = '';
+    scrollVersLeBas();
 }
 
 //Signaler un message
@@ -251,8 +264,13 @@ function transformToYouTubeIframe(url) {
 
     if (match && match[1]) {
         const videoId = match[1];
-        return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+        return `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}"
+            title="YouTube video player" frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen></iframe>`;
     }
+
 
     return null; // ce n'est pas une vidéo YouTube
 }

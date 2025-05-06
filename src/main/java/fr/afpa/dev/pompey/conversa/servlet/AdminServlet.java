@@ -40,17 +40,23 @@ public class AdminServlet extends HttpServlet {
         JsonObject jsonObject = (JsonObject) apiResponse.get("json");
         log.info("apiResponse : " + apiResponse);
         log.info("jsonObject : " + jsonObject);
+
         if (jsonObject != null && jsonObject.containsKey("status")) {
             String status = jsonObject.getString("status", "");
-
+            String roles = CookiesUtils.getRole(request.getCookies());
             if (status.equals("success")) {
-                log.info("Status : "+status);
-                // Définir le titre de la page
-                request.setAttribute("title", "Admin");
-                // Définir le nom du fichier JavaScript à inclure
-                request.setAttribute("js", "admin.js");
-                this.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
 
+                if(roles.equals("admin")){
+                    log.info("Status : "+status);
+                    // Définir le titre de la page
+                    request.setAttribute("title", "Admin");
+                    request.setAttribute("menu", "admin");
+                    // Définir le nom du fichier JavaScript à inclure
+//                    request.setAttribute("js", "admin.js");
+                    this.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
+                }else{
+                    backToPageLogin(request, response);
+                }
             } else if (status.equals("error")) {
                 log.info("Status : " + status);
                 String message = jsonObject.getString("message", "");

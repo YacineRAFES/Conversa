@@ -86,6 +86,19 @@ public class CookiesUtils {
         return null;
     }
 
+    public static String getRole(Cookie[] cookies) {
+        log.info("Fonction getRole enclenchée");
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("roles".equals(cookie.getName())) {
+                    log.info("Cookie JWT trouvé : " + cookie.getValue());
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
     public static void deleteCookies(HttpServletRequest request, HttpServletResponse response) {
         log.info("Fonction deleteCookies enclenchée");
         // Supprimer le cookie JWT
