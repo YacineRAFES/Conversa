@@ -3,6 +3,7 @@ import fr.afpa.dev.pompey.conversa.securite.Captcha;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
+import fr.afpa.dev.pompey.conversa.utilitaires.Utils;
 import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,6 +20,8 @@ import java.util.Objects;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.GoToPage;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ADMIN;
 
 @Slf4j
 @WebServlet(name = "LoginServlet", value = {"/login", "/"})
@@ -40,7 +43,7 @@ public class LoginServlet extends HttpServlet {
         // Définir le titre de la page
         request.setAttribute("title", "Connexion");
 
-        this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response);
+        GoToPage(request, response, Utils.ServletPage.LOGIN);
     }
 
     @Override

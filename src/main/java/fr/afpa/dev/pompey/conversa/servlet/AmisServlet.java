@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.definirPage;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.*;
 
 @Slf4j
 @WebServlet(name = "AmisServlet", value = "/amis")
@@ -47,13 +46,15 @@ public class AmisServlet extends HttpServlet {
             String status = jsonObject.getString("status", "");
             JsonObject user = jsonObject.getJsonObject("user");
             String roles = user.getString("userRole");
+            if(roles == null){
+                backToPageLogin(request, response);
+                return;
+            }
             if (status.equals("success")) {
-                if(roles != null){
-                    definirPage(request, Utils.ServletPage.HOME, roles);
-                    this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
-                }else{
-                    backToPageLogin(request, response);
-                }
+                Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(CookiesUtils.getJWT(request));
+                request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
+                request.setAttribute("amisList", allAmisData.get("amisList"));
+                GoToPage(request, response, Utils.ServletPage.AMIS);
             } else if (status.equals("error")) {
                 log.info("Status : " + status);
                 String message = jsonObject.getString("message", "");
@@ -72,15 +73,7 @@ public class AmisServlet extends HttpServlet {
 
         // quand l'utilisateur entre dans la page et le servlet doit demander une reponse à l'api pour récupérer tout les amis de l'utilisateur
 
-        Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(CookiesUtils.getJWT(request));
 
-        // TODO: FAIRE LA VERIFICATION DU JWT DANS L'API ET FAIRE UN RETOUR DE CONFIRMATION
-        // backToPageLogin(request, response);
-        request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
-        request.setAttribute("amisList", allAmisData.get("amisList"));
-        definirPage(request, Utils.ServletPage.AMIS);
-
-        this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
     }
 
     @Override
@@ -168,8 +161,6 @@ public class AmisServlet extends HttpServlet {
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 
             if (jsonObject.getString("status").equals("success")) {
-                definirPage(request, Utils.ServletPage.AMIS);
-
                 if(jsonObject.getString("message").equals("friendRequestSent")) {
                     log.info("Demande d'ami envoyée");
                     request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);

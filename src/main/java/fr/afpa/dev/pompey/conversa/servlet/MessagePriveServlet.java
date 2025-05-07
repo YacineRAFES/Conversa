@@ -49,7 +49,7 @@ public class MessagePriveServlet extends HttpServlet {
             String roles = user.getString("userRole");
             if (status.equals("success")) {
                 if(roles != null){
-                    definirPage(request, ServletPage.MESSAGEPRIVE, roles);
+                    GoToPage(request, response, ServletPage.MESSAGEPRIVE, roles);
                     this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
                 }else{
                     backToPageLogin(request, response);

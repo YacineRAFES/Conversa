@@ -75,8 +75,7 @@ public class AdminServlet extends HttpServlet {
                     signalementList.add(signalement);
                 }
                 request.setAttribute("signalementList", signalementList);
-                definirPage(request, ADMIN, roles);
-                this.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
+                GoToPage(request, response, ADMIN, roles);
 
             }else if(status.equals("error")) {
                 log.info("Status : " + status);

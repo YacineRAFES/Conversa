@@ -1,5 +1,6 @@
 package fr.afpa.dev.pompey.conversa.utilitaires;
 
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -27,9 +28,9 @@ public class Utils {
         return "Emplacement appelant non trouvé";
     }
 
-    public static void backToPageLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("backToPageLogin " + Utils.getNameClass());
-        definirPage(request, ServletPage.DECONNEXION);
+    public static void backToPageLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        log.info("backToPageLogin {}", Utils.getNameClass());
+        GoToPage(request, response, ServletPage.DECONNEXION);
         // Invalider la session
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -52,15 +53,17 @@ public class Utils {
         DECONNEXION
     }
 
-    public static void definirPage(HttpServletRequest request , ServletPage page, String roles){
+    public static void GoToPage(HttpServletRequest request, HttpServletResponse response, ServletPage page, String roles) throws ServletException, IOException {
         switch(page){
             case LOGIN:
                 request.setAttribute("title", "Connexion");
                 request.setAttribute("js", "connexion.js");
+                request.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response);
                 break;
             case REGISTER:
                 request.setAttribute("title", "Inscription");
                 request.setAttribute("js", "register.js");
+                request.getServletContext().getRequestDispatcher(Page.JSP.REGISTER).forward(request, response);
                 break;
             case HOME:
                 request.setAttribute("title", "Home");
@@ -71,6 +74,7 @@ public class Utils {
                 } else {
                     request.setAttribute("menu", "clients");
                 }
+                request.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
                 break;
             case AMIS:
                 request.setAttribute("title", "Amis");
@@ -81,6 +85,7 @@ public class Utils {
                 } else {
                     request.setAttribute("menu", "clients");
                 }
+                request.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
                 break;
             case MESSAGEPRIVE:
                 request.setAttribute("title", "Messages Privés");
@@ -91,6 +96,7 @@ public class Utils {
                 } else {
                     request.setAttribute("menu", "clients");
                 }
+                request.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
                 break;
             case ADMIN:
                 request.setAttribute("title", "Admin");
@@ -99,11 +105,12 @@ public class Utils {
                 if ("admin".equalsIgnoreCase(roles)) {
                     request.setAttribute("menu", "admin");
                 }
+                request.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
                 break;
         }
     }
 
-    public static void definirPage(HttpServletRequest request, ServletPage page) {
-        definirPage(request, page, "clients");
+    public static void GoToPage(HttpServletRequest request, HttpServletResponse response, ServletPage page) throws ServletException, IOException {
+        GoToPage(request, response, page, "clients");
     }
 }

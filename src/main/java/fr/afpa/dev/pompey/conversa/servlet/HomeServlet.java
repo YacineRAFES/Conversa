@@ -17,8 +17,7 @@ import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.CHECKJWT;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.envoyerFormulaireVersApi;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.definirPage;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.*;
 
 @Slf4j
 @WebServlet(name = "HomeServlet", value = "/home")
@@ -50,8 +49,7 @@ public class HomeServlet extends HttpServlet {
             String roles = user.getString("userRole");
             if (status.equals("success")) {
                 if(roles != null){
-                    definirPage(request, Utils.ServletPage.HOME, roles);
-                    this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
+                    GoToPage(request, response, Utils.ServletPage.HOME, roles);
                 }else{
                     backToPageLogin(request, response);
                 }
