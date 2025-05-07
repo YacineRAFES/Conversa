@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="/WEB-INF/JSP/header.jsp" %>
 <main>
     <div class="container-fluid">
@@ -5,17 +6,15 @@
             <c:if test="${menu == 'admin'}">
                 <%@include file="/WEB-INF/JSP/menu-client/menu_admin.jsp" %>
             </c:if>
-            <c:if test="${menu == 'user'}">
-                <%@include file="/WEB-INF/JSP/menu-client/menu_client.jsp" %>
-            </c:if>
-<%--            TODO: A FAIRE POUR TOUT LES PAGES--%>
                     <!-- COLONNE PRINCIPAL -->
 
                 <div class="col-2 bloc-principal p-0 me-2">
-                    <form class="d-flex flex-column" action="" method="post">
-                        <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="numérodemessage" name="idMessage">
-                            Signalement de Message 1111
-                        </button>
+                    <form class="d-flex flex-column" action="/admin" method="post">
+                        <c:forEach var="signalements" items="${signalementList}">
+                            <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="${signalements.messageId}" name="idMessage">
+                                Signalement de Message ${signalements.messageId}
+                            </button>
+                        </c:forEach>
                     </form>
                 </div>
                     <div class="col p-0 bloc-principal me-2">
@@ -24,8 +23,6 @@
                                 <div class="col mt-3">
                                     <div class="row">
                                         <div class="col-4">
-
-
                                             <table class="table">
                                                 <thead>
                                                     <tr>
@@ -101,22 +98,17 @@
 
                                         <div class="message d-flex justify-content-between mt-2 p-2 ">
                                             <div class="d-flex">
-                                                <img src="/images/nightcity.jpg" alt="" class="avatarConversa">
+                                                <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                                 <div class="ms-3">
                                                     <div class="username">Username</div>
                                                     <div class="messageUser">Hello World!</div>
                                                 </div>
                                             </div>
-                                            <div class="my-auto mx-3 rounded-circle OptionsMessage">
-                                                <button class="mainmenubtn boutonOptionMessage" href="">
-                                                    <i class="bi bi-x-lg fs-4 fw-bold"></i>
-                                                </button>
-                                            </div>
                                         </div>
                                     </div>
                                     <div class="my-auto mx-3">
                                         <form action="/admin" method="POST">
-                                            <input type="hidden" name="csrfToken" value="#">
+                                            <input type="hidden" name="csrfToken" value="${csrfToken}">
                                             <input type="hidden" name="idUser" value="#">
                                             <input type="hidden" name="idMessage" value="#">
                                             <button type="button" class="btn btn-info">

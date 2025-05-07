@@ -3,7 +3,12 @@
 <main>
     <div class="container-fluid">
         <div class="row" style="height: 100vh; ">
-            <%@include file="/WEB-INF/JSP/menu-client/menu_client.jsp" %>
+            <c:if test="${menu == 'admin'}">
+                <%@include file="/WEB-INF/JSP/menu-client/menu_admin.jsp" %>
+            </c:if>
+            <c:if test="${menu == 'clients'}">
+                <%@include file="/WEB-INF/JSP/menu-client/menu_client.jsp" %>
+            </c:if>
             <!-- COLONNE PRINCIPAL -->
             <div class="col p-0 bloc-principal me-2">
                 <div class="container-fluid">

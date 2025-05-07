@@ -144,8 +144,9 @@ function getAllMessages() {
                     messageList.appendChild(messageElement);
                 });
             }
+
+            scrollVersLeBas();
         })
-    scrollVersLeBas();
 }
 
 // Envoie le message au serveur

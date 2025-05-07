@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
+import fr.afpa.dev.pompey.conversa.utilitaires.Utils;
 import jakarta.json.JsonObject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,8 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.getNameClass;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.*;
 
 @Slf4j
 @WebServlet(name = "MessagePriveServlet", value = "/messageprive")
@@ -36,23 +36,25 @@ public class MessagePriveServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer le JWT
-        String jwt = CookiesUtils.getJWT(request);
         Map<String, Object> checkJWT = new HashMap<>();
-        checkJWT.put("jwt", jwt);
+        checkJWT.put("jwt", CookiesUtils.getJWT(request));
         Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, CHECKJWT);
         JsonObject jsonObject = (JsonObject) apiResponse.get("json");
         log.info("apiResponse : " + apiResponse);
         log.info("jsonObject : " + jsonObject);
+
         if (jsonObject != null && jsonObject.containsKey("status")) {
             String status = jsonObject.getString("status", "");
-
-            if ("success".equals(status)) {
-                log.info("Status : "+status);
-                request.setAttribute("title", "Messages Privés");
-                request.setAttribute("js", "messagesprivee.js");
-                this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
-
-            } else if ("error".equals(status)) {
+            JsonObject user = jsonObject.getJsonObject("user");
+            String roles = user.getString("userRole");
+            if (status.equals("success")) {
+                if(roles != null){
+                    definirPage(request, ServletPage.MESSAGEPRIVE, roles);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
+                }else{
+                    backToPageLogin(request, response);
+                }
+            } else if (status.equals("error")) {
                 log.info("Status : " + status);
                 String message = jsonObject.getString("message", "");
 
@@ -66,7 +68,6 @@ public class MessagePriveServlet extends HttpServlet {
                 }
             }
         }
-
     }
 
     @Override
@@ -169,13 +170,14 @@ public class MessagePriveServlet extends HttpServlet {
             log.error("apiResponse est null");
             return false;
         }
-        String status = apiResponse.get("status").toString();
-        String message = apiResponse.get("message").toString();
+        JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+        String status = jsonObject.get("status").toString();
+        String message = jsonObject.get("message").toString();
         if (status != null && message != null && status.equals("success")) {
-            log.info("apiResponse : OK " + apiResponse);
+            log.info("jsonObject : OK " + jsonObject);
             return true;
         } else if (status.equals("error")) {
-            log.info("apiResponse : ERROR " + apiResponse);
+            log.info("jsonObject : ERROR " + jsonObject);
             if (message.equals("jwtInvalide")) {
                 log.info(message);
                 request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);

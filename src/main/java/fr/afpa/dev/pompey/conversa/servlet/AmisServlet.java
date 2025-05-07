@@ -2,17 +2,16 @@ package fr.afpa.dev.pompey.conversa.servlet;
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
 import fr.afpa.dev.pompey.conversa.utilitaires.Page;
+import fr.afpa.dev.pompey.conversa.utilitaires.Utils;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonValue;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,11 +20,14 @@ import java.util.List;
 import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.definirPage;
 
 @Slf4j
 @WebServlet(name = "AmisServlet", value = "/amis")
 public class AmisServlet extends HttpServlet {
     private static final String SET_DIV = "setDiv";
+
     @Override
     public void init() {
 
@@ -33,17 +35,50 @@ public class AmisServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // quand l'utilisateur entre dans la page et le servlet doit demander une reponse à l'api pour récupérer tout les amis de l'utilisateur
-        String jwt = null;
-        jwt = CookiesUtils.getJWT(request);
+        // Récupérer le JWT
+        Map<String, Object> checkJWT = new HashMap<>();
+        checkJWT.put("jwt", CookiesUtils.getJWT(request));
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, CHECKJWT);
+        JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+        log.info("apiResponse : " + apiResponse);
+        log.info("jsonObject : " + jsonObject);
 
-        Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
+        if (jsonObject != null && jsonObject.containsKey("status")) {
+            String status = jsonObject.getString("status", "");
+            JsonObject user = jsonObject.getJsonObject("user");
+            String roles = user.getString("userRole");
+            if (status.equals("success")) {
+                if(roles != null){
+                    definirPage(request, Utils.ServletPage.HOME, roles);
+                    this.getServletContext().getRequestDispatcher(Page.JSP.HOME).forward(request, response);
+                }else{
+                    backToPageLogin(request, response);
+                }
+            } else if (status.equals("error")) {
+                log.info("Status : " + status);
+                String message = jsonObject.getString("message", "");
+
+                if ("jwtInvalide".equals(message)) {
+                    log.info(message);
+                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    backToPageLogin(request, response);
+                }else if("ErrorServer".equals(message)) {
+                    log.info(message);
+                    backToPageLogin(request, response);
+                }
+            }
+        }
+
+
+        // quand l'utilisateur entre dans la page et le servlet doit demander une reponse à l'api pour récupérer tout les amis de l'utilisateur
+
+        Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(CookiesUtils.getJWT(request));
 
         // TODO: FAIRE LA VERIFICATION DU JWT DANS L'API ET FAIRE UN RETOUR DE CONFIRMATION
         // backToPageLogin(request, response);
         request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
         request.setAttribute("amisList", allAmisData.get("amisList"));
-        request.setAttribute("title", "Amis");
+        definirPage(request, Utils.ServletPage.AMIS);
 
         this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
     }
@@ -133,6 +168,7 @@ public class AmisServlet extends HttpServlet {
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 
             if (jsonObject.getString("status").equals("success")) {
+                definirPage(request, Utils.ServletPage.AMIS);
 
                 if(jsonObject.getString("message").equals("friendRequestSent")) {
                     log.info("Demande d'ami envoyée");
@@ -148,30 +184,33 @@ public class AmisServlet extends HttpServlet {
                     log.error("Demande d'ami déjà acceptée");
                     request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYACCEPTED);
                     this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+
                 }else if(jsonObject.getString("message").equals("AskFriendRequestSend")) {
                     log.info("Demande d'ami envoyée");
                     request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
                     this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+
                 }else if(jsonObject.getString("message").equals("AcceptFriendRequest")) {
                     log.info("Demande d'ami acceptée");
                     Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
                     request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
                     request.setAttribute("amisList", allAmisData.get("amisList"));
-                    request.setAttribute("title", "Amis");
                     request.setAttribute(SET_DIV, Alert.ACCEPTFRIENDREQUEST);
                     this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+
                 }else if(jsonObject.getString("message").equals("RefuseFriendRequest")) {
                     log.info("Demande d'ami refusée");
                     request.setAttribute(SET_DIV, Alert.REFUSEDFRIENDREQUEST);
                     Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
                     request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
                     request.setAttribute("amisList", allAmisData.get("amisList"));
-                    request.setAttribute("title", "Amis");
                     this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+
                 } else {
                     log.error("Erreur lors de l'ajout d'ami");
                     request.setAttribute(SET_DIV, Alert.ERRORSERVER);
                     this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
+
                 }
 
             } else if (jsonObject.getString("status").equals("error")) {
@@ -223,5 +262,6 @@ public class AmisServlet extends HttpServlet {
         formData.put("idGroupeMessagesPrivee", id);
         return envoyeLaDemandeAmis(method, formData, AMIS);
     }
+
 }
 

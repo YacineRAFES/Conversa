@@ -23,6 +23,7 @@ public class SendJSON {
     public static final String AMIS = "amis";
     public static final String MESSAGEPRIVE = "MessagesPrivee";
     public static final String CHECKJWT = "CheckJWT";
+    public static final String ADMIN = "admin";
 
     private SendJSON() {}
 
