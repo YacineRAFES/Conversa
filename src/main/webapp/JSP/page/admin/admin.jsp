@@ -33,11 +33,11 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>ID de l'utilisateur</td>
-                                                        <td>IDUSER</td>
+                                                        <td>${signalement.emetteurId}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nom de l'utilisateur</td>
-                                                        <td>USER_NAME</td>
+                                                        <td>${signalement.emetteurNom}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -51,11 +51,11 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>ID de l'utilisateur</td>
-                                                        <td>IDUSER</td>
+                                                        <td>${signalement.utilisateurIdSignale}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Nom de l'utilisateur</td>
-                                                        <td>USER_NAME</td>
+                                                        <td>${signalement.utilisateurNomSignale}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -74,7 +74,7 @@
                                                     <tr>
                                                         <td>Raison de signalement</td>
                                                         <td>
-                                                            <input type="text" name="raison" id="raison">
+                                                            <input type="text" name="raison" id="raison" value="${signalement.raison}">
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -100,8 +100,8 @@
                                             <div class="d-flex">
                                                 <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                                 <div class="ms-3">
-                                                    <div class="username">Username</div>
-                                                    <div class="messageUser">Hello World!</div>
+                                                    <div class="username">${signalement.emetteurNom}</div>
+                                                    <div class="messageUser">${signalement.messageTexte}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -109,8 +109,8 @@
                                     <div class="my-auto mx-3">
                                         <form action="/admin" method="POST">
                                             <input type="hidden" name="csrfToken" value="${csrfToken}">
-                                            <input type="hidden" name="idUser" value="#">
-                                            <input type="hidden" name="idMessage" value="#">
+                                            <input type="hidden" name="idUser" value="${signalement.emetteurId}">
+                                            <input type="hidden" name="idMessage" value="${signalement.messageId}">
                                             <button type="button" class="btn btn-info">
                                                 Supprimer le signalement
                                             </button>

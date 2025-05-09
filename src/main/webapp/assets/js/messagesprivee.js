@@ -7,6 +7,7 @@ const currentUsername = getCookieValue("username");
 document.addEventListener("DOMContentLoaded", () => {
     getAllMessages();
     scrollVersLeBas();
+    getAllAmis();
 })
 
 //Appel tout les 3 secondes
@@ -28,6 +29,25 @@ document.getElementById('Msg').addEventListener("keydown", function (e) {
 function scrollVersLeBas() {
     const messageList = document.getElementById('listeOfMessage');
     messageList.scrollTop = messageList.scrollHeight;
+}
+
+function getAllAmis() {
+    fetch('amisjson', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+
+    })
+        .then(response => response.json())  // Traitement de la réponse (JSON ici)
+        .then(data => {
+            console.log(data);
+            const listAllMessagesOfUser = document.getElementById('listAllMessagesOfUser');
+
+            listAllMessagesOfUser.innerHTML = '';
+
+
+        });
 }
 
 // Récupère tous les messages de ses amis
@@ -274,4 +294,7 @@ function transformToYouTubeIframe(url) {
 
 
     return null; // ce n'est pas une vidéo YouTube
+}
+function getAllGroupeMP(){
+
 }

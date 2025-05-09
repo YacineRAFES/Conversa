@@ -22,6 +22,7 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.GoToPage;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ADMIN;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.HOME;
 
 @Slf4j
 @WebServlet(name = "LoginServlet", value = {"/login", "/"})
@@ -36,7 +37,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        deleteCookies(request, response);
 
         // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
         // response qui permet d'envoyer une réponse HTTP au client
@@ -76,7 +76,7 @@ public class LoginServlet extends HttpServlet {
 
                 log.info("Connexion réussie et redirection vers la page d'accueil");
 
-                response.sendRedirect(request.getContextPath() + "/home");
+                GoToPage(request, response, HOME);
 
             } else if (jsonObject.getString("status").equals("error")) {
 
@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 
                     log.info("INVALIDCREDENTIALS");
                     request.setAttribute(SET_DIV_ERROR, Alert.INVALIDCREDENTIALS); // Afficher le message d'erreur
-                    this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
+                    GoToPage(request, response, Utils.ServletPage.LOGIN); // Rediriger vers la page d'inscription
 
                 }
             } else {

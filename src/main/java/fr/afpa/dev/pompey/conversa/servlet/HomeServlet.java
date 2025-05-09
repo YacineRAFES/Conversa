@@ -31,6 +31,7 @@ public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("Home servlet");
         // Récupérer le JWT
         Map<String, Object> checkJWT = new HashMap<>();
         checkJWT.put("jwt", CookiesUtils.getJWT(request));
@@ -40,17 +41,22 @@ public class HomeServlet extends HttpServlet {
         log.info("jsonObject : " + jsonObject);
 
         if (jsonObject != null && jsonObject.containsKey("status")) {
+            log.info("Status : " + jsonObject.getString("status"));
             String status = jsonObject.getString("status", "");
             JsonObject user = jsonObject.getJsonObject("user");
             if(user == null){
+                log.info("user is null");
                 backToPageLogin(request, response);
-                return;
             }
             String roles = user.getString("userRole");
             if (status.equals("success")) {
+                log.info("Status : " + status);
                 if(roles != null){
+                    log.info("roles : " + roles);
                     GoToPage(request, response, Utils.ServletPage.HOME, roles);
                 }else{
+
+                    log.info("Pas de roles, donc backtoPageLogin");
                     backToPageLogin(request, response);
                 }
             } else if (status.equals("error")) {
@@ -58,10 +64,14 @@ public class HomeServlet extends HttpServlet {
                 String message = jsonObject.getString("message", "");
 
                 if ("jwtInvalide".equals(message)) {
+
+                    log.info("jwtInvalide, donc backtoPageLogin");
                     log.info(message);
                     request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
                     backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
+
+                    log.info("ErrorServer, donc backtoPageLogin");
                     log.info(message);
                     backToPageLogin(request, response);
                 }
