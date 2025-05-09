@@ -1,5 +1,6 @@
 package fr.afpa.dev.pompey.conversa.servlet;
 
+import fr.afpa.dev.pompey.conversa.utilitaires.Utils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.sendRedirectTo;
 
 @WebServlet(name = "DeconnexionServlet", value = "/deconnexion")
 public class DeconnexionServlet extends HttpServlet {
@@ -25,6 +27,6 @@ public class DeconnexionServlet extends HttpServlet {
         deleteCookies(request, response);
 
         // Rediriger l'utilisateur vers la page d'accueil
-        response.sendRedirect(request.getContextPath() + "/");
+        sendRedirectTo(request, response, Utils.ServletPage.LOGIN);
     }
 }

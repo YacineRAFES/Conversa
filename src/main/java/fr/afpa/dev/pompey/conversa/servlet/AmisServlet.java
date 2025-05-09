@@ -35,8 +35,10 @@ public class AmisServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Récupérer le JWT
+        String jwt = CookiesUtils.getJWT(request);
+        log.info(getNameClass());
         Map<String, Object> checkJWT = new HashMap<>();
-        checkJWT.put("jwt", CookiesUtils.getJWT(request));
+        checkJWT.put("jwt", jwt);
         Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, CHECKJWT);
         JsonObject jsonObject = (JsonObject) apiResponse.get("json");
         log.info("apiResponse : " + apiResponse);

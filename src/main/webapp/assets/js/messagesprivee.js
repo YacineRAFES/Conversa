@@ -10,11 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
     getAllAmis();
 })
 
-//Appel tout les 3 secondes
-setInterval(() => {
-    getAllMessages();
-    scrollVersLeBas();
-}, 3000);
+// //Appel tout les 3 secondes
+// setInterval(() => {
+//     getAllMessages();
+//     scrollVersLeBas();
+// }, 3000);
 
 document.getElementById('sendMsg').addEventListener("click", () => Message("sendMessages"));
 
@@ -37,18 +37,34 @@ function getAllAmis() {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-
     })
-        .then(response => response.json())  // Traitement de la réponse (JSON ici)
+        .then(response => response.json())
         .then(data => {
-            console.log(data);
+            console.log("Amis :", data);
             const listAllMessagesOfUser = document.getElementById('listAllMessagesOfUser');
-
             listAllMessagesOfUser.innerHTML = '';
 
+            data.forEach((amis) => {
+                const userElement = document.createElement('div');
+                userElement.className = 'user d-flex align-items-center p-2 m-1';
+                userElement.setAttribute('data-groupid', amis.idGroupeMessagesPrives);
+                userElement.innerHTML = `
+                <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
+                <div class="m-2">
+                    <div class="username">${amis.username}</div>
+                </div>`;
 
+                listAllMessagesOfUser.appendChild(userElement);
+
+                // Ajouter l'action de clic
+                userElement.addEventListener('click', () => {
+                    document.getElementById('idGrpMsgPrivee').value = amis.idGroupeMessagesPrives;
+                    displayMessagesOfGroup(amis.idGroupeMessagesPrives);
+                });
+            });
         });
 }
+
 
 // Récupère tous les messages de ses amis
 function getAllMessages() {
@@ -86,36 +102,6 @@ function getAllMessages() {
                         messagesByGroup[groupId] = [];
                     }
                     messagesByGroup[groupId].push(message);
-                });
-
-
-                const listUserMessages = document.getElementById('listAllMessagesOfUser');
-                listUserMessages.innerHTML = '';
-
-                // Affichage des conversations
-                Object.values(messagesByGroup).forEach(messages => {
-                    messages.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-                    // Récupére le nom de son amis
-                    const user = messages.find(m => m.user.id !== currentIdUser)?.user || messages[0].user;
-                    const lastMessage = messages[messages.length - 1];
-                    document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
-
-                    const userElement = document.createElement('div');
-                    userElement.className = 'user d-flex align-items-center p-2 m-1';
-                    userElement.setAttribute('data-groupid', lastMessage.idGroupeMessagesPrives);
-                    userElement.innerHTML = `
-            <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
-            <div class="m-2">
-                <div class="username">${user.username}</div>
-                <div class="messageUser">${lastMessage.message}</div>
-            </div>`;
-                    listUserMessages.appendChild(userElement);
-
-                    // Ajouter le click pour afficher les messages de ce groupe
-                    userElement.addEventListener('click', () => {
-                        displayMessagesOfGroup(lastMessage.idGroupeMessagesPrives);
-                    });
                 });
 
                 // Récupérer les messages de la sessionStorage

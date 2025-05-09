@@ -18,11 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.*;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.GoToPage;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ADMIN;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.HOME;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.sendRedirectTo;
 
 @Slf4j
 @WebServlet(name = "LoginServlet", value = {"/login", "/"})
@@ -76,7 +75,7 @@ public class LoginServlet extends HttpServlet {
 
                 log.info("Connexion réussie et redirection vers la page d'accueil");
 
-                GoToPage(request, response, HOME);
+                sendRedirectTo(request, response, HOME);
 
             } else if (jsonObject.getString("status").equals("error")) {
 

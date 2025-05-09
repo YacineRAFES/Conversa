@@ -30,6 +30,7 @@ public class Utils {
 
     public static void backToPageLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         log.info("backToPageLogin {}", Utils.getNameClass());
+        log.info("Redirection vers login");
         GoToPage(request, response, ServletPage.DECONNEXION);
         // Invalider la session
         HttpSession session = request.getSession(false);
@@ -112,5 +113,28 @@ public class Utils {
 
     public static void GoToPage(HttpServletRequest request, HttpServletResponse response, ServletPage page) throws ServletException, IOException {
         GoToPage(request, response, page, "clients");
+    }
+
+    public static void sendRedirectTo(HttpServletRequest request, HttpServletResponse response, ServletPage page) throws IOException {
+        switch (page) {
+            case LOGIN:
+                response.sendRedirect(request.getContextPath() + "/login");
+                break;
+            case REGISTER:
+                response.sendRedirect(request.getContextPath() + "/register");
+                break;
+            case HOME:
+                response.sendRedirect(request.getContextPath() + "/home");
+                break;
+            case AMIS:
+                response.sendRedirect(request.getContextPath() + "/amis");
+                break;
+            case MESSAGEPRIVE:
+                response.sendRedirect(request.getContextPath() + "/messageprive");
+                break;
+            case ADMIN:
+                response.sendRedirect(request.getContextPath() + "/admin");
+                break;
+        }
     }
 }

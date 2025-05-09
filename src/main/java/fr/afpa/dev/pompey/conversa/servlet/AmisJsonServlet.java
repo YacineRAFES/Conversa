@@ -19,7 +19,7 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.getAllAmis;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.backToPageLogin;
 
 @Slf4j
-@WebServlet(name = "AmisServlet", value = "/amisjson")
+@WebServlet(name = "AmisJsonServlet", value = "/amisjson")
 public class AmisJsonServlet extends HttpServlet {
 
     @Override
