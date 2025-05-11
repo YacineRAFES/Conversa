@@ -47,16 +47,16 @@ public class AmisServlet extends HttpServlet {
         if (jsonObject != null && jsonObject.containsKey("status")) {
             String status = jsonObject.getString("status", "");
             JsonObject user = jsonObject.getJsonObject("user");
-            String roles = user.getString("userRole");
-            if(roles == null){
+            if(user == null){
                 backToPageLogin(request, response);
                 return;
             }
+            String roles = user.getString("userRole");
             if (status.equals("success")) {
                 Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(CookiesUtils.getJWT(request));
                 request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
                 request.setAttribute("amisList", allAmisData.get("amisList"));
-                GoToPage(request, response, Utils.ServletPage.AMIS);
+                GoToPage(request, response, Utils.ServletPage.AMIS, roles);
             } else if (status.equals("error")) {
                 log.info("Status : " + status);
                 String message = jsonObject.getString("message", "");

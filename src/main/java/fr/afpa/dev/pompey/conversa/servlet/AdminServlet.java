@@ -95,6 +95,13 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        String idUser = request.getParameter("idUser");
+        String raison = request.getParameter("raison");
+        String idMessage = request.getParameter("idMessage");
+        Map<String, Object> actionSignalement = new HashMap<>();
+        actionSignalement.put("action", action);
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
 
     }
 
