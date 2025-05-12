@@ -10,11 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
     getAllAmis();
 })
 
-// //Appel tout les 3 secondes
-// setInterval(() => {
-//     getAllMessages();
-//     scrollVersLeBas();
-// }, 3000);
+//Appel tout les 3 secondes
+setInterval(() => {
+    getAllMessages();
+    scrollVersLeBas();
+}, 3000);
 
 document.getElementById('sendMsg').addEventListener("click", () => Message("sendMessages"));
 
@@ -228,8 +228,6 @@ function displayMessagesOfGroup(groupId) {
 
     const messageList = document.getElementById('listeOfMessage');
     messageList.innerHTML = '';
-
-    document.getElementById('idGrpMsgPrivee').value = lastMessage.idGroupeMessagesPrives;
 
     filteredMessages.forEach(message => {
         const isOwnMessage = message.user.id === currentIdUser;

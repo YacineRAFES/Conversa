@@ -7,7 +7,7 @@
                 <%@include file="/WEB-INF/JSP/menu-client/menu_admin.jsp" %>
             </c:if>
             <!-- COLONNE PRINCIPAL -->
-
+            <!-- LISTE DES SIGNALEMENTS -->
             <div class="col-2 bloc-principal p-0 me-2">
                 <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
                     <input type="hidden" name="csrfToken" value="${csrfToken}">
@@ -20,6 +20,7 @@
                     </c:forEach>
                 </form>
             </div>
+            <!-- INFORMATION SUR LE SIGNALEMENT -->
             <div class="col p-0 bloc-principal me-2">
                 <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
                     <div class="container-fluid">
@@ -132,15 +133,16 @@
                     </div>
                 </form>
             </div>
+            <!-- INFORMATION SUR L'UTILISATEUR -->
             <div class="col-2 bloc-principal p-0 me-2">
                 <div class="userGrand d-flex align-items-center p-2 m-1 d-flex justify-content-around">
                     <img src="/images/nightcity.jpg" alt="" class="avatarConversaGrand">
                     <div class="m-2">
-                        <div class="usernameGrand">Username</div>
+                        <div class="usernameGrand">${signalement.emetteurNom}</div>
                     </div>
                 </div>
                 <div class="message bg-white d-flex justify-content-between mt-2 p-2 mx-2">
-                    Inscrit depuis 19 sept 2019
+                    ${signalement.emetteurDateInscription}
                 </div>
             </div>
 

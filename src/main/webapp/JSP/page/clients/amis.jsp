@@ -48,7 +48,8 @@
                             <div class="d-flex d-inline-flex pt-3 flex-wrap overflow-y-scroll overflow-y-hidden" style="scrollbar-width: none;  height: calc(80vh - 1rem);">
                                 <c:forEach var="ami" items="${amisList}">
                                     <div>
-                                        <a class="user d-flex align-items-center p-2 m-1 px-3 text-decoration-none text-reset" href="#">
+                                        <a class="user d-flex align-items-center p-2 m-1 px-3 text-decoration-none text-reset"
+                                           href="${pageContext.request.contextPath}/messageprive">
                                             <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                             <div class="m-2">
                                                 <div class="username">${ami.username}</div>
