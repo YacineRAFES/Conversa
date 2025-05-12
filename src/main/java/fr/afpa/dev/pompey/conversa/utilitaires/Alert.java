@@ -43,6 +43,12 @@ public class Alert {
 
     private static final String AUTHENTICATION_EXPIRED = "Votre session a expiré. Veuillez vous reconnecter.";
 
+    private static final String USER_BAN = "L'utilisateur est banni.";
+
+    private static final String SIGNALEMENT_ISDELETE = "Le signalement a été supprimé.";
+
+    private static final String USER_WARNING = "L'utilisateur a été averti.";
+
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
     }
@@ -139,4 +145,19 @@ public class Alert {
      * Information pour l'authentification expirée
      */
     public static final String AUTHENTICATIONEXPIRED = setDivAlertDanger(AUTHENTICATION_EXPIRED);
+
+    /**
+     * Information pour l'utilisateur est banni
+     */
+    public static final String USERBAN = setDivAlertInfo(USER_BAN);
+
+    /**
+     * Information pour le signalement a été supprimée
+     */
+    public static final String SIGNALEMENTISDELETE = setDivAlertInfo(SIGNALEMENT_ISDELETE);
+
+    /**
+     * Information pour l'avertissement d'un utilisateur
+     */
+    public static final String USERWARNING = setDivAlertInfo(USER_WARNING);
 }

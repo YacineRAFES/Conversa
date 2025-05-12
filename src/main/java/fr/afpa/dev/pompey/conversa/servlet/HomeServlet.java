@@ -47,6 +47,7 @@ public class HomeServlet extends HttpServlet {
             if(user == null){
                 log.info("user is null");
                 backToPageLogin(request, response);
+                return;
             }
             String roles = user.getString("userRole");
             if (status.equals("success")) {

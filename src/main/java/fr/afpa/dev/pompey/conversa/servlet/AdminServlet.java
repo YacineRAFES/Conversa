@@ -98,11 +98,131 @@ public class AdminServlet extends HttpServlet {
         String action = request.getParameter("action");
         String idUser = request.getParameter("idUser");
         String raison = request.getParameter("raison");
-        String idMessage = request.getParameter("idMessage");
-        Map<String, Object> actionSignalement = new HashMap<>();
-        actionSignalement.put("action", action);
-        Map<String, Object> apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+        String idMessage = request.getParameter("IdMessage");
 
+        String newAction = null;
+        Map<String, Object> apiResponse = null;
+        if(action.equals("supprimer")){
+            newAction = "deleteSignalement";
+            Map<String, Object> actionSignalement = new HashMap<>();
+            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
+            actionSignalement.put("action", newAction);
+            actionSignalement.put("IdMessage", idMessage);
+            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+        }else if(action.equals("ban")){
+            newAction = "banSignalement";
+
+            Map<String, Object> actionSignalement = new HashMap<>();
+            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
+            actionSignalement.put("action", newAction);
+            actionSignalement.put("IdMessage", idMessage);
+            actionSignalement.put("idUser", idUser);
+            actionSignalement.put("raison", raison);
+            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+        }else if(action.equals("avertissement")){
+            newAction = "warningSignalement";
+
+            Map<String, Object> actionSignalement = new HashMap<>();
+            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
+            actionSignalement.put("action", newAction);
+            actionSignalement.put("IdMessage", idMessage);
+            actionSignalement.put("idUser", idUser);
+            actionSignalement.put("raison", raison);
+            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+        }else if(action.equals("get")){
+            newAction = "getSignalement";
+
+            Map<String, Object> actionSignalement = new HashMap<>();
+            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
+            actionSignalement.put("action", newAction);
+            actionSignalement.put("IdMessage", idMessage);
+            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+        }
+
+        Map<String, Object> actionSignalement = new HashMap<>();
+        actionSignalement.put("jwt", CookiesUtils.getJWT(request));
+        actionSignalement.put("action", newAction);
+        actionSignalement.put("IdMessage", idMessage);
+        if(apiResponse != null) {
+            JsonObject jsonObject = (JsonObject) apiResponse.get("json");
+            String status = jsonObject.getString("status", "");
+            if(status.equals("success")){
+                String message = jsonObject.getString("message", "");
+                if(message.equals("getSignalement")) {
+                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+
+                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
+                    List<Map<String, Object>> signalementList = new ArrayList<>();
+                    for (JsonValue value : getAllSignalement) {
+                        JsonObject signalementJson = value.asJsonObject();
+
+                        Map<String, Object> signalement = new HashMap<>();
+                        signalement.put("messageId", signalementJson.getInt("messageId"));
+
+                        signalementList.add(signalement);
+                    }
+                    JsonObject signalement = sgl.getJsonObject("signalements");
+
+                    request.setAttribute("signalementList", signalementList);
+                    request.setAttribute("signalement", signalement);
+                    GoToPage(request, response, ADMIN, "admin");
+                }else if(message.equals("banSignalement")) {
+                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+
+                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
+                    List<Map<String, Object>> signalementList = new ArrayList<>();
+                    for (JsonValue value : getAllSignalement) {
+                        JsonObject signalementJson = value.asJsonObject();
+
+                        Map<String, Object> signalement = new HashMap<>();
+                        signalement.put("messageId", signalementJson.getInt("messageId"));
+
+                        signalementList.add(signalement);
+                    }
+
+                    request.setAttribute("signalementList", signalementList);
+                    request.setAttribute(SET_DIV, Alert.USERBAN);
+                    GoToPage(request, response, ADMIN, "admin");
+                }else if(message.equals("deleteSignalement")){
+                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+
+                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
+                    List<Map<String, Object>> signalementList = new ArrayList<>();
+                    for (JsonValue value : getAllSignalement) {
+                        JsonObject signalementJson = value.asJsonObject();
+
+                        Map<String, Object> signalement = new HashMap<>();
+                        signalement.put("messageId", signalementJson.getInt("messageId"));
+
+                        signalementList.add(signalement);
+                    }
+
+                    request.setAttribute("signalementList", signalementList);
+                    request.setAttribute(SET_DIV, Alert.SIGNALEMENTISDELETE);
+                    GoToPage(request, response, ADMIN, "admin");
+                }else if(message.equals("warningSignalement")) {
+                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+
+                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
+                    List<Map<String, Object>> signalementList = new ArrayList<>();
+                    for (JsonValue value : getAllSignalement) {
+                        JsonObject signalementJson = value.asJsonObject();
+
+                        Map<String, Object> signalement = new HashMap<>();
+                        signalement.put("messageId", signalementJson.getInt("messageId"));
+
+                        signalementList.add(signalement);
+                    }
+
+                    request.setAttribute("signalementList", signalementList);
+                    request.setAttribute(SET_DIV, Alert.USERWARNING);
+                    GoToPage(request, response, ADMIN, "admin");
+                }
+            }else if(status.equals("error")){
+                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                GoToPage(request, response, ADMIN, "admin");
+            }
+        }
     }
 
 }

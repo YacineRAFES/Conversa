@@ -32,7 +32,8 @@ public class CSRFTokenFilter implements Filter {
                     contextPath + "/login",
                     contextPath + "/",
                     contextPath + "/amis",
-                    contextPath + "/messageprive"
+                    contextPath + "/messageprive",
+                    contextPath + "/admin"
             );
 
             log.info("filtre csrf appele");

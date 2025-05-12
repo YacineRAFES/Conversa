@@ -9,20 +9,27 @@
             <!-- COLONNE PRINCIPAL -->
 
             <div class="col-2 bloc-principal p-0 me-2">
-                <form class="d-flex flex-column" action="/admin" method="post">
+                <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
+                    <input type="hidden" name="csrfToken" value="${csrfToken}">
                     <c:forEach var="signalements" items="${signalementList}">
+                        <input type="hidden" name="action" value="get">
                         <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="${signalements.messageId}"
-                                name="getSignalement">
+                                name="IdMessage">
                             Signalement de Message ${signalements.messageId}
                         </button>
                     </c:forEach>
                 </form>
             </div>
             <div class="col p-0 bloc-principal me-2">
-                <form class="d-flex flex-column" action="/admin" method="post">
+                <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col mt-3">
+                                <div id="message">
+                                    <c:if test="${not empty setDiv}">
+                                        ${setDiv}
+                                    </c:if>
+                                </div>
                                 <div class="row">
                                     <div class="col-4">
                                         <table class="table">
@@ -108,14 +115,14 @@
                                 <div class="my-auto mt-3">
                                     <input type="hidden" name="csrfToken" value="${csrfToken}">
                                     <input type="hidden" name="idUser" value="${signalement.emetteurId}">
-                                    <input type="hidden" name="idMessage" value="${signalement.messageId}">
-                                    <button type="button" name="action" class="btn btn-info" value="supprimer">
+                                    <input type="hidden" name="IdMessage" value="${signalement.messageId}">
+                                    <button type="submit" name="action" class="btn btn-info" value="supprimer">
                                         Supprimer le signalement
                                     </button>
-                                    <button type="button" name="action" class="btn btn-warning" value="avertissement">
+                                    <button type="submit" name="action" class="btn btn-warning" value="avertissement">
                                         Avertissement
                                     </button>
-                                    <button type="button" name="action" class="btn btn-danger" value="ban">
+                                    <button type="submit" name="action" class="btn btn-danger" value="ban">
                                         Bannir ce utilisateur
                                     </button>
                                 </div>
