@@ -26,7 +26,7 @@
                             </div>
                             <!-- BARRE DE RECHERCHE D'UN AMI OU AJOUTER UN AMI -->
                             <form action="${pageContext.request.contextPath}/amis" method="post">
-                                <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+                                <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
                                 <input type="hidden" name="formType" value="friendSearchForm">
                                 <div class="mb-3 d-flex justify-content-center">
                                     <input type="text" class="placeholderCustom form-control rounded-3"
@@ -46,13 +46,13 @@
                             </form>
                             <!-- LISTE DES AMIS -->
                             <div class="d-flex d-inline-flex pt-3 flex-wrap overflow-y-scroll overflow-y-hidden" style="scrollbar-width: none;  height: calc(80vh - 1rem);">
-                                <c:forEach var="ami" items="${amisList}">
+                                <c:forEach var="ami" items="${requestScope.amisList}">
                                     <div>
                                         <a class="user d-flex align-items-center p-2 m-1 px-3 text-decoration-none text-reset"
                                            href="${pageContext.request.contextPath}/messageprive">
                                             <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                             <div class="m-2">
-                                                <div class="username">${ami.username}</div>
+                                                <div class="username"><c:out value="${ami.username}"/></div>
                                             </div>
                                         </a>
                                     </div>
@@ -68,21 +68,21 @@
                     Demande d'amis
                 </div>
                 <!-- LISTE DES DEMANDES D'AMIS -->
-                <c:forEach var="amisRequest" items="${amisRequest}">
+                <c:forEach var="amisRequest" items="${requestScope.amisRequest}">
                     <div class="user-friendrequest d-flex align-items-center p-2 m-1 text-decoration-none text-reset">
                         <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                         <div class="m-2">
-                            <div class="username">${amisRequest.username}</div>
+                            <div class="username"><c:out value="${amisRequest.username}"/></div>
                         </div>
                         <div class="ms-auto">
                             <form action="${pageContext.request.contextPath}/amis" class="" method="post">
-                                <input name="id" type="hidden" value="${amisRequest.idGroupeMessagesPrives}">
+                                <input name="id" type="hidden" value="<c:out value='${amisRequest.idGroupeMessagesPrives}'/>">
 
                                 <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->
-                                <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+                                <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
 
-                                <input name="username" type="hidden" value="${amisRequest.username}">
+                                <input name="username" type="hidden" value="<c:out value='${amisRequest.username}'/>">
                                 <!-- Bouton YES pour accepter la demande d'amis -->
                                 <button type="submit" class="btn-friendrequest-valider" name="action" value="yes">
                                     <i class="bi bi-check-lg"></i>

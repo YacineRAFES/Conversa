@@ -20,7 +20,7 @@
             <div class="col-4 mx-auto mt-5">
                 <form class="form-control rounded-0 p-5" action="${pageContext.request.contextPath}/register" method="post" id="registerForm">
                     <!-- CSRF TOKEN -->
-                    <input type="hidden" name="csrfToken" value="${csrfToken}"/>
+                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Créer un compte</h5>

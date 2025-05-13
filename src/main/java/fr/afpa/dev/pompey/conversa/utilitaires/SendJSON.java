@@ -10,10 +10,15 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static fr.afpa.dev.pompey.conversa.utilitaires.Config.getAPIURL;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Config.getSecretKeyCaptcha;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.getNameClass;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.jsonObjectToMap;
 
 @Slf4j
 public class SendJSON {
@@ -24,6 +29,9 @@ public class SendJSON {
     public static final String MESSAGEPRIVE = "MessagesPrivee";
     public static final String CHECKJWT = "CheckJWT";
     public static final String ADMIN = "admin";
+    public static final String ACCMANAGEMENT = "accManagement";
+
+    private static final String API_URL = getAPIURL();
 
     private SendJSON() {}
 
@@ -32,7 +40,7 @@ public class SendJSON {
 
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de la connexion
@@ -75,7 +83,7 @@ public class SendJSON {
 
         HttpURLConnection conn = null;
         try {
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de la connexion
@@ -118,7 +126,7 @@ public class SendJSON {
         HttpURLConnection conn = null;
 
         try {
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de la connexion
@@ -161,7 +169,7 @@ public class SendJSON {
         HttpURLConnection conn = null;
 
         try {
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
@@ -170,41 +178,44 @@ public class SendJSON {
             conn.setDoOutput(true);
 
             JSONObject json = new JSONObject(formData);
-
             try (OutputStream os = conn.getOutputStream()) {
                 os.write(json.toString().getBytes(StandardCharsets.UTF_8));
             }
-            log.info("recuperationInfoAmis: JSON envoyé : {}", json);
 
             JsonObject fullResponse = lireReponseJSON(conn);
-
-            log.info("recuperationInfoAmis: Réponse JSON : {}", fullResponse);
-            log.info("Statut de la réponse: {}", fullResponse.getString("status"));
-
             JsonObject objects = fullResponse.getJsonObject("objects");
+
+            // ✅ Conversion des JsonArray en List<Map<String, Object>>
+            List<Map<String, Object>> amisList = new ArrayList<>();
+            for (JsonValue val : objects.getJsonArray("amis")) {
+                amisList.add(jsonObjectToMap(val.asJsonObject()));
+            }
+
+            List<Map<String, Object>> demandesList = new ArrayList<>();
+            for (JsonValue val : objects.getJsonArray("demandes")) {
+                demandesList.add(jsonObjectToMap(val.asJsonObject()));
+            }
 
             Map<String, Object> result = new HashMap<>();
             result.put("status", fullResponse.getString("status"));
-            result.put("amis", objects.getJsonArray("amis"));
-            result.put("demandes", objects.getJsonArray("demandes"));
+            result.put("amis", amisList);
+            result.put("demandes", demandesList);
             return result;
 
         } catch (IOException e) {
-            log.error("recuperationInfoAmis: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());
-            e.printStackTrace();
+            log.error("Erreur: {}", e.getMessage());
         } finally {
-            if (conn != null) {
-                conn.disconnect();
-            }
+            if (conn != null) conn.disconnect();
         }
         return null;
     }
+
 
     public static Map<String, Object> envoyeLaDemandeAmis(String method, Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de la connexion
@@ -247,7 +258,7 @@ public class SendJSON {
 
         try {
             JSONObject json = new JSONObject(formData);
-            URL url = new URL("http://localhost:8080/ConversaAPI_war/" + apiUrl);
+            URL url = new URL(API_URL + apiUrl);
             conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de la connexion

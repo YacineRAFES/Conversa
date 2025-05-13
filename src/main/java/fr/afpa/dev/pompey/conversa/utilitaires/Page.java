@@ -41,6 +41,12 @@ public class Page {
          * /JSP/page/admin/admin.jsp
          */
         public static final String ADMIN = "/JSP/page/admin/admin.jsp";
+
+        /**
+         * Page de gestion des comptes
+         * /JSP/page/admin/accmanagement.jsp
+         */
+        public static final String ACCMANAGEMENT = "/JSP/page/admin/accManagement.jsp";
     }
 
     public static final class URL {
@@ -81,6 +87,12 @@ public class Page {
          * /admin
          */
         public static final String ADMIN = "/admin";
+
+        /**
+         * URL de la page de la gestion des comptes
+         * /admin
+         */
+        public static final String ACCMANAGEMENT = "/accmanagement";
 
     }
 

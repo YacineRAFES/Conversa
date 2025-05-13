@@ -49,6 +49,8 @@ public class Alert {
 
     private static final String USER_WARNING = "L'utilisateur a été averti.";
 
+    private static final String USER_MODIFY = "Le compte de l'utilisateur a été modifié.";
+
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
     }
@@ -63,8 +65,6 @@ public class Alert {
                 "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
                 "</div>";
     }
-
-
 
     /**
      * Avertissement pour les champs vides
@@ -160,4 +160,9 @@ public class Alert {
      * Information pour l'avertissement d'un utilisateur
      */
     public static final String USERWARNING = setDivAlertInfo(USER_WARNING);
+
+    /**
+     * Information pour la modification du compte d'un utilisateur
+     */
+    public static final String USERMODIFY = setDivAlertInfo(USER_MODIFY);
 }

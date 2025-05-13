@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- SIDEBAR MENU DE L'APPLICATION -->
 <div class="p-auto d-flex flex-column my-2" style="width: auto;">
     <ul class="nav flex-column flex-grow-1 justify-content-between mx-auto">

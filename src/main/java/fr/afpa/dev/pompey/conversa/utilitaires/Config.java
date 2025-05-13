@@ -22,4 +22,8 @@ public class Config {
     public static String getSecretKeyCaptcha() {
         return props.getProperty("SECRET_KEY_CAPTCHA");
     }
+
+    public static String getAPIURL(){
+        return props.getProperty("API_REDIRECTION");
+    }
 }

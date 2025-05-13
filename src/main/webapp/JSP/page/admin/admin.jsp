@@ -10,12 +10,12 @@
             <!-- LISTE DES SIGNALEMENTS -->
             <div class="col-2 bloc-principal p-0 me-2">
                 <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
-                    <input type="hidden" name="csrfToken" value="${csrfToken}">
-                    <c:forEach var="signalements" items="${signalementList}">
+                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                    <c:forEach var="signalements" items="${requestScope.signalementList}">
                         <input type="hidden" name="action" value="get">
-                        <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="${signalements.messageId}"
+                        <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="<c:out value='${signalements.messageId}'/>"
                                 name="IdMessage">
-                            Signalement de Message ${signalements.messageId}
+                            Signalement de Message <c:out value="${signalements.messageId}"/>
                         </button>
                     </c:forEach>
                 </form>
@@ -43,11 +43,15 @@
                                             <tbody>
                                             <tr>
                                                 <td>ID de l'utilisateur</td>
-                                                <td>${signalement.emetteurId}</td>
+                                                <td>
+                                                    <c:out value="${signalement.emetteurId}"/>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Nom de l'utilisateur</td>
-                                                <td>${signalement.emetteurNom}</td>
+                                                <td>
+                                                    <c:out value="${signalement.emetteurNom}"/>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -61,11 +65,15 @@
                                             <tbody>
                                             <tr>
                                                 <td>ID de l'utilisateur</td>
-                                                <td>${signalement.utilisateurIdSignale}</td>
+                                                <td>
+                                                    <c:out value="${signalement.utilisateurIdSignale}"/>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Nom de l'utilisateur</td>
-                                                <td>${signalement.utilisateurNomSignale}</td>
+                                                <td>
+                                                    <c:out value="${signalement.utilisateurNomSignale}"/>
+                                                </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -84,21 +92,12 @@
                                             <tr>
                                                 <td>Raison de signalement</td>
                                                 <td>
-                                                    <input type="text" name="raison" id="raison"
-                                                           value="${signalement.raison}">
+                                                    <input
+                                                            type="text"
+                                                            name="raison"
+                                                            id="raison"
+                                                           value="<c:out value='${signalement.utilisateurNomSignale}'/>">
                                                 </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="col-4">
-                                        <table class="table">
-                                            <tbody>
-                                            <tr>
-                                                <td colspan="2">Historiques de l'utilisateur</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Aucun signalement précédent</td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -108,15 +107,15 @@
                                     <div class="d-flex">
                                         <img src="assets/images/nightcity.jpg" alt="" class="avatarConversa">
                                         <div class="ms-3">
-                                            <div class="username">${signalement.emetteurNom}</div>
-                                            <div class="messageUser">${signalement.messageTexte}</div>
+                                            <div class="username"><c:out value="${signalement.emetteurNom}"/></div>
+                                            <div class="messageUser"><c:out value="${signalement.messageTexte}"/></div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="my-auto mt-3">
-                                    <input type="hidden" name="csrfToken" value="${csrfToken}">
-                                    <input type="hidden" name="idUser" value="${signalement.emetteurId}">
-                                    <input type="hidden" name="IdMessage" value="${signalement.messageId}">
+                                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                                    <input type="hidden" name="idUser" value="<c:out value="${signalement.emetteurId}"/>">
+                                    <input type="hidden" name="IdMessage" value="<c:out value="${signalement.messageId}"/>">
                                     <button type="submit" name="action" class="btn btn-info" value="supprimer">
                                         Supprimer le signalement
                                     </button>
@@ -131,6 +130,7 @@
                             </div>
                         </div>
                     </div>
+
                 </form>
             </div>
             <!-- INFORMATION SUR L'UTILISATEUR -->
@@ -138,11 +138,13 @@
                 <div class="userGrand d-flex align-items-center p-2 m-1 d-flex justify-content-around">
                     <img src="/images/nightcity.jpg" alt="" class="avatarConversaGrand">
                     <div class="m-2">
-                        <div class="usernameGrand">${signalement.emetteurNom}</div>
+                        <div class="usernameGrand">
+                            <c:out value="${signalement.emetteurNom}"/>
+                        </div>
                     </div>
                 </div>
                 <div class="message bg-white d-flex justify-content-between mt-2 p-2 mx-2">
-                    ${signalement.emetteurDateInscription}
+                    <c:out value="${signalement.emetteurDateInscription}"/>
                 </div>
             </div>
 

@@ -2,7 +2,6 @@ package fr.afpa.dev.pompey.conversa.servlet;
 
 import fr.afpa.dev.pompey.conversa.utilitaires.Alert;
 import fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils;
-import fr.afpa.dev.pompey.conversa.utilitaires.Page;
 import fr.afpa.dev.pompey.conversa.utilitaires.SendJSON;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -20,29 +19,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.CHECKJWT;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.envoyerFormulaireVersApi;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.*;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ACCMANAGEMENT;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ADMIN;
 
 @Slf4j
-@WebServlet(name = "AdminServlet", value = "/admin")
-public class AdminServlet extends HttpServlet {
+@WebServlet(name = "AccManagementServlet", value = "/accmanagement")
+public class AccManagementServlet extends HttpServlet {
     private static final String SET_DIV = "setDiv";
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        log.info("accmanagement");
 // Récupérer le JWT
         // TODO: A FAIRE !!!!!!!!!!!!!!!!!!!!!
         Map<String, Object> checkJWT = new HashMap<>();
         checkJWT.put("jwt", CookiesUtils.getJWT(request));
-        checkJWT.put("action", "getAllSignalements");
-        Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, SendJSON.ADMIN);
+        checkJWT.put("action", "getAllUser");
+        Map<String, Object> apiResponse = envoyerFormulaireVersApi(checkJWT, SendJSON.ACCMANAGEMENT);
         JsonObject jsonObject = (JsonObject) apiResponse.get("json");
         log.info("apiResponse : " + apiResponse);
         log.info("jsonObject : " + jsonObject);
@@ -62,20 +57,21 @@ public class AdminServlet extends HttpServlet {
 
                 //Je récupère tout les signalements
 
-                JsonArray signalementsArray = objects.getJsonArray("signalements");
+                JsonArray utilisateursArray = objects.getJsonArray("users");
 
-                List<Map<String, Object>> signalementList = new ArrayList<>();
+                List<Map<String, Object>> utilisateurList = new ArrayList<>();
 
-                for (JsonValue value : signalementsArray) {
-                    JsonObject signalementJson = value.asJsonObject();
+                for (JsonValue value : utilisateursArray) {
+                    JsonObject utilisateurJson = value.asJsonObject();
 
-                    Map<String, Object> signalement = new HashMap<>();
-                    signalement.put("messageId", signalementJson.getInt("messageId"));
+                    Map<String, Object> utilisateur = new HashMap<>();
+                    utilisateur.put("userId", utilisateurJson.getInt("userId"));
+                    utilisateur.put("userName", utilisateurJson.getString("userName"));
 
-                    signalementList.add(signalement);
+                    utilisateurList.add(utilisateur);
                 }
-                request.setAttribute("signalementList", signalementList);
-                GoToPage(request, response, ADMIN, roles);
+                request.setAttribute("utilisateursList", utilisateurList);
+                GoToPage(request, response, ACCMANAGEMENT, roles);
 
             }else if(status.equals("error")) {
                 log.info("Status : " + status);
@@ -96,35 +92,35 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
-        String idUser = request.getParameter("idUser");
-        String raison = request.getParameter("raison");
-        String idMessage = request.getParameter("IdMessage");
-
+        String idUser = request.getParameter("UserId");
+        String email = request.getParameter("email");
+        String nom = request.getParameter("nom");
+        String roles = request.getParameter("roles");
+//        Boolean valide = request.get
+        //TODO: A FAIRE µICI VITE
         String newAction;
         Map<String, Object> apiResponse = null;
         if(action.equals("supprimer")){
-            newAction = "deleteSignalement";
-            Map<String, Object> actionSignalement = new HashMap<>();
-            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
-            actionSignalement.put("action", newAction);
-            actionSignalement.put("IdMessage", idMessage);
-            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
-        }else if(action.equals("ban")){
-            newAction = "banSignalement";
-
-            apiResponse = getStringToMap(request, idUser, raison, idMessage, newAction);
-        }else if(action.equals("avertissement")){
-            newAction = "warningSignalement";
-
-            apiResponse = getStringToMap(request, idUser, raison, idMessage, newAction);
+            newAction = "deleteAccount";
+            apiResponse = getStringToMap(request, newAction, idUser);
         }else if(action.equals("get")){
-            newAction = "getSignalement";
-
-            Map<String, Object> actionSignalement = new HashMap<>();
-            actionSignalement.put("jwt", CookiesUtils.getJWT(request));
-            actionSignalement.put("action", newAction);
-            actionSignalement.put("IdMessage", idMessage);
-            apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
+            newAction = "getUser";
+            apiResponse = getStringToMap(request, newAction, idUser);
+        }else if(action.equals("editUser")){
+            newAction = "modifUser";
+            if(idUser != null && email != null && nom != null && roles != null) {
+                Map<String, Object> actionUser = new HashMap<>();
+                actionUser.put("jwt", CookiesUtils.getJWT(request));
+                actionUser.put("action", newAction);
+                actionUser.put("IdUser", idUser);
+                actionUser.put("email", email);
+                actionUser.put("nom", nom);
+                actionUser.put("valide", valide);
+                apiResponse = envoyerFormulaireVersApi(actionUser, SendJSON.ACCMANAGEMENT);
+            }else{
+                request.setAttribute(SET_DIV, Alert.EMPTYFIELD);
+                GoToPage(request, response, ACCMANAGEMENT, "admin");
+            }
         }
 
         if(apiResponse != null) {
@@ -132,41 +128,45 @@ public class AdminServlet extends HttpServlet {
             String status = jsonObject.getString("status", "");
             if(status.equals("success")){
                 String message = jsonObject.getString("message", "");
-                if(message.equals("getSignalement")) {
-                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+                if(message.equals("getUser")) {
+                    JsonObject usr = jsonObject.getJsonObject("usr");
 
-                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
-                    List<Map<String, Object>> signalementList = new ArrayList<>();
-                    for (JsonValue value : getAllSignalement) {
-                        JsonObject signalementJson = value.asJsonObject();
+                    JsonArray getAllUser = usr.getJsonArray("getAllUser");
+                    List<Map<String, Object>> utilisateursList = new ArrayList<>();
+                    for (JsonValue value : getAllUser) {
+                        JsonObject utilisateurJson = value.asJsonObject();
 
-                        Map<String, Object> signalement = new HashMap<>();
-                        signalement.put("messageId", signalementJson.getInt("messageId"));
+                        Map<String, Object> utilisateur = new HashMap<>();
+                        utilisateur.put("userId", utilisateurJson.getInt("userId"));
+                        utilisateur.put("userName", utilisateurJson.getString("userName"));
 
-                        signalementList.add(signalement);
+                        utilisateursList.add(utilisateur);
                     }
-                    Map<String, Object> signalement = jsonObjectToMap(sgl.getJsonObject("signalements"));
+                    Map<String, Object> user = jsonObjectToMap(usr.getJsonObject("getUser"));
 
-                    request.setAttribute("signalementList", signalementList);
-                    request.setAttribute("signalement", signalement);
-                    GoToPage(request, response, ADMIN, "admin");
-                }else if(message.equals("banSignalement")) {
-                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+                    request.setAttribute("utilisateursList", utilisateursList);
+                    request.setAttribute("utilisateur", user);
+                    GoToPage(request, response, ACCMANAGEMENT, "admin");
+                }else if(message.equals("userGotModify")) {
+                    JsonObject usr = jsonObject.getJsonObject("usr");
 
-                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
-                    List<Map<String, Object>> signalementList = new ArrayList<>();
-                    for (JsonValue value : getAllSignalement) {
-                        JsonObject signalementJson = value.asJsonObject();
+                    JsonArray getAllUser = usr.getJsonArray("getAllUser");
+                    List<Map<String, Object>> utilisateursList = new ArrayList<>();
+                    for (JsonValue value : getAllUser) {
+                        JsonObject utilisateurJson = value.asJsonObject();
 
-                        Map<String, Object> signalement = new HashMap<>();
-                        signalement.put("messageId", signalementJson.getInt("messageId"));
+                        Map<String, Object> utilisateur = new HashMap<>();
+                        utilisateur.put("userId", utilisateurJson.getInt("userId"));
+                        utilisateur.put("userName", utilisateurJson.getString("userName"));
 
-                        signalementList.add(signalement);
+                        utilisateursList.add(utilisateur);
                     }
+                    Map<String, Object> user = jsonObjectToMap(usr.getJsonObject("getUser"));
 
-                    request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.USERBAN);
-                    GoToPage(request, response, ADMIN, "admin");
+                    request.setAttribute("utilisateursList", utilisateursList);
+                    request.setAttribute("utilisateur", user);
+                    request.setAttribute("setDiv", Alert.USERMODIFY);
+                    GoToPage(request, response, ACCMANAGEMENT, "admin");
                 }else if(message.equals("deleteSignalement")){
                     JsonObject sgl = jsonObject.getJsonObject("sgl");
 
@@ -209,16 +209,18 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    private Map<String, Object> getStringToMap(HttpServletRequest request, String idUser, String raison, String idMessage, String newAction) {
-        Map<String, Object> apiResponse;
-        Map<String, Object> actionSignalement = new HashMap<>();
-        actionSignalement.put("jwt", CookiesUtils.getJWT(request));
-        actionSignalement.put("action", newAction);
-        actionSignalement.put("IdMessage", idMessage);
-        actionSignalement.put("idUser", idUser);
-        actionSignalement.put("raison", raison);
-        apiResponse = envoyerFormulaireVersApi(actionSignalement, SendJSON.ADMIN);
-        return apiResponse;
+    @Override
+    public void destroy() {
+
     }
 
+    private Map<String, Object> getStringToMap(HttpServletRequest request, String newAction, String idUser) {
+        Map<String, Object> apiResponse;
+        Map<String, Object> actionUser = new HashMap<>();
+        actionUser.put("jwt", CookiesUtils.getJWT(request));
+        actionUser.put("action", newAction);
+        actionUser.put("IdUser", idUser);
+        apiResponse = envoyerFormulaireVersApi(actionUser, SendJSON.ACCMANAGEMENT);
+        return apiResponse;
+    }
 }

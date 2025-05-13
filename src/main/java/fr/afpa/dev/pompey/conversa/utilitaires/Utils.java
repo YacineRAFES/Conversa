@@ -1,5 +1,9 @@
 package fr.afpa.dev.pompey.conversa.utilitaires;
 
+import jakarta.json.JsonNumber;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -7,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.CookiesUtils.deleteCookies;
 
@@ -47,6 +53,7 @@ public class Utils {
     public enum ServletPage {
         AMIS,
         ADMIN,
+        ACCMANAGEMENT,
         HOME,
         LOGIN,
         MESSAGEPRIVE,
@@ -108,6 +115,17 @@ public class Utils {
                 }
                 request.getServletContext().getRequestDispatcher(Page.JSP.ADMIN).forward(request, response);
                 break;
+            case ACCMANAGEMENT:
+                request.setAttribute("title", "Gestion des comptes");
+                request.setAttribute("js", "accmanagement.js");
+
+                if ("admin".equalsIgnoreCase(roles)) {
+                    request.setAttribute("menu", "admin");
+                }
+                request.getServletContext().getRequestDispatcher(Page.JSP.ACCMANAGEMENT).forward(request, response);
+                break;
+            default:
+                log.error("Erreur dans GoToPage, on trouve pas la page demandé");
         }
     }
 
@@ -136,5 +154,26 @@ public class Utils {
                 response.sendRedirect(request.getContextPath() + "/admin");
                 break;
         }
+    }
+
+    public static Map<String, Object> jsonObjectToMap(JsonObject jsonObject){
+        Map<String, Object> map = new HashMap<>();
+        for(String key : jsonObject.keySet()){
+            JsonValue value = jsonObject.get(key);
+            switch (value.getValueType()) {
+                case STRING:
+                    map.put(key, ((JsonString) value).getString());
+                    break;
+                case NUMBER:
+                    map.put(key, ((JsonNumber) value).intValue());
+                    break;
+                case TRUE, FALSE:
+                    map.put(key, Boolean.valueOf(value.toString()));
+                    break;
+                default:
+                    map.put(key, value.toString());
+            }
+        }
+        return map;
     }
 }
