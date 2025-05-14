@@ -10,12 +10,12 @@
             <!-- LISTE DES UTILISATEURS -->
             <div class="col-2 bloc-principal p-0 me-2">
                 <form class="d-flex flex-column" action="${pageContext.request.contextPath}/accmanagement" method="POST">
-                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>" >
+                    <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>" >
+                    <input type="hidden" name="action" value="get">
                     <c:forEach var="account" items="${requestScope.utilisateursList}">
-                        <input type="hidden" name="action" value="get">
                         <button class="btn btn-info d-flex mt-2 p-2 mx-2"
                                 value="${account.userId}"
-                                name="UserId">
+                                name="userId">
                             <c:out value="${account.userId}" /> - <c:out value="${account.userName}" />
                         </button>
                     </c:forEach>
@@ -34,14 +34,14 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-4">
-                                        <table class="table">
+                                        <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">Utilisateur</th>
                                                     <th scope="col">Information</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody class="table-group-divider">
                                                 <tr>
                                                     <td>ID</td>
                                                     <td>
@@ -51,13 +51,13 @@
                                                 <tr>
                                                     <td>Nom</td>
                                                     <td>
-                                                        <input name="userName" type="text" value="<c:out value='${utilisateur.userName}'/>">
+                                                        <input class="form-control" name="userName" type="text" value="<c:out value='${utilisateur.userName}'/>">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Email</td>
                                                     <td>
-                                                        <input name="email" type="text" value="<c:out value='${utilisateur.userEmail}'/>">
+                                                        <input class="form-control" name="userEmail" type="text" value="<c:out value='${utilisateur.userEmail}'/>">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -69,7 +69,7 @@
                                                 <tr>
                                                     <td>Role</td>
                                                     <td>
-                                                        <select name="userRole">
+                                                        <select class="form-select" name="userRole">
                                                             <option value="admin" <c:if test="${utilisateur.userRole == 'admin'}"> selected </c:if>>Admin</option>
                                                             <option value="user" <c:if test="${utilisateur.userRole == 'user'}"> selected </c:if>>Utilisateur</option>
                                                             <option value="user" <c:if test="${utilisateur.userRole == 'moderator'}"> selected </c:if>>Modérateur</option>
@@ -79,7 +79,10 @@
                                                 <tr>
                                                     <td>Statut du compte</td>
                                                     <td>
-                                                        <c:out value='${utilisateur.userIsValid}'/>
+                                                        <select class="form-select" name="userValid">
+                                                            <option value="true" <c:if test="${utilisateur.userIsValid == 'true'}"> selected </c:if>>Valide</option>
+                                                            <option value="false" <c:if test="${utilisateur.userIsValid == 'user'}"> selected </c:if>>Fermé</option>
+                                                        </select>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -99,8 +102,8 @@
                                     </div>
                                 </div>
                                 <div class="my-auto mt-3">
-                                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>" >
-                                    <input type="hidden" name="idUser" value="<c:out value='${utilisateur.IdUser}'/>" >
+                                    <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>" >
+                                    <input type="hidden" name="userId" value="<c:out value='${utilisateur.userId}'/>">
                                     <button type="submit" name="action" class="btn btn-warning" value="modif">
                                         Modifier
                                     </button>

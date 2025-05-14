@@ -12,18 +12,17 @@
     </header>
     <!-- PARTIE DE CORPS DU SITE -->
     <div class="container">
-        <div id="message"></div>
         <div class="row d-flex">
             <div class="col-4 mx-auto mt-5">
-                <div class="message disparition">
-                    <c:if test="${param.info == 'compteCree'}">
-                        <div class="alert alert-success text-center mb-3" role="alert">Votre compte a été crée. Veuillez de vous connecter.</div>
+                <div id="message">
+                    <c:if test="${not empty setDiv}">
+                        ${setDiv}
                     </c:if>
                 </div>
                 <!-- FORMULAIRE DE CONNEXION -->
                 <form id="loginForm" action="${pageContext.request.contextPath}/login" class="form-control rounded-0 p-5 mx-auto my-auto" method="post">
                     <!-- CSRF TOKEN -->
-                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>"/>
+                    <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>"/>
                     <!-- TITRE DU FORMULAIRE -->
                     <div class="mb-3">
                         <h5 class="text-center">Connexion</h5>

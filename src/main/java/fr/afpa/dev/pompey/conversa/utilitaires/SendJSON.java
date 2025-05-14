@@ -211,7 +211,7 @@ public class SendJSON {
     }
 
 
-    public static Map<String, Object> envoyeLaDemandeAmis(String method, Map<String, String> formData, String apiUrl) {
+    public static Map<String, Object> envoyeLaDemandeAmis(String method, String jwt, Map<String, String> formData, String apiUrl) {
         HttpURLConnection conn = null;
 
         try {
@@ -226,6 +226,7 @@ public class SendJSON {
 
             JSONObject json = new JSONObject();
             json.put("method", method);
+            json.put("jwt", jwt);
             json.put("objects", new JSONObject(formData));
 
             try (OutputStream os = conn.getOutputStream()) {

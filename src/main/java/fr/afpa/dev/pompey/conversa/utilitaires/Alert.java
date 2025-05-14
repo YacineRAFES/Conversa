@@ -49,7 +49,13 @@ public class Alert {
 
     private static final String USER_WARNING = "L'utilisateur a été averti.";
 
-    private static final String USER_MODIFY = "Le compte de l'utilisateur a été modifié.";
+    private static final String USER_MODIFIED = "Le compte de l'utilisateur a été modifié.";
+
+    private static final String ERROR_FORM = "Erreur du saisie.";
+
+    private static final String USER_DELETED = "Le compte de l'utilisateur a été supprimé.";
+
+    private static final String USER_CREATED = "Votre compte a été crée. Veuillez de vous connecter.";
 
     private static String setDivAlertDanger(String message) {
         return "<div class='alert alert-danger text-center' role='alert'>"+message+"</div>";
@@ -60,7 +66,7 @@ public class Alert {
     }
 
     private static String setDivAlertInfo(String message) {
-        return "<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
+        return "<div class=\"alert alert-warning alert-dismissible fade show text-center\" role=\"alert\">\n" +
                 message +
                 "  <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button>\n" +
                 "</div>";
@@ -164,5 +170,11 @@ public class Alert {
     /**
      * Information pour la modification du compte d'un utilisateur
      */
-    public static final String USERMODIFY = setDivAlertInfo(USER_MODIFY);
+    public static final String USERMODIFIED = setDivAlertInfo(USER_MODIFIED);
+
+    public static final String ERRORFORM = setDivAlertWarning(ERROR_FORM);
+
+    public static final String USERDELETED = setDivAlertInfo(USER_DELETED);
+
+    public static final String USERCREATED = setDivAlertInfo(USER_CREATED);
 }

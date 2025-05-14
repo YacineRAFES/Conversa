@@ -91,36 +91,50 @@ public class AccManagementServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Récupération des données saisies par l'Admin
         String action = request.getParameter("action");
-        String idUser = request.getParameter("UserId");
-        String email = request.getParameter("email");
-        String nom = request.getParameter("nom");
-        String roles = request.getParameter("roles");
-//        Boolean valide = request.get
-        //TODO: A FAIRE µICI VITE
+        String userId = request.getParameter("userId");
+        String userEmail = request.getParameter("userEmail");
+        String userName = request.getParameter("userName");
+        String userRole = request.getParameter("userRole");
+        String valideString = request.getParameter("userValid");
+
         String newAction;
         Map<String, Object> apiResponse = null;
+
         if(action.equals("supprimer")){
+            //Suppression du compte
             newAction = "deleteAccount";
-            apiResponse = getStringToMap(request, newAction, idUser);
+            apiResponse = getStringToMap(request, newAction, userId);
         }else if(action.equals("get")){
+            //Récupération des informations de l'utilisateur
             newAction = "getUser";
-            apiResponse = getStringToMap(request, newAction, idUser);
-        }else if(action.equals("editUser")){
+            apiResponse = getStringToMap(request, newAction, userId);
+        }else if(action.equals("modif")){
+            //Modification de l'utilisateur
             newAction = "modifUser";
-            if(idUser != null && email != null && nom != null && roles != null) {
+            if(userId != null && userEmail != null && userName != null && userRole != null && valideString != null) {
+                boolean validBoolean = false;
+                if(valideString.equals("true")) {
+                    validBoolean = true;
+                }
                 Map<String, Object> actionUser = new HashMap<>();
                 actionUser.put("jwt", CookiesUtils.getJWT(request));
                 actionUser.put("action", newAction);
-                actionUser.put("IdUser", idUser);
-                actionUser.put("email", email);
-                actionUser.put("nom", nom);
-                actionUser.put("valide", valide);
+                actionUser.put("userId", userId);
+                actionUser.put("userEmail", userEmail);
+                actionUser.put("userName", userName);
+                actionUser.put("userRole", userRole);
+                actionUser.put("userIsValid", validBoolean);
                 apiResponse = envoyerFormulaireVersApi(actionUser, SendJSON.ACCMANAGEMENT);
             }else{
                 request.setAttribute(SET_DIV, Alert.EMPTYFIELD);
                 GoToPage(request, response, ACCMANAGEMENT, "admin");
+                return;
             }
+        } else if (action.equals("resetPassword")) {
+            newAction = "sendAskResetPassword";
+            apiResponse = getStringToMap(request, newAction, userId);
         }
 
         if(apiResponse != null) {
@@ -147,7 +161,7 @@ public class AccManagementServlet extends HttpServlet {
                     request.setAttribute("utilisateursList", utilisateursList);
                     request.setAttribute("utilisateur", user);
                     GoToPage(request, response, ACCMANAGEMENT, "admin");
-                }else if(message.equals("userGotModify")) {
+                }else if(message.equals("userModified")) {
                     JsonObject usr = jsonObject.getJsonObject("usr");
 
                     JsonArray getAllUser = usr.getJsonArray("getAllUser");
@@ -165,42 +179,26 @@ public class AccManagementServlet extends HttpServlet {
 
                     request.setAttribute("utilisateursList", utilisateursList);
                     request.setAttribute("utilisateur", user);
-                    request.setAttribute("setDiv", Alert.USERMODIFY);
+                    request.setAttribute(SET_DIV, Alert.USERMODIFIED);
                     GoToPage(request, response, ACCMANAGEMENT, "admin");
-                }else if(message.equals("deleteSignalement")){
-                    JsonObject sgl = jsonObject.getJsonObject("sgl");
+                }else if(message.equals("userDeleted")){
+                    JsonObject usr = jsonObject.getJsonObject("usr");
 
-                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
-                    List<Map<String, Object>> signalementList = new ArrayList<>();
-                    for (JsonValue value : getAllSignalement) {
-                        JsonObject signalementJson = value.asJsonObject();
+                    JsonArray getAllUser = usr.getJsonArray("getAllUser");
+                    List<Map<String, Object>> utilisateursList = new ArrayList<>();
+                    for (JsonValue value : getAllUser) {
+                        JsonObject utilisateurJson = value.asJsonObject();
 
-                        Map<String, Object> signalement = new HashMap<>();
-                        signalement.put("messageId", signalementJson.getInt("messageId"));
+                        Map<String, Object> utilisateur = new HashMap<>();
+                        utilisateur.put("userId", utilisateurJson.getInt("userId"));
+                        utilisateur.put("userName", utilisateurJson.getString("userName"));
 
-                        signalementList.add(signalement);
-                    }
+                        utilisateursList.add(utilisateur);
+                    };
 
-                    request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.SIGNALEMENTISDELETE);
-                    GoToPage(request, response, ADMIN, "admin");
-                }else if(message.equals("warningSignalement")) {
-                    JsonObject sgl = jsonObject.getJsonObject("sgl");
-
-                    JsonArray getAllSignalement = sgl.getJsonArray("getAllSignalement");
-                    List<Map<String, Object>> signalementList = new ArrayList<>();
-                    for (JsonValue value : getAllSignalement) {
-                        JsonObject signalementJson = value.asJsonObject();
-
-                        Map<String, Object> signalement = new HashMap<>();
-                        signalement.put("messageId", signalementJson.getInt("messageId"));
-
-                        signalementList.add(signalement);
-                    }
-
-                    request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.USERWARNING);
-                    GoToPage(request, response, ADMIN, "admin");
+                    request.setAttribute("utilisateursList", utilisateursList);
+                    request.setAttribute(SET_DIV, Alert.USERDELETED);
+                    GoToPage(request, response, ACCMANAGEMENT, "admin");
                 }
             }else if(status.equals("error")){
                 request.setAttribute(SET_DIV, Alert.ERRORSERVER);
@@ -219,7 +217,7 @@ public class AccManagementServlet extends HttpServlet {
         Map<String, Object> actionUser = new HashMap<>();
         actionUser.put("jwt", CookiesUtils.getJWT(request));
         actionUser.put("action", newAction);
-        actionUser.put("IdUser", idUser);
+        actionUser.put("userId", idUser);
         apiResponse = envoyerFormulaireVersApi(actionUser, SendJSON.ACCMANAGEMENT);
         return apiResponse;
     }

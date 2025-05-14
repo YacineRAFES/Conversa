@@ -26,7 +26,7 @@
                             </div>
                             <!-- BARRE DE RECHERCHE D'UN AMI OU AJOUTER UN AMI -->
                             <form action="${pageContext.request.contextPath}/amis" method="post">
-                                <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                                <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>">
                                 <input type="hidden" name="formType" value="friendSearchForm">
                                 <div class="mb-3 d-flex justify-content-center">
                                     <input type="text" class="placeholderCustom form-control rounded-3"
@@ -80,7 +80,7 @@
 
                                 <input type="hidden" name="formType" value="friendRequestResponse">
                                 <!-- CSRF TOKEN -->
-                                <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                                <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>">
 
                                 <input name="username" type="hidden" value="<c:out value='${amisRequest.username}'/>">
                                 <!-- Bouton YES pour accepter la demande d'amis -->

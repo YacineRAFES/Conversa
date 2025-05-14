@@ -19,12 +19,14 @@ import java.util.Map;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.REGISTER;
 import static fr.afpa.dev.pompey.conversa.utilitaires.SendJSON.envoyerFormulaireVersApi;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.GoToPage;
+import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.sendRedirectTo;
 
 @Slf4j
 @WebServlet(name = "UserRegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
     private static final String MESSAGE = "message";
     private static final String SET_DIV_ERROR = "setDivError";
+    private static final String SET_DIV = "setDiv";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -59,9 +61,8 @@ public class RegisterServlet extends HttpServlet {
             JsonObject jsonObject = (JsonObject) apiResponse.get("json");
 
             if (jsonObject.getString("status").equals("success")) {
-                request.setAttribute("title", "Connexion");
                 log.info("Inscription réussie et redirection vers la page de connexion");
-                response.sendRedirect(request.getContextPath() + Page.URL.LOGIN);
+                sendRedirectTo(request, response, Utils.ServletPage.LOGIN);
 
             } else if (jsonObject.getString("status").equals("error")) {
                 request.setAttribute("title", "Inscription");

@@ -10,9 +10,9 @@
             <!-- LISTE DES SIGNALEMENTS -->
             <div class="col-2 bloc-principal p-0 me-2">
                 <form class="d-flex flex-column" action="${pageContext.request.contextPath}/admin" method="POST">
-                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                    <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>">
+                    <input type="hidden" name="action" value="get">
                     <c:forEach var="signalements" items="${requestScope.signalementList}">
-                        <input type="hidden" name="action" value="get">
                         <button class=" btn btn-info d-flex  mt-2 p-2 mx-2" value="<c:out value='${signalements.messageId}'/>"
                                 name="IdMessage">
                             Signalement de Message <c:out value="${signalements.messageId}"/>
@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class="my-auto mt-3">
-                                    <input type="hidden" name="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                                    <input type="hidden" name="csrfToken" value="<c:out value='${csrfToken}'/>">
                                     <input type="hidden" name="idUser" value="<c:out value="${signalement.emetteurId}"/>">
                                     <input type="hidden" name="IdMessage" value="<c:out value="${signalement.messageId}"/>">
                                     <button type="submit" name="action" class="btn btn-info" value="supprimer">

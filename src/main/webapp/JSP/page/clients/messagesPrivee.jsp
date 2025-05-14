@@ -55,7 +55,7 @@
                                 <!-- PARTIE POUR ECRIRE UN MESSAGE -->
                                 <div class="insertMessage">
                                     <textarea class="textareaCustom autoResize" name="" id="Msg"></textarea>
-                                    <input type="hidden" name="csrfToken" id="csrfToken" value="<c:out value='${requestScope.csrfToken}'/>">
+                                    <input type="hidden" name="csrfToken" id="csrfToken" value="<c:out value='${csrfToken}'/>">
                                     <input type="hidden" name="idGrpMsgPrivee" id="idGrpMsgPrivee" value="<c:out value='${idGrpMsgPrivee}'/>">
                                     <input type="hidden" id="currentUserId" value="<c:out value='${user.id}'/>">
                                     <!-- <label for="fichiers"
