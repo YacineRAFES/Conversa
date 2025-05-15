@@ -10,13 +10,9 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static fr.afpa.dev.pompey.conversa.utilitaires.Config.getAPIURL;
-import static fr.afpa.dev.pompey.conversa.utilitaires.Config.getSecretKeyCaptcha;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.getNameClass;
 import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.jsonObjectToMap;
 
@@ -78,7 +74,7 @@ public class SendJSON {
         return null;
     }
 
-    public static Map<String, Object> getAllMessages(Map<String, String> formData, String apiUrl){
+    public static JsonObject getAllMessages(Map<String, String> formData, String apiUrl){
         log.info("Fonction getAllMessages appelée avec les paramètres : formData = {}, apiUrl = {}", formData, apiUrl);
 
         HttpURLConnection conn = null;
@@ -100,15 +96,7 @@ public class SendJSON {
             log.info("getAllMessages: JSON envoyé : {}", json);
 
             JsonObject fullResponse = lireReponseJSON(conn);
-
-            log.info("getAllMessages: Réponse JSON : {}", fullResponse);
-
-            JsonObject objects = fullResponse.getJsonObject("objects");
-
-            Map<String, Object> result = new HashMap<>();
-            result.put("status", fullResponse.getString("status"));
-            result.put("getAllMessages", objects.getJsonArray("getAllMessages"));
-            return result;
+            return fullResponse;
 
         } catch (IOException e) {
             log.error("getAllMessages: Erreur lors de l'envoi du formulaire à l'API : {}", e.getMessage());

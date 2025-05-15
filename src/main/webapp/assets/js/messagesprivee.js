@@ -65,6 +65,26 @@ function getAllAmis() {
         });
 }
 
+function getAllMessagesByIdGrpMsg(idgroupemp){
+    fetch('messageprivejson', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+
+    })
+        .then(response => response.json())  // Traitement de la réponse (JSON ici)
+        .then(data => {
+            data.forEach(item => {
+                const groupe = item.groupe_messages_prives;
+                if(groupe.id_groupe_messages_prives == idgroupemp) {
+                    const msg = groupe.message_prive;
+
+                }
+            })
+        })
+}
+
 
 // Récupère tous les messages de ses amis
 function getAllMessages() {
