@@ -4,7 +4,7 @@ currentGroupId = localStorage.getItem('groupId');
 
 localStorage.getItem("userId");
 const currentIdUser = getCookieValue("userId")
-
+console.log(currentIdUser);
 document.addEventListener("DOMContentLoaded", () => {
     // getAllMessages();
     // scrollVersLeBas();
