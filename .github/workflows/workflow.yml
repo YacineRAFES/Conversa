@@ -16,7 +16,7 @@ jobs :
 
         # Installation de Chrome pour Selenium
       - name: Install Chrome Browser for Selenium
-        uses: browser-actions/setup-chrome@late
+        uses: browser-actions/setup-chrome@latest
 
         # Démarre le navigateur Chrome
       - name: run Chrome Browser for version control
