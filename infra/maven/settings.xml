@@ -1,0 +1,29 @@
+<settings>
+    <activeProfiles>
+        <activeProfile>localT9</activeProfile>
+        <activeProfile>localMySQL</activeProfile>
+        <activeProfile>localDocker</activeProfile>
+    </activeProfiles>
+
+    <profiles>
+        <profile>
+            <id>localT9</id>
+            <properties>
+                <tomcat.manager.hostname>localhost</tomcat.manager.hostname>
+                <tomcat.servlet.port>9090</tomcat.servlet.port>
+                <tomcat.username>cargo</tomcat.username>
+                <tomcat.password>cargo</tomcat.password>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>localDocker</id>
+            <properties>
+                <tomcat.manager.hostname>app-mysql</tomcat.manager.hostname>
+                <tomcat.servlet.port>8036</tomcat.servlet.port>
+                <tomcat.username>root</tomcat.username>
+                <tomcat.password>root</tomcat.password>
+            </properties>
+        </profile>
+    </profiles>
+</settings>

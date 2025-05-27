@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+    app-maven:
+        container_name: app-maven
+        image: maven:3.8.3-jdk-11
+        volumes:
+            - ./app:/app
+            - maven_repo:/root/.m2/repository
+            - ./infra/maven/settings.xml:/root/.m2/settings.xml
+            - ./infra/logs/maven:/logs
+        working_dir: /app
+        depends_on:
+            - app-tomcat
+        command: [ "sh", "-c", "mvn clean package && cp /app/target/*.war /app/deploy/" ]
+        # La commande Maven et la copie du .war sont maintenant combinées en une seule commande shell
+        networks:
+            - app
+
+    app-tomcat:
+        container_name: app-tomcat
+        restart: 'always'
+        build:
+            context: ./infra/tomcat
+        #image: tomcat:10
+        env_file:
+            - "./.env"
+        ports:
+            - "8090:8090"
+        volumes:
+            - ./app/deploy:/usr/local/tomcat/webapps
+            - ./infra/tomcat/tomcat-users.xml:/usr/local/tomcat/conf/tomcat-users.xml
+            - ./infra/tomcat/server.xml:/usr/local/tomcat/conf/server.xml
+            - ./infra/logs/tomcat:/usr/local/tomcat/logs
+        # command: ["catalina.sh", "run"]
+        networks:
+            - app
+
+#Docker Networks
+networks:
+    app:
+        driver: bridge
+
+volumes:
+    maven_repo:
