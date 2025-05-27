@@ -11,4 +11,4 @@ EXPOSE 8090
 COPY Conversa-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/conversaweb.war
 
 #Commande pour exécuter le fichier JAR
-CMD ["java", "-jar", "Conversa-1.0-SNAPSHOT.war"]
+CMD ["java", "-war", "Conversa-1.0-SNAPSHOT.war"]
