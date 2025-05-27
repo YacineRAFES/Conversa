@@ -48,6 +48,16 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String captcha = request.getParameter("cf-turnstile-response");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+
+        // Vérification des champs email et mot de passe
+        if( email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
+            log.error("Champs email ou mot de passe vides");
+            request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD); // Afficher le message d'erreur
+            GoToPage(request, response, Utils.ServletPage.LOGIN); // Rediriger vers la page de connexion
+            return;
+        }
 
         log.info("Captcha : " + captcha);
 
