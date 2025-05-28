@@ -3,7 +3,6 @@
 <c:url value="/assets/js/bootstrap.js" var="bootstrapjs"/>
 <c:url value="/assets/js/bootstrap.bundle.js" var="bootstrapbundlejs"/>
 <footer>
-    <%-- TODO: A REVOIR --%>
     <c:if test="${requestScope.title eq 'Inscription'}">
         <script src="${pageContext.request.contextPath}/assets/js/MDPVerif.js"></script>
     </c:if >

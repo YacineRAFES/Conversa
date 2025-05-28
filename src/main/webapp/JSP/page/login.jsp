@@ -32,21 +32,20 @@
                         <label for="userEmail" class="form-label">
                             Adresse email <span aria-hidden="true">*</span>
                         </label>
-                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email" aria-required="true" required>
-                        <span class="visually-hidden">Ce champ est obligatoire</span>
+                        <input type="email" name="email" class="form-control rounded-0" id="userEmail" aria-label="Adresse email"
+                               aria-required="true" required>
+                        <span class="visually-hidden">
+                            Ce champ est obligatoire
+                        </span>
                     </div>
                     <!-- CHAMPS DE MOT DE PASSE -->
                     <div class="mb-3">
                         <label for="password" class="form-label">
                             Mot de passe <span aria-hidden="true">*</span>
                         </label>
-                        <input type="password"
-                               name="password"
+                        <input type="password" name="password"
                                class="form-control rounded-0 text-decoration-none"
-                               id="password"
-                               aria-label="Mot de passe"
-                               aria-required="true"
-                               required>
+                               id="password" aria-label="Mot de passe" aria-required="true" required>
                         <span class="visually-hidden">Ce champ est obligatoire</span>
                         <!-- LIEN HYPERTEXTE POUR OUVRIR LE MODAL -->
                         <a data-bs-toggle="modal" data-bs-target="#motdepasseoublie" class="">
@@ -88,7 +87,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
