@@ -28,6 +28,8 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.sendRedirectTo;
 public class LoginServlet extends HttpServlet {
     private static final String MESSAGE = "message";
     private static final String SET_DIV_ERROR = "setDivError";
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
 
     @Override
     public void init() {
@@ -48,8 +50,8 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String captcha = request.getParameter("cf-turnstile-response");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = request.getParameter(EMAIL);
+        String password = request.getParameter(PASSWORD);
 
         // Vérification des champs email et mot de passe
         if( email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
@@ -70,8 +72,8 @@ public class LoginServlet extends HttpServlet {
 
         // 29/04/2025 j'ai mis Map<String, String> formData = new HashMap<>(); en Map<String, Object> formData = new HashMap<>();
         Map<String, Object> formData = new HashMap<>();
-        formData.put("email", request.getParameter("email"));
-        formData.put("password", request.getParameter("password"));
+        formData.put(EMAIL, request.getParameter(EMAIL));
+        formData.put(PASSWORD, request.getParameter(PASSWORD));
 
         Map<String, Object> apiResponse = envoyerFormulaireVersApi(formData, LOGIN);
 

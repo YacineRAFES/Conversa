@@ -24,7 +24,8 @@ public class Captcha {
         //SECRET_KEY
         String SECRET_KEY = getSecretKeyCaptcha();
         String url = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
-        String params = "secret=" + URLEncoder.encode(SECRET_KEY, StandardCharsets.UTF_8) + "&response=" + URLEncoder.encode(captcha, StandardCharsets.UTF_8);
+        String params = "secret=" + URLEncoder.encode(SECRET_KEY, StandardCharsets.UTF_8) +
+                "&response=" + URLEncoder.encode(captcha, StandardCharsets.UTF_8);
         log.info(params);
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -37,10 +38,10 @@ public class Captcha {
         // Convertir la réponse JSON en objet Java
         try(JsonReader jsonReader = Json.createReader(con.getInputStream())) {
             JsonObject jsonObject = jsonReader.readObject();
-            System.out.println("Depuis Captcha.verif: " + jsonObject);
+            log.info("Depuis Captcha.verif: " + jsonObject);
             return jsonObject.getBoolean("success");
         }catch (Exception e) {
-            System.out.println("Erreur de parsing Captcha JSON: " + e.getMessage());
+            log.info("Erreur de parsing Captcha JSON: " + e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
