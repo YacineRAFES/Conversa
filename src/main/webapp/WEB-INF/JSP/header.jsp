@@ -14,5 +14,8 @@
     <link rel="stylesheet" href="${bootstrap}">
     <link rel="stylesheet" href="${style}">
     <link rel="stylesheet" href="${bootstrapicons}">
+    <c:if test="${requestScope.title eq 'Inscription' or requestScope.title eq 'Connexion'}">
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    </c:if>
 </head>
 <body class="min-vh-100 bg-gradient-custom">
