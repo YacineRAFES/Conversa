@@ -34,7 +34,7 @@ jobs :
 
       - name : Create file
         run : echo "SECRET_KEY_CAPTCHA=${{ secrets.SECRET_KEY_CAPTCHA }}
-              API_REDIRECTION=http://localhost:8080/"
+              API_REDIRECTION=http://localhost:8080/" > src/main/resources/conf.properties
 
         # Mise en cache des paquets SonarQube
       - name : Cache SonarQube packages
