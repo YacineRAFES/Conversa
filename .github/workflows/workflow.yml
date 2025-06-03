@@ -29,6 +29,13 @@ jobs :
           java-version : 21
           distribution : 'zulu'
 
+      - name : Delete files
+        run : rm -f src/main/resources/conf.properties
+
+      - name : Create file
+        run : echo "SECRET_KEY_CAPTCHA=${{ secrets.SECRET_KEY_CAPTCHA }}
+              API_REDIRECTION=http://localhost:8080/"
+
         # Mise en cache des paquets SonarQube
       - name : Cache SonarQube packages
         uses : actions/cache@v4

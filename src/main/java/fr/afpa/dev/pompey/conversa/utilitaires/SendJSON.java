@@ -297,6 +297,7 @@ public class SendJSON {
         }
 
         if (inputStream != null) {
+
             return Json.createReader(inputStream).readObject();
         } else {
             return Json.createObjectBuilder()
