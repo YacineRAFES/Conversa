@@ -38,13 +38,16 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
+            // response qui permet d'envoyer une réponse HTTP au client
+            // Définir le titre de la page
+            request.setAttribute("title", "Connexion");
 
-        // request qui contient tout les informations envoyées par le client lors de la requête HTTP vers le serveur
-        // response qui permet d'envoyer une réponse HTTP au client
-        // Définir le titre de la page
-        request.setAttribute("title", "Connexion");
-
-        GoToPage(request, response, Utils.ServletPage.LOGIN);
+            GoToPage(request, response, Utils.ServletPage.LOGIN);
+        }catch (Exception e){
+            throw new ServletException(e);
+        }
     }
 
     @Override
