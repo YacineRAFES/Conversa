@@ -33,8 +33,9 @@ jobs :
         run : rm -f src/main/resources/conf.properties
 
       - name : Create file
-        run : echo "SECRET_KEY_CAPTCHA=${{ secrets.SECRET_KEY_CAPTCHA }}
-              API_REDIRECTION=http://localhost:8080/" > src/main/resources/conf.properties
+        run: |
+          echo "SECRET_KEY_CAPTCHA=${{ secrets.SECRET_KEY_CAPTCHA }}" > src/main/resources/conf.properties
+          echo "API_REDIRECTION=http://localhost:8080/" >> src/main/resources/conf.properties
 
         # Mise en cache des paquets SonarQube
       - name : Cache SonarQube packages
