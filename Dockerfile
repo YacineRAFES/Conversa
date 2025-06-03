@@ -6,7 +6,7 @@ FROM tomcat:10.1.34-jdk21-temurin
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
 #Copie du ficher JAR recuperer de l'artefact de votre projet dans le conteneur
-COPY target/Conversa-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY Conversa-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 #Exposer le port 8090
 EXPOSE 8090
