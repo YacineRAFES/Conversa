@@ -9,4 +9,4 @@ RUN rm -rf /usr/local/tomcat/webapps/ROOT
 COPY Conversa-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 #Exposer le port 8090
-EXPOSE 8090
+EXPOSE 9090
