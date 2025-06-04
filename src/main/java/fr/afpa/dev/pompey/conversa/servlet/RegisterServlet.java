@@ -41,12 +41,12 @@ public class RegisterServlet extends HttpServlet {
 
             log.info("Captcha : " + captcha);
 
-//        boolean isCaptchaValid = Captcha.verif(captcha);
-//        if (!isCaptchaValid) {
-//            log.error("Captcha invalide");
-//            response.sendRedirect(request.getContextPath() + "/register?info=erreurCaptcha");
-//            return;
-//        }
+        boolean isCaptchaValid = Captcha.verif(captcha);
+        if (!isCaptchaValid) {
+            log.error("Captcha invalide");
+            response.sendRedirect(request.getContextPath() + "/register?info=erreurCaptcha");
+            return;
+        }
 
             // 29/04/2025 j'ai mis Map<String, String> formData = new HashMap<>(); en Map<String, Object> formData = new HashMap<>();
             Map<String, Object> formData = new HashMap<>();
