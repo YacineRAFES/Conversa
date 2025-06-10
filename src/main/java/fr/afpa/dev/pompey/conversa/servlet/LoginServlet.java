@@ -86,7 +86,7 @@ public class LoginServlet extends HttpServlet {
 
             if (jsonObject.getString("status").equals("success")) {
 
-                CookiesUtils.createCookies(request, response, apiResponse);
+                CookiesUtils.createCookies(response, apiResponse);
 
                 log.info("Connexion réussie et redirection vers la page d'accueil");
 
