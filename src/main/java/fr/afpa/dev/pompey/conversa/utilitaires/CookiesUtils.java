@@ -22,7 +22,7 @@ public class CookiesUtils {
             USERNAME
     );
 
-    public static void createCookies(HttpServletRequest request, HttpServletResponse response, Map<String, Object> apiResponse) {
+    public static void createCookies(HttpServletResponse response, Map<String, Object> apiResponse) {
         log.info("Fonction createCookies enclenchée");
 
         JsonObject jsonObject = (JsonObject) apiResponse.get("json");
