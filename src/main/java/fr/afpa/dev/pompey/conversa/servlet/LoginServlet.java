@@ -56,20 +56,19 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
 
+        // Vérification du captcha
+        boolean isCaptchaValid = Captcha.verif(captcha);
+        if (!isCaptchaValid) {
+            log.error("Captcha invalide");
+            response.sendRedirect(request.getContextPath() + "/login?info=erreurCaptcha");
+            return;
+        }
+
         // Vérification des champs email et mot de passe
         if( email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             log.error("Champs email ou mot de passe vides");
             request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD); // Afficher le message d'erreur
             GoToPage(request, response, Utils.ServletPage.LOGIN); // Rediriger vers la page de connexion
-            return;
-        }
-
-        log.info("Captcha : " + captcha);
-
-        boolean isCaptchaValid = Captcha.verif(captcha);
-        if (!isCaptchaValid) {
-            log.error("Captcha invalide");
-            response.sendRedirect(request.getContextPath() + "/login?info=erreurCaptcha");
             return;
         }
 
