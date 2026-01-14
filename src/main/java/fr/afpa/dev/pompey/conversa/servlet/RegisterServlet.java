@@ -62,6 +62,7 @@ public class RegisterServlet extends HttpServlet {
 
                 if (jsonObject.getString("status").equals("success")) {
                     log.info("Inscription réussie et redirection vers la page de connexion");
+                    request.setAttribute(ALERT, Alert.LENGTH_INVALID.toHtml()); // Afficher le message d'erreur
                     sendRedirectTo(request, response, Utils.ServletPage.LOGIN);
 
                 } else if (jsonObject.getString("status").equals("error")) {
@@ -69,32 +70,32 @@ public class RegisterServlet extends HttpServlet {
 
                     if (jsonObject.getString(MESSAGE).equals("lengthInvalid")) { // Au cas d'erreur de longueur
                         log.info("lengthInvalid");
-                        request.setAttribute(SET_DIV_ERROR, Alert.LENGTHINVALID); // Afficher le message d'erreur
+                        request.setAttribute(ALERT, Alert.USER_CREATED); // Afficher le message d'erreur
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     } else if (jsonObject.getString(MESSAGE).equals("userAlreadyExists")) {
                         log.info("userAlreadyExists");
-                        request.setAttribute(SET_DIV_ERROR, Alert.USERALREADYEXISTS);
+                        request.setAttribute(ALERT, Alert.USER_ALREADY_EXISTS.toHtml());
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     } else if (jsonObject.getString(MESSAGE).equals("emailInvalid")) {
                         log.info("emailInvalid");
-                        request.setAttribute(SET_DIV_ERROR, Alert.EMAILINVALID);
+                        request.setAttribute(ALERT, Alert.EMAIL_INVALID.toHtml());
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     } else if (jsonObject.getString(MESSAGE).equals("passwordInvalid")) {
                         log.info("passwordInvalid");
-                        request.setAttribute(SET_DIV_ERROR, Alert.PASSWORDINVALID);
+                        request.setAttribute(ALERT, Alert.PASSWORD_INVALID.toHtml());
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     } else if (jsonObject.getString(MESSAGE).equals("emptyField")) {
                         log.info("emptyField");
-                        request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD);
+                        request.setAttribute(ALERT, Alert.EMPTY_FIELD.toHtml());
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     } else {
                         log.info("errorUnknown");
-                        request.setAttribute(SET_DIV_ERROR, Alert.UNKNOWNERROR);
+                        request.setAttribute(ALERT, Alert.UNKNOWN_ERROR.toHtml());
                         GoToPage(request, response, Utils.ServletPage.REGISTER);
 
                     }
@@ -102,7 +103,7 @@ public class RegisterServlet extends HttpServlet {
             }
         }catch (Exception e){
             log.error("Erreur lors de l'inscription : ", e);
-            request.setAttribute(SET_DIV_ERROR, Alert.ERRORSERVER);
+            request.setAttribute(ALERT, Alert.ERROR_SERVER.toHtml());
             GoToPage(request, response, Utils.ServletPage.REGISTER);
         }
     }

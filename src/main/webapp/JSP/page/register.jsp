@@ -12,8 +12,8 @@
     <!-- PARTIE DE CORPS DU SITE -->
     <div class="container" style="z-index: 2;">
         <div id="message">
-            <c:if test="${not empty setDivError}">
-                ${setDivError}
+            <c:if test="${not empty alert}">
+                ${alert}
             </c:if>
         </div>
         <div class="row d-flex">
