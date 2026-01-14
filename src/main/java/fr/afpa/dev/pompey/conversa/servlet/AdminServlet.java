@@ -28,7 +28,7 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.ServletPage.ADMIN;
 @Slf4j
 @WebServlet(name = "AdminServlet", value = "/admin")
 public class AdminServlet extends HttpServlet {
-    private static final String SET_DIV = "setDiv";
+    private static final String ALERT = "alert";
 
     @Override
     public void init() {
@@ -83,7 +83,7 @@ public class AdminServlet extends HttpServlet {
 
                 if ("jwtInvalide".equals(message)) {
                     log.info(message);
-                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    request.setAttribute(ALERT, Alert.AUTHENTICATION_EXPIRED.toHtml());
                     backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
                     log.info(message);
@@ -165,7 +165,7 @@ public class AdminServlet extends HttpServlet {
                     }
 
                     request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.USERBAN);
+                    request.setAttribute(ALERT, Alert.USER_BAN.toHtml());
                     GoToPage(request, response, ADMIN, "admin");
                 }else if(message.equals("deleteSignalement")){
                     JsonObject sgl = jsonObject.getJsonObject("sgl");
@@ -182,7 +182,7 @@ public class AdminServlet extends HttpServlet {
                     }
 
                     request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.SIGNALEMENTISDELETE);
+                    request.setAttribute(ALERT, Alert.SIGNALEMENT_ISDELETE.toHtml());
                     GoToPage(request, response, ADMIN, "admin");
                 }else if(message.equals("warningSignalement")) {
                     JsonObject sgl = jsonObject.getJsonObject("sgl");
@@ -199,11 +199,11 @@ public class AdminServlet extends HttpServlet {
                     }
 
                     request.setAttribute("signalementList", signalementList);
-                    request.setAttribute(SET_DIV, Alert.USERWARNING);
+                    request.setAttribute(ALERT, Alert.USER_WARNING.toHtml());
                     GoToPage(request, response, ADMIN, "admin");
                 }
             }else if(status.equals("error")){
-                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                request.setAttribute(ALERT, Alert.ERROR_SERVER.toHtml());
                 GoToPage(request, response, ADMIN, "admin");
             }
         }
