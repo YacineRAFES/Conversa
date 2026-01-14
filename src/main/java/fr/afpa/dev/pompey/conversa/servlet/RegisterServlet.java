@@ -25,8 +25,7 @@ import static fr.afpa.dev.pompey.conversa.utilitaires.Utils.sendRedirectTo;
 @WebServlet(name = "UserRegisterServlet", value = "/register")
 public class RegisterServlet extends HttpServlet {
     private static final String MESSAGE = "message";
-    private static final String SET_DIV_ERROR = "setDivError";
-    private static final String SET_DIV = "setDiv";
+    private static final String ALERT = "alert";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
