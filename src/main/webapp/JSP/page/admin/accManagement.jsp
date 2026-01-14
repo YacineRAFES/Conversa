@@ -28,8 +28,8 @@
                         <div class="row">
                             <div class="col mt-3">
                                 <div id="message">
-                                    <c:if test="${not empty setDiv}">
-                                        ${setDiv}
+                                    <c:if test="${not empty alert}">
+                                        ${alert}
                                     </c:if>
                                 </div>
                                 <div class="row">
