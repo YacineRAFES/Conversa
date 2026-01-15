@@ -67,7 +67,7 @@ public class LoginServlet extends HttpServlet {
         // Vérification des champs email et mot de passe
         if( email == null || email.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             log.error("Champs email ou mot de passe vides");
-            request.setAttribute(SET_DIV_ERROR, Alert.EMPTYFIELD); // Afficher le message d'erreur
+            request.setAttribute(SET_DIV_ERROR, Alert.EMPTY_FIELD.toHtml()); // Afficher le message d'erreur
             GoToPage(request, response, Utils.ServletPage.LOGIN); // Rediriger vers la page de connexion
             return;
         }
@@ -98,13 +98,13 @@ public class LoginServlet extends HttpServlet {
                 if(jsonObject.getString(MESSAGE).equals("InvalidCredentials")) {
 
                     log.info("INVALIDCREDENTIALS");
-                    request.setAttribute(SET_DIV_ERROR, Alert.INVALIDCREDENTIALS); // Afficher le message d'erreur
+                    request.setAttribute(SET_DIV_ERROR, Alert.INVALID_CREDENTIALS.toHtml()); // Afficher le message d'erreur
                     GoToPage(request, response, Utils.ServletPage.LOGIN); // Rediriger vers la page d'inscription
 
                 }
             } else {
 
-                request.setAttribute(SET_DIV_ERROR, Alert.ERRORSERVER); // Afficher le message d'erreur
+                request.setAttribute(SET_DIV_ERROR, Alert.ERROR_SERVER.toHtml()); // Afficher le message d'erreur
                 this.getServletContext().getRequestDispatcher(Page.JSP.LOGIN).forward(request, response); // Rediriger vers la page d'inscription
 
             }

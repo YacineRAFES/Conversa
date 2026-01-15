@@ -60,7 +60,7 @@ public class MessagePriveServlet extends HttpServlet {
 
                 if ("jwtInvalide".equals(message)) {
                     log.info(message);
-                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    request.setAttribute(SET_DIV, Alert.AUTHENTICATION_EXPIRED.toHtml());
                     backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
                     log.info(message);
@@ -153,7 +153,7 @@ public class MessagePriveServlet extends HttpServlet {
 
         } catch (Exception e) {
             log.error("Une erreur s'est produite : " + e.getMessage());
-            request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+            request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
             this.getServletContext().getRequestDispatcher(Page.JSP.MESSAGES_PRIVEE).forward(request, response);
         }
 
@@ -180,11 +180,11 @@ public class MessagePriveServlet extends HttpServlet {
             log.info("jsonObject : ERROR " + jsonObject);
             if (message.equals("jwtInvalide")) {
                 log.info(message);
-                request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                request.setAttribute(SET_DIV, Alert.AUTHENTICATION_EXPIRED.toHtml());
                 backToPageLogin(request, response);
             } else if (message.equals("ErrorServer")) {
                 log.info(message);
-                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
                 backToPageLogin(request, response);
             }
         }

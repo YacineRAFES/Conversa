@@ -68,7 +68,7 @@ public class HomeServlet extends HttpServlet {
 
                     log.info("jwtInvalide, donc backtoPageLogin");
                     log.info(message);
-                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    request.setAttribute(SET_DIV, Alert.AUTHENTICATION_EXPIRED.toHtml());
                     backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
 

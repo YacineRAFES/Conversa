@@ -63,7 +63,7 @@ public class AmisServlet extends HttpServlet {
 
                 if ("jwtInvalide".equals(message)) {
                     log.info(message);
-                    request.setAttribute(SET_DIV, Alert.AUTHENTICATIONEXPIRED);
+                    request.setAttribute(SET_DIV, Alert.AUTHENTICATION_EXPIRED.toHtml());
                     backToPageLogin(request, response);
                 }else if("ErrorServer".equals(message)) {
                     log.info(message);
@@ -129,7 +129,7 @@ public class AmisServlet extends HttpServlet {
                     Reponse(apiResponse, request, response);
                 } else {
                     // Gérer d'autres actions si nécessaire
-                    request.setAttribute(SET_DIV, Alert.ERRORFORM);
+                    request.setAttribute(SET_DIV, Alert.ERROR_FORM.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
                 }
             } else if ("friendRequestResponse".equals(type)) {
@@ -140,7 +140,7 @@ public class AmisServlet extends HttpServlet {
             }
         }catch (Exception e){
             log.error("Erreur dans le doPost de AmisServlet : " + e.getMessage());
-            request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+            request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
             this.getServletContext().getRequestDispatcher(Page.JSP.AMIS).forward(request, response);
         }
     }
@@ -162,22 +162,22 @@ public class AmisServlet extends HttpServlet {
             if (jsonObject.getString("status").equals("success")) {
                 if(jsonObject.getString("message").equals("friendRequestSent")) {
                     log.info("Demande d'ami envoyée");
-                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
+                    request.setAttribute(SET_DIV, Alert.FRIEND_REQUEST_SENT.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 } else if(jsonObject.getString("message").equals("friendRequestAlreadySent")) {
                     log.error("Demande d'ami déjà envoyée");
-                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYSENT);
+                    request.setAttribute(SET_DIV, Alert.FRIEND_REQUEST_ALREADY_SENT.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 } else if(jsonObject.getString("message").equals("friendRequestAlreadyAccepted")) {
                     log.error("Demande d'ami déjà acceptée");
-                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTALREADYACCEPTED);
+                    request.setAttribute(SET_DIV, Alert.FRIEND_REQUEST_ALREADY_ACCEPTED.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 }else if(jsonObject.getString("message").equals("AskFriendRequestSend")) {
                     log.info("Demande d'ami envoyée");
-                    request.setAttribute(SET_DIV, Alert.FRIENDREQUESTSENT);
+                    request.setAttribute(SET_DIV, Alert.FRIEND_REQUEST_SENT.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 }else if(jsonObject.getString("message").equals("AcceptFriendRequest")) {
@@ -185,12 +185,12 @@ public class AmisServlet extends HttpServlet {
                     Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
                     request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
                     request.setAttribute("amisList", allAmisData.get("amisList"));
-                    request.setAttribute(SET_DIV, Alert.ACCEPTFRIENDREQUEST);
+                    request.setAttribute(SET_DIV, Alert.ACCEPT_FRIEND_REQUEST.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 }else if(jsonObject.getString("message").equals("RefuseFriendRequest")) {
                     log.info("Demande d'ami refusée");
-                    request.setAttribute(SET_DIV, Alert.REFUSEDFRIENDREQUEST);
+                    request.setAttribute(SET_DIV, Alert.REFUSED_FRIEND_REQUEST.toHtml());
                     Map<String, List<Map<String, Object>>> allAmisData = recupererAmisEtDemandes(jwt);
                     request.setAttribute("amisRequest", allAmisData.get("amisRequest"));
                     request.setAttribute("amisList", allAmisData.get("amisList"));
@@ -198,19 +198,19 @@ public class AmisServlet extends HttpServlet {
 
                 } else {
                     log.error("Erreur lors de l'ajout d'ami");
-                    request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                    request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
                     GoToPage(request, response, ServletPage.AMIS);
 
                 }
 
             } else if (jsonObject.getString("status").equals("error")) {
                 log.error("Erreur lors de l'ajout d'ami");
-                request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+                request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
                 GoToPage(request, response, ServletPage.AMIS);
             }
         }else{
             log.error("apiResponse est null, la récupération a échoué");
-            request.setAttribute(SET_DIV, Alert.ERRORSERVER);
+            request.setAttribute(SET_DIV, Alert.ERROR_SERVER.toHtml());
             GoToPage(request, response, ServletPage.AMIS);
         }
     }
